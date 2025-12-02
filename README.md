@@ -3,7 +3,11 @@
 > **Distributed, Bio-Mimetic AI Memory System**
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
+[![License: Commercial](https://img.shields.io/badge/License-Commercial-green.svg)](.github/COMMERCIAL.md)
 [![Rust](https://img.shields.io/badge/Rust-2021-orange.svg)](https://www.rust-lang.org/)
+[![GitHub Stars](https://img.shields.io/github/stars/iberi22/synapse-protocol?style=social)](https://github.com/iberi22/synapse-protocol/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/iberi22/synapse-protocol)](https://github.com/iberi22/synapse-protocol/issues)
+[![Status: Beta](https://img.shields.io/badge/Status-Beta-yellow.svg)](https://github.com/iberi22/synapse-protocol/releases)
 
 ## 🎯 Vision
 
