@@ -4,6 +4,7 @@ members = [
     "crates/synapse-core",
     "crates/synapse-infra",
     "crates/synapse-cli",
+    "apps/desktop/src-tauri",
 ]
 
 [workspace.package]
