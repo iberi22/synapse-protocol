@@ -98,10 +98,22 @@ This project follows the [Git-Core Protocol](https://github.com/iberi22/Git-Core
 
 ## ⚖️ License
 
-This project is licensed under **AGPLv3**. 
+**Dual Licensed:**
+- **AGPLv3** for open source projects
+- **Commercial License** for proprietary/closed-source use
 
-For commercial/proprietary use, contact: [your-email]
+**What this means:**
+- ✅ Free to use, modify, and distribute (must keep open source)
+- ✅ Commercial use allowed IF you open-source your entire application
+- 💰 For closed-source/proprietary use, contact: **commercial@southwestlabs.com**
+
+See [LICENSE](LICENSE) for full AGPLv3 text.
 
 ---
 
-*Built with 🧠 by South West Labs*
+**Why AGPLv3?**
+We believe in open innovation while protecting against exploitation. Companies that benefit from our work should either contribute back to the community (open source) or support development (commercial license).
+
+---
+
+Built with 🧠 by South West Labs
