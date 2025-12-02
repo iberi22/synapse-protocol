@@ -1,0 +1,635 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{832F57B7-7B21-39A4-9750-46B1330DC110}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>crypto</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto.dir\nasm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">crypto.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">aws_lc_0_34_0_crypto</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">crypto.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">aws_lc_0_34_0_crypto</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">crypto.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">aws_lc_0_34_0_crypto</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">crypto.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">aws_lc_0_34_0_crypto</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro -utf-8 -w44265 -Brepro</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4061;4100;4127;4146;4200;4204;4221;4242;4244;4267;4291;4296;4371;4388;4350;4365;4389;4464;4510;4512;4514;4548;4571;4610;4623;4625;4626;4628;4668;4706;4710;4711;4800;4820;5026;5027;5039;5045;4255;4152;4295;4701;4505;4702;4191;4996;4746;5264;5266;5267</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Outputswitch>1</Outputswitch>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_DISPATCH_TEST</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro -utf-8 -w44265</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4061;4100;4127;4146;4200;4204;4221;4242;4244;4267;4291;4296;4371;4388;4350;4365;4389;4464;4510;4512;4514;4548;4571;4610;4623;4625;4626;4628;4668;4706;4710;4711;4800;4820;5026;5027;5039;5045;4255;4152;4295;4701;4505;4702;4191;4996;4746;5264;5266;5267</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Outputswitch>1</Outputswitch>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_DISPATCH_TEST</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro -utf-8 -w44265</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4061;4100;4127;4146;4200;4204;4221;4242;4244;4267;4291;4296;4371;4388;4350;4365;4389;4464;4510;4512;4514;4548;4571;4610;4623;4625;4626;4628;4668;4706;4710;4711;4800;4820;5026;5027;5039;5045;4255;4152;4295;4701;4505;4702;4191;4996;4746;5264;5266;5267</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Outputswitch>1</Outputswitch>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_DISPATCH_TEST</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro -utf-8 -w44265</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4061;4100;4127;4146;4200;4204;4221;4242;4244;4267;4291;4296;4371;4388;4350;4365;4389;4464;4510;4512;4514;4548;4571;4610;4623;4625;4626;4628;4668;4706;4710;4711;4800;4820;5026;5027;5039;5045;4255;4152;4295;4701;4505;4702;4191;4996;4746;5264;5266;5267</DisableSpecificWarnings>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Outputswitch>1</Outputswitch>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_DISPATCH_TEST</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_DISPATCH_TEST;_HAS_EXCEPTIONS=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_STL_EXTRA_DISABLED_WARNINGS=4774 4987;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/crypto/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build/aws-lc/crypto/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASM_NASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseArguments.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckCSourceCompiles.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckIncludeFile.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckLibraryExists.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageHandleStandardArgs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageMessage.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindThreads.cmake;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\cmake\crypto-config.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\CMakeFiles\3.29.2\CMakeASM_NASMCompiler.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/crypto/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build/aws-lc/crypto/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASM_NASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseArguments.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckCSourceCompiles.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckIncludeFile.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckLibraryExists.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageHandleStandardArgs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageMessage.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindThreads.cmake;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\cmake\crypto-config.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\CMakeFiles\3.29.2\CMakeASM_NASMCompiler.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/crypto/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build/aws-lc/crypto/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASM_NASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseArguments.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckCSourceCompiles.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckIncludeFile.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckLibraryExists.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageHandleStandardArgs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageMessage.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindThreads.cmake;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\cmake\crypto-config.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\CMakeFiles\3.29.2\CMakeASM_NASMCompiler.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/crypto/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build/aws-lc/crypto/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASM_NASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseArguments.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestASM_NASMCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckCSourceCompiles.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckIncludeFile.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CheckLibraryExists.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageHandleStandardArgs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindPackageMessage.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\FindThreads.cmake;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\cmake\crypto-config.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\CMakeFiles\3.29.2\CMakeASM_NASMCompiler.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_bitstr.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_bool.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_d2i_fp.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_dup.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_gentm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_i2d_fp.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_int.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_mbstr.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_object.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_octet.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_strex.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_strnid.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_time.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_type.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_utctm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_utf8.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_lib.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_par.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn_pack.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\f_int.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\f_string.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_dec.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_enc.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_fre.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_new.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_typ.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_utl.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\posix_time.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\base64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bio.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bio_addr.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bio_mem.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\connect.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dgram.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\errno.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\fd.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\file.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hexdump.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\md.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pair.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\printf.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\socket.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\socket_helper.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\blake2.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bn_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\convert.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\buf.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_compat.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ber.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cbb.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cbs.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\unicode.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\chacha.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cipher_extra.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\derive_key.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aesctrhmac.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aesgcmsiv.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_chacha20poly1305.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aes_cbc_hmac_sha1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aes_cbc_hmac_sha256.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_des.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_null.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_rc2.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_rc4.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_tls.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tls_cbc.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\conf.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\console.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\crypto.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\des.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\params.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dh_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\digest_extra.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dsa.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dsa_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ecdh_extra.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ecdsa_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ec_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ec_derive.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hash_to_curve.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\err.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\err_data.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\engine.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\evp_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dh.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dh_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dsa.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dsa_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_ec_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_ed25519_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_hmac_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_kem_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_pqdsa_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_rsa_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_x25519.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_x25519_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_methods.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\print.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\scrypt.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\sign.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ex_data.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hpke.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hrss.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kyber512r3_ref.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kyber768r3_ref.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kyber1024r3_ref.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\fips202.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kem_kyber.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\lhash.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\mem.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\obj.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\obj_xref.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_asn.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_client.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_extension.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_http.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_lib.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_print.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_server.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_verify.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_all.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_info.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_lib.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_oth.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_pk8.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_pkey.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_x509.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_xaux.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cipher.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs7.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs7_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs7_x509.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs8.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs8_x509.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p5_pbev2.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\poly1305.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\poly1305_arm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\poly1305_vec.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pool.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ccrandomgeneratebytes.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\deterministic.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\getentropy.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rand_extra.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\vm_ube_fallback.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\urandom.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\windows.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rc4.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\refcount_c11.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\refcount_lock.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\refcount_win.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsassa_pss_asn1.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_crypt.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_print.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\stack.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\siphash.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\spake25519.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread_none.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread_pthread.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread_win.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pmbtoken.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\trust_token.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\voprf.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ube.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\fork_ube_detect.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\vm_ube_detect.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_digest.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_sign.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_verify.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\algorithm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_gen.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\by_dir.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\by_file.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\i2d_pr.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\name_print.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\policy.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_pss.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_crl.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_req.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_x509.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_x509a.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_akey.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_akeya.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_alt.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_bcons.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_bitst.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_conf.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_cpols.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_crld.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_enum.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_extku.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_genn.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_ia5.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_info.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_int.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_lib.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_ncons.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_ocsp.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_pcons.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_pmaps.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_prn.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_purp.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_skey.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_utl.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_algor.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_all.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_attrib.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_crl.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_exten.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_name.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_pubkey.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_req.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_sig.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_spki.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_val.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_x509.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_x509a.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_att.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_cmp.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_d2.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_def.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_ext.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_lu.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_obj.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_req.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_set.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_trs.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_txt.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_v3.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_vfy.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_vpm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509cset.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509name.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509rset.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509spki.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ui.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\base64_bio.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\blowfish.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cast.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cast_tables.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cfb.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dh_decrepit.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\evp_do_all.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\obj_decrepit.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ripemd.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_decrepit.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_decrepit.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\chacha-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\chacha20_poly1305_x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\aes128gcmsiv-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\aesni-sha1-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\aesni-sha256-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\trampoline-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\bcm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\fips_shared_support.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\cpucap.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-gcm-avx512.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-gcm-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-xts-avx512.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\ghash-ssse3-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\ghash-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\md5-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\p256-x86_64-asm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\p256_beeu-x86_64-asm.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rdrand-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-avx2.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-2k-avx512.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-3k-avx512.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-4k-avx512.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\sha1-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\sha256-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\sha512-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\vpaes-x86_64.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\x86_64-mont5.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\x86_64-mont.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-base.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-gcd.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-health.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-noise.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-sha3.obj" />
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-timer.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\ZERO_CHECK.vcxproj">
+      <Project>{AEE28A42-EE0B-3B97-9445-583FA9F791A9}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\boringssl_prefix_symbols.vcxproj">
+      <Project>{AABA5571-577E-30F0-95AB-ECEED27739E7}</Project>
+      <Name>boringssl_prefix_symbols</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.vcxproj">
+      <Project>{F59ED5C7-2EC0-3219-ADB4-C445590C1A08}</Project>
+      <Name>crypto_objects</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\fipsmodule\fipsmodule.vcxproj">
+      <Project>{17E3E99E-34E0-33C3-9056-43A0F8FA0516}</Project>
+      <Name>fipsmodule</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\third_party\jitterentropy\jitterentropy.vcxproj">
+      <Project>{85781F2B-75E1-3BC1-8927-CBFF6F664025}</Project>
+      <Name>jitterentropy</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.targets" />
+  </ImportGroup>
+</Project>

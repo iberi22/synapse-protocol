@@ -1,0 +1,865 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_bitstr.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_bool.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_d2i_fp.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_dup.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_gentm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_i2d_fp.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_int.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_mbstr.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_object.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_octet.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_strex.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_strnid.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_time.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_type.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_utctm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_utf8.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_lib.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_par.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn_pack.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\f_int.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\f_string.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_dec.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_enc.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_fre.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_new.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_typ.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tasn_utl.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\posix_time.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\base64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bio.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bio_addr.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bio_mem.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\connect.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dgram.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\errno.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\fd.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\file.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hexdump.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\md.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pair.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\printf.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\socket.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\socket_helper.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\blake2.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\bn_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\convert.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\buf.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_compat.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ber.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cbb.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cbs.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\unicode.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\chacha.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cipher_extra.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\derive_key.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aesctrhmac.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aesgcmsiv.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_chacha20poly1305.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aes_cbc_hmac_sha1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_aes_cbc_hmac_sha256.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_des.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_null.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_rc2.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_rc4.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\e_tls.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\tls_cbc.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\conf.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\console.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\crypto.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\des.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\params.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dh_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\digest_extra.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dsa.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dsa_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ecdh_extra.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ecdsa_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ec_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ec_derive.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hash_to_curve.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\err.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\err_data.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\engine.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\evp_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dh.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dh_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dsa.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_dsa_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_ec_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_ed25519_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_hmac_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_kem_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_pqdsa_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_rsa_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_x25519.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_x25519_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p_methods.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\print.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\scrypt.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\sign.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ex_data.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hpke.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\hrss.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kyber512r3_ref.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kyber768r3_ref.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kyber1024r3_ref.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\fips202.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\kem_kyber.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\lhash.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\mem.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\obj.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\obj_xref.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_asn.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_client.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_extension.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_http.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_lib.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_print.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_server.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ocsp_verify.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_all.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_info.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_lib.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_oth.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_pk8.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_pkey.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_x509.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pem_xaux.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cipher.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs7.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs7_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs7_x509.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs8.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pkcs8_x509.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\p5_pbev2.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\poly1305.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\poly1305_arm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\poly1305_vec.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pool.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ccrandomgeneratebytes.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\deterministic.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\getentropy.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rand_extra.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\vm_ube_fallback.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\urandom.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\windows.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rc4.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\refcount_c11.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\refcount_lock.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\refcount_win.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsassa_pss_asn1.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_crypt.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_print.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\stack.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\siphash.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\spake25519.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread_none.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread_pthread.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\thread_win.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\pmbtoken.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\trust_token.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\voprf.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ube.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\fork_ube_detect.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\vm_ube_detect.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_digest.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_sign.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\a_verify.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\algorithm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\asn1_gen.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\by_dir.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\by_file.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\i2d_pr.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\name_print.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\policy.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_pss.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_crl.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_req.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_x509.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\t_x509a.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_akey.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_akeya.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_alt.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_bcons.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_bitst.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_conf.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_cpols.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_crld.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_enum.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_extku.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_genn.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_ia5.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_info.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_int.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_lib.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_ncons.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_ocsp.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_pcons.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_pmaps.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_prn.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_purp.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_skey.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\v3_utl.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_algor.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_all.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_attrib.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_crl.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_exten.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_name.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_pubkey.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_req.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_sig.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_spki.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_val.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_x509.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x_x509a.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_att.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_cmp.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_d2.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_def.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_ext.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_lu.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_obj.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_req.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_set.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_trs.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_txt.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_v3.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_vfy.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_vpm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509cset.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509name.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509rset.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509spki.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ui.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\base64_bio.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\blowfish.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cast.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cast_tables.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\cfb.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\dh_decrepit.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\evp_do_all.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\obj_decrepit.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\ripemd.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\rsa_decrepit.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\x509_decrepit.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\chacha-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\chacha20_poly1305_x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\aes128gcmsiv-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\aesni-sha1-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\aesni-sha256-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto_objects.dir\$(Configuration)\trampoline-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\bcm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\fips_shared_support.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\cpucap.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-gcm-avx512.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-gcm-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-xts-avx512.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\aesni-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\ghash-ssse3-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\ghash-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\md5-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\p256-x86_64-asm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\p256_beeu-x86_64-asm.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rdrand-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-avx2.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-2k-avx512.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-3k-avx512.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\rsaz-4k-avx512.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\sha1-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\sha256-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\sha512-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\vpaes-x86_64.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\x86_64-mont5.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\$(Configuration)\x86_64-mont.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-base.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-gcd.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-health.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-noise.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-sha3.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\third_party\jitterentropy\jitterentropy.dir\$(Configuration)\jitterentropy-timer.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Object Libraries">
+      <UniqueIdentifier>{43EC85F3-F7EC-3621-B531-159CDB354FA1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

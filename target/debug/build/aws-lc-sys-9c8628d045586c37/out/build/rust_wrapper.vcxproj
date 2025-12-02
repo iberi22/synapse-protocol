@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{285A2251-0303-34AB-B95D-7AB4FCDD9D2F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>rust_wrapper</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\rust_wrapper.dir\nasm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">rust_wrapper.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">aws_lc_0_34_0_rust_wrapper</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">rust_wrapper.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">aws_lc_0_34_0_rust_wrapper</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">rust_wrapper.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">aws_lc_0_34_0_rust_wrapper</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\artifacts\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">rust_wrapper.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">aws_lc_0_34_0_rust_wrapper</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro -Brepro</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include\;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>-f</AdditionalOptions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include\;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>-f</AdditionalOptions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include\;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>-f</AdditionalOptions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -Brepro</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <NASM>
+      <IncludePaths>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include\;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include\;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include\;%(IncludePaths)</IncludePaths>
+      <AdditionalOptions>-f</AdditionalOptions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);NDEBUG;BORINGSSL_PREFIX=aws_lc_0_34_0;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+    </NASM>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\include;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\symbol_prefix_include;C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompilerABI.c;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCommonLanguageInclude.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompileFeatures.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerABI.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeLanguageInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseLibraryArchitecture.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystem.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCompilerCommon.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CompilerId\VS-10.vcxproj.in;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\FeatureTesting.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeRCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompilerABI.c;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCommonLanguageInclude.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompileFeatures.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerABI.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeLanguageInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseLibraryArchitecture.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystem.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCompilerCommon.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CompilerId\VS-10.vcxproj.in;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\FeatureTesting.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeRCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompilerABI.c;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCommonLanguageInclude.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompileFeatures.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerABI.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeLanguageInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseLibraryArchitecture.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystem.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCompilerCommon.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CompilerId\VS-10.vcxproj.in;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\FeatureTesting.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeRCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCCompilerABI.c;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCommonLanguageInclude.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCompilerIdDetection.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompileFeatures.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerABI.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineCompilerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeDetermineSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeFindBinUtils.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeLanguageInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeParseLibraryArchitecture.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCCompiler.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystem.cmake.in;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestCompilerCommon.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeTestRCCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CompilerId\VS-10.vcxproj.in;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Internal\FeatureTesting.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeRCCompiler.cmake;E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\3.29.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\rust_wrapper.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\ZERO_CHECK.vcxproj">
+      <Project>{2DB0406B-E014-39F9-8BFE-A3B90724AE81}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\crypto.vcxproj">
+      <Project>{3CA33F35-4111-3815-A693-9483263A5713}</Project>
+      <Name>crypto</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.targets" />
+  </ImportGroup>
+</Project>

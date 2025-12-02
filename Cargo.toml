@@ -1,0 +1,70 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/synapse-core",
+    "crates/synapse-infra",
+    "crates/synapse-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+authors = ["South West Labs"]
+repository = "https://github.com/YOUR_ORG/synapse-protocol"
+description = "Distributed, bio-mimetic AI memory system"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Async traits
+async-trait = "0.1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# UUID generation
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Storage - Vector DB
+lancedb = "0.10"
+
+# Storage - Key-Value Buffer
+sled = "0.34"
+
+# AI Inference
+candle-core = "0.4"
+candle-nn = "0.4"
+candle-transformers = "0.4"
+ort = "2.0.0-rc.10"
+
+# Text search
+tantivy = "0.21"
+
+# Networking
+libp2p = { version = "0.53", features = ["tokio", "gossipsub", "noise", "tcp", "yamux"] }
+
+# Cryptography
+aes-gcm = "0.10"
+rand = "0.8"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

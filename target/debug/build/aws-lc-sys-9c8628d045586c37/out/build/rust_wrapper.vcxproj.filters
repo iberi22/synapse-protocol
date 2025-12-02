@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\rust_wrapper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D1A29BB2-E7BF-35E1-BA56-2E28CF5FC395}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,10 @@
+^C:\USERS\BELAL\.CARGO\REGISTRY\SRC\INDEX.CRATES.IO-1949CF8C6B5B557F\AWS-LC-SYS-0.34.0\AWS-LC\CRYPTO\FIPSMODULE\CMAKELISTS.TXT
+setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0 -BE:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build --check-stamp-file E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-9c8628d045586c37/out/build/aws-lc/crypto/fipsmodule/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

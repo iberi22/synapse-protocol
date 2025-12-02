@@ -1,0 +1,1 @@
+E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\fipsmodule.dir\Debug\fipsmodule.lib

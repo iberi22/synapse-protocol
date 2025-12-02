@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\CMakeFiles\c4bb5fc8b47a9c6f52a19cd73c5d0502\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{ECA2C67D-33F1-3A0F-BEDB-AACEE82ADFDF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

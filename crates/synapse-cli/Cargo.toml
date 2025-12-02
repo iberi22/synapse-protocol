@@ -1,0 +1,32 @@
+[package]
+name = "synapse-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "CLI application for Synapse Protocol"
+
+[[bin]]
+name = "synapse"
+path = "src/main.rs"
+
+[dependencies]
+# Core & Infra
+synapse-core = { path = "../synapse-core" }
+synapse-infra = { path = "../synapse-infra" }
+
+# Async
+tokio = { workspace = true }
+
+# CLI
+clap = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }

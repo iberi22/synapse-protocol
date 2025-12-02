@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\fipsmodule\bcm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\fipsmodule\fips_shared_support.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\fipsmodule\cpucap\cpucap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\belal\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\aws-lc-sys-0.34.0\aws-lc\crypto\fipsmodule\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\aesni-gcm-avx512.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\aesni-gcm-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\aesni-xts-avx512.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\aesni-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\ghash-ssse3-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\ghash-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\md5-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\p256-x86_64-asm.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\p256_beeu-x86_64-asm.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\rdrand-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\rsaz-avx2.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\rsaz-2k-avx512.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\rsaz-3k-avx512.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\rsaz-4k-avx512.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\sha1-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\sha256-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\sha512-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\vpaes-x86_64.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\x86_64-mont5.asm" />
+    <NASM Include="E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\crypto\fipsmodule\x86_64-mont.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D1A29BB2-E7BF-35E1-BA56-2E28CF5FC395}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

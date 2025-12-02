@@ -1,0 +1,16 @@
+# CMake generation dependency list for this directory.
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckCCompilerFlag.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckCSourceCompiles.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckIncludeFile.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckIncludeFileCXX.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckTypeSize.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/Internal/CheckCompilerFlag.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/Internal/CheckFlagCommonConfig.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/Internal/CheckSourceCompiles.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/TestBigEndian.cmake
+C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/CMakeLists.txt
+C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/cmake/JoinPaths.cmake
+C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/cmake/go.cmake
+C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/sources.cmake
+C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in

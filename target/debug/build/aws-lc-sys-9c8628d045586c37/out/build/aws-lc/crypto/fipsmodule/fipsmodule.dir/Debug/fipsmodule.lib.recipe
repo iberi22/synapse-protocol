@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\x64\Debug\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-9c8628d045586c37\out\build\aws-lc\x64\Debug\boringssl_prefix_symbols</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

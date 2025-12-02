@@ -1,0 +1,12 @@
+^E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\chacha\chacha-x86_64.asm
+E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\Debug\chacha-x86_64.obj
+^E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\cipher_extra\chacha20_poly1305_x86_64.asm
+E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\Debug\chacha20_poly1305_x86_64.obj
+^E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\cipher_extra\aes128gcmsiv-x86_64.asm
+E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\Debug\aes128gcmsiv-x86_64.obj
+^E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\cipher_extra\aesni-sha1-x86_64.asm
+E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\Debug\aesni-sha1-x86_64.obj
+^E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\cipher_extra\aesni-sha256-x86_64.asm
+E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\Debug\aesni-sha256-x86_64.obj
+^E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\test\trampoline-x86_64.asm
+E:\scripts-python\synapse-internet-evolve\target\debug\build\aws-lc-sys-97a54c085cc21ce2\out\build\aws-lc\crypto\crypto_objects.dir\Debug\trampoline-x86_64.obj

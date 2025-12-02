@@ -1,0 +1,23 @@
+# CMake generation dependency list for this directory.
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeASMCompiler.cmake.in
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeASMInformation.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeASM_NASMInformation.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeCompilerIdDetection.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineASMCompiler.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineASM_NASMCompiler.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompiler.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeDetermineCompilerId.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeFindBinUtils.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeParseArguments.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestASMCompiler.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeTestASM_NASMCompiler.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckCSourceCompiles.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckIncludeFile.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/CheckLibraryExists.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/FindPackageHandleStandardArgs.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/FindPackageMessage.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/FindThreads.cmake
+C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/crypto/CMakeLists.txt
+C:/Users/belal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/aws-lc-sys-0.34.0/aws-lc/crypto/cmake/crypto-config.cmake
+C:\Strawberry\c\share\cmake-3.29\Templates\MSBuild\nasm.props.in
+E:/scripts-python/synapse-internet-evolve/target/debug/build/aws-lc-sys-97a54c085cc21ce2/out/build/CMakeFiles/3.29.2/CMakeASM_NASMCompiler.cmake

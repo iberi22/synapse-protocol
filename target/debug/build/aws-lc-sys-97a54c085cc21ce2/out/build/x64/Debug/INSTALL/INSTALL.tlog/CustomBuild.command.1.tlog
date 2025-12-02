@@ -1,0 +1,10 @@
+^E:\SCRIPTS-PYTHON\SYNAPSE-INTERNET-EVOLVE\TARGET\DEBUG\BUILD\AWS-LC-SYS-97A54C085CC21CE2\OUT\BUILD\CMAKEFILES\EE66FD5A44A8B388F6C8414D82FDE579\INSTALL_FORCE.RULE
+setlocal
+cd .
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
