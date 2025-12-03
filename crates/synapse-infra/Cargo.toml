@@ -12,6 +12,7 @@ synapse-core = { path = "../synapse-core" }
 # Async
 tokio = { workspace = true }
 async-trait = { workspace = true }
+futures = "0.3"
 
 # Serialization
 serde = { workspace = true }
@@ -28,8 +29,15 @@ tracing = { workspace = true }
 lancedb = { workspace = true }
 sled = { workspace = true }
 
+# Arrow (matching LanceDB's version)
+arrow-array = "56"
+arrow-schema = "56"
+
 # AI Inference
 ort = { workspace = true }
 # candle-core = { workspace = true }  # TODO: Enable when RWKV implemented
 # candle-nn = { workspace = true }
 # candle-transformers = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3"

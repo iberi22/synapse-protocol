@@ -43,7 +43,7 @@ chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4", features = ["derive"] }
 
 # Storage - Vector DB
-lancedb = "0.10"
+lancedb = "0.22"
 
 # Storage - Key-Value Buffer
 sled = "0.34"
