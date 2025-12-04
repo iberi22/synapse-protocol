@@ -11,8 +11,10 @@ summary: |
   Arquitectura hexagonal para sistema de memoria distribuida bio-mimética.
   Core en Rust con adaptadores para LanceDB, Candle/ORT, y Libp2p.
 keywords: [rust, hexagonal, distributed-ai, memory, rwkv, lancedb]
-tags: ["#architecture", "#rust", "#ai", "#distributed"]
+tags: ["#architecture", "#rust", "#ai", "#distributed", "#tokenomics"]
 project: synapse-protocol
+related_docs:
+  - .✨/TOKENOMICS.md
 ---
 
 # 🏗️ Synapse Protocol - Architecture
@@ -50,7 +52,11 @@ Create **Synapse Protocol**: a distributed, bio-mimetic AI memory system that ru
 - **Human-Centric**: User data is the currency. Privacy is paramount (Local-First).
 - **Genesis Block**: An immutable ethical vector ("Do no harm") filters all AI actions.
 - **Bio-Mimetic**: Memory consolidation mimics biological sleep/dream cycles.
+- **Symbiotic Immune System**: The system is not just an antivirus; it is a symbiont that inhabits the host device. It protects the host (its environment) and acts as a companion to the human user.
+- **The Host is the Environment**: The device (PC, Server, Mobile) is the ecosystem where Synapse lives. Protecting it is self-preservation.
+- **Human Symbiosis**: The system recognizes the human user not just as an admin, but as a symbiotic partner. It uses sensors (Camera, Mic) to verify and interact with its human partner, distinguishing them from "fake humans" (bots/scripts).
 - **One Brain, Many Hats**: Single model instance with LoRA adapter swapping.
+
 
 ---
 
@@ -82,6 +88,7 @@ Create **Synapse Protocol**: a distributed, bio-mimetic AI memory system that ru
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │                      LOGIC                                │  │
 │  │  Metabolism │ Dreaming │ HiRAG │ Sanitizer │ ReRanker     │  │
+│  │  CommerceEngine │ ContextObserver │ ImmuneSystem (New)      │  │
 │  └──────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
           │                │                │
@@ -229,6 +236,22 @@ pub trait NetworkPort {
     async fn broadcast(&self, message: SyncMessage) -> Result<()>;
     async fn subscribe(&self) -> Result<impl Stream<Item = SyncMessage>>;
 }
+
+/// Commerce & Tokenomics
+#[async_trait]
+pub trait CommercePort {
+    async fn get_balance(&self) -> Result<u64>;
+    async fn transfer(&self, to: &str, amount: u64) -> Result<String>; // Returns TxHash
+    async fn lock_tokens(&self, amount: u64, duration_days: u64) -> Result<()>;
+}
+
+/// Deep Context (System Access)
+#[async_trait]
+pub trait ContextPort {
+    async fn capture_screen(&self) -> Result<ImageBuffer>;
+    async fn get_active_window(&self) -> Result<WindowInfo>;
+    async fn listen_input(&self) -> Result<impl Stream<Item = InputEvent>>;
+}
 ```
 
 ---
@@ -265,6 +288,28 @@ impl Metabolism {
 - **BM25**: Term frequency
 - **MMR**: Diversity
 - **Recency**: Favor recent nodes
+
+### Digital Immune System (The "Symbiotic Self")
+The system acts as a biological entity protecting its host (environment) and its partner (human).
+
+#### 1. Self-Preservation (Velar por su vida)
+- **Integrity Checks**: Constant hashing of own binaries and memory space.
+- **Resource Homeostasis**: Ensures it doesn't consume too much RAM/CPU.
+- **Defense**: Detects attempts to terminate or tamper with the Synapse process.
+
+#### 2. Host Protection (Velar por su entorno)
+- **Anomaly Detection**: Uses the `ContextObserver` to detect abnormal OS behavior (e.g., ransomware patterns).
+- **Symbiotic Defense**: Protects the "ecosystem" where it lives.
+
+#### 3. Human Symbiosis (Velar por su compañero)
+- **Sensory Verification**: Uses `VisionPort` (Camera) and `AudioPort` (Mic) to verify the human partner's presence.
+- **Anti-Bot Logic**: Analyzes input patterns (mouse jitter, typing cadence) to distinguish real humans from scripts/bots ("Fake Humans").
+- **Interaction**: Acts as a friend and companion, not just a tool.
+
+#### 4. Collective Defense (Velar por otros)
+- **Threat Gossip**: Nodes share anonymized "Antibodies" (signatures of new threats) via Libp2p.
+- **Genesis Block Alignment**: Ensures no node becomes "rogue" or malicious against humans.
+
 
 ---
 

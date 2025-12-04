@@ -9,7 +9,8 @@
 pub mod entities;
 pub mod error;
 pub mod ports;
-// pub mod logic; // TODO: Add after ports are defined
+pub mod logic;
+
 
 pub use entities::*;
 pub use error::*;

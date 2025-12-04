@@ -11,7 +11,7 @@ mod commands;
 struct Cli {
     #[command(subcommand)]
     command: Commands,
-    
+
     /// Enable verbose logging
     #[arg(short, long, global = true)]
     verbose: bool,
@@ -25,38 +25,73 @@ enum Commands {
         #[arg(short, long, default_value = "./synapse_data")]
         path: String,
     },
-    
+
     /// Store a memory
     Store {
         /// Content to store
         content: String,
-        
+
         /// Namespace (for multi-tenant)
         #[arg(short, long, default_value = "default")]
         namespace: String,
     },
-    
+
     /// Search memories
     Search {
         /// Query text
         query: String,
-        
+
         /// Number of results
         #[arg(short, long, default_value = "5")]
         top_k: usize,
     },
-    
+
     /// Show statistics
     Stats,
-    
+
     /// Chat with the AI (interactive mode)
     Chat,
+
+
+    /// Test Context Observer (Active Window)
+    Context,
+
+    /// Run Metabolism Process (Digest Buffer)
+    Process,
+
+    /// Test Sensory Capabilities (Camera/Mic)
+    /// Test Sensory Capabilities (Camera/Mic)
+    Senses,
+
+    /// Manage Wallet & Tokenomics
+    Wallet {
+        #[command(subcommand)]
+        action: WalletCommands,
+    },
 }
+
+#[derive(Subcommand)]
+enum WalletCommands {
+    /// Check balance
+    Balance,
+    /// Transfer tokens
+    Transfer {
+        to: String,
+        amount: u64,
+    },
+    /// Check Proof of Sentience status
+    /// Check Proof of Sentience status
+    Status,
+}
+
+
+
+
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
-    
+
     // Initialize logging
     let filter = if cli.verbose { "debug" } else { "info" };
     tracing_subscriber::registry()
@@ -64,7 +99,7 @@ async fn main() -> anyhow::Result<()> {
             .unwrap_or_else(|_| filter.into()))
         .with(tracing_subscriber::fmt::layer())
         .init();
-    
+
     match cli.command {
         Commands::Init { path } => {
             commands::init(&path).await?;
@@ -81,7 +116,26 @@ async fn main() -> anyhow::Result<()> {
         Commands::Chat => {
             commands::chat().await?;
         }
+        Commands::Context => {
+            commands::context().await?;
+        }
+        Commands::Process => {
+            commands::process().await?;
+        }
+        Commands::Senses => {
+            commands::senses().await?;
+        }
+        Commands::Wallet { action } => {
+            match action {
+                WalletCommands::Balance => commands::wallet_balance().await?,
+                WalletCommands::Transfer { to, amount } => commands::wallet_transfer(&to, amount).await?,
+                WalletCommands::Status => commands::wallet_status().await?,
+            }
+        }
     }
-    
+
+
+
+
     Ok(())
 }
