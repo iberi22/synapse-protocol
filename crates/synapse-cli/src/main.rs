@@ -4,6 +4,7 @@ use clap::{Parser, Subcommand};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod commands;
+mod config;
 
 #[derive(Parser)]
 #[command(name = "synapse")]
@@ -52,7 +53,6 @@ enum Commands {
     /// Chat with the AI (interactive mode)
     Chat,
 
-
     /// Test Context Observer (Active Window)
     Context,
 
@@ -70,7 +70,6 @@ enum Commands {
         consolidate: bool,
     },
 
-    /// Test Sensory Capabilities (Camera/Mic)
     /// Test Sensory Capabilities (Camera/Mic)
     Senses,
 
@@ -91,13 +90,8 @@ enum WalletCommands {
         amount: u64,
     },
     /// Check Proof of Sentience status
-    /// Check Proof of Sentience status
     Status,
 }
-
-
-
-
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -147,9 +141,6 @@ async fn main() -> anyhow::Result<()> {
             }
         }
     }
-
-
-
 
     Ok(())
 }

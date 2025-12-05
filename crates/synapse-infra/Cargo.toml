@@ -28,6 +28,13 @@ tracing = { workspace = true }
 surrealdb = { workspace = true }
 sled = { workspace = true }
 
+# Arrow (needed for LanceDB operations)
+arrow-array = "56"
+arrow-schema = "56"
+
+# Futures (for stream operations)
+futures = "0.3"
+
 # AI Inference
 ort = { workspace = true }
 tokenizers = { version = "0.19", default-features = false, features = ["onig"] }

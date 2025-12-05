@@ -1,9 +1,10 @@
 //! CLI command implementations.
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use tracing::info;
 
-/// Initialize a new Synapse database.
+use synapse_core::entities::MemoryNode;
+
 /// Initialize a new Synapse database.
 pub async fn init(path: &str) -> Result<()> {
     info!("Initializing Synapse database at: {}", path);
@@ -66,8 +67,13 @@ pub async fn init(path: &str) -> Result<()> {
         println!("✅ LLM already exists.");
     }
 
+    // 3. Create data directories
+    std::fs::create_dir_all(path)?;
+    std::fs::create_dir_all(format!("{}/buffer", path))?;
+    std::fs::create_dir_all(format!("{}/memory", path))?;
+
     println!("✅ Synapse database initialized at: {}", path);
-    println!("   📦 Vector store: LanceDB");
+    println!("   📦 Vector store: SurrealDB");
     println!("   📋 Buffer store: Sled");
     println!("   🧠 Embedding Model: all-MiniLM-L6-v2");
     println!("   🤖 LLM Model: TinyLlama-1.1B-Chat (GGUF)");
@@ -107,12 +113,23 @@ pub async fn store(content: &str, namespace: &str) -> Result<()> {
     use synapse_core::ports::EmbeddingPort;
     let embedding = embedder.embed(content).await?;
 
+    // 3. Initialize Memory Adapter (SurrealDB)
+    let memory = synapse_infra::adapters::surrealdb_adapter::SurrealDbAdapter::new("synapse_data/memory").await?;
+
+    // 4. Create MemoryNode
+    let node = MemoryNode::new(content.to_string())
+        .with_embedding(embedding.clone())
+        .with_namespace(namespace.to_string());
+
+    // 5. Store in SurrealDB
+    use synapse_core::ports::MemoryPort;
+    let node_id = memory.store(node).await
+        .context("Failed to store memory")?;
+
     println!("✅ Embedding generated (dim: {})", embedding.len());
     println!("   Vector: [{:.4}, {:.4}, {:.4}, ...]", embedding[0], embedding[1], embedding[2]);
-
-    // TODO: Store in LanceDB
-
     println!("✅ Memory stored in namespace '{}'", namespace);
+    println!("   ID: {}", node_id);
     println!("   Content: {}...", &content[..content.len().min(50)]);
 
     Ok(())
@@ -123,12 +140,34 @@ pub async fn store(content: &str, namespace: &str) -> Result<()> {
 pub async fn search(query: &str, top_k: usize) -> Result<()> {
     info!("Searching for: {}", query);
 
-    // TODO: Generate query embedding
-    // TODO: Search LanceDB
+    // 1. Initialize adapters
+    let embedder = synapse_infra::adapters::ort_adapter::OrtAdapter::new()?;
+    let memory = synapse_infra::adapters::surrealdb_adapter::SurrealDbAdapter::new("synapse_data/memory").await?;
+
+    // 2. Generate query embedding
+    use synapse_core::ports::EmbeddingPort;
+    let query_embedding = embedder.embed(query).await?;
+
+    // 3. Search
+    use synapse_core::ports::MemoryPort;
+    let results = memory.search(&query_embedding, top_k)
+        .await
+        .context("Search failed")?;
 
     println!("🔍 Search results for: {}", query);
-    println!("   (TODO: Implement after LanceDB adapter)");
-    println!("   Requested top_k: {}", top_k);
+    println!("   Found {} results:\n", results.len());
+
+    for (i, result) in results.iter().enumerate() {
+        println!("   {}. [Distance: {:.3}] {}",
+                 i + 1,
+                 result.distance,
+                 &result.node.content[..result.node.content.len().min(60)]);
+        println!("      ID: {} | Layer: {} | Namespace: {}",
+                 result.node.id,
+                 result.node.layer,
+                 result.node.namespace);
+        println!();
+    }
 
     Ok(())
 }
@@ -137,13 +176,22 @@ pub async fn search(query: &str, top_k: usize) -> Result<()> {
 pub async fn stats() -> Result<()> {
     info!("Gathering statistics...");
 
-    // TODO: Get counts from LanceDB and Sled
+    // Initialize memory adapter
+    let memory = synapse_infra::adapters::surrealdb_adapter::SurrealDbAdapter::new("synapse_data/memory").await?;
+
+    // Get counts
+    use synapse_core::ports::MemoryPort;
+    let total = memory.count().await
+        .context("Failed to get count")?;
+
+    let layer0 = memory.count_by_layer(0).await.unwrap_or(0);
+    let layer1 = memory.count_by_layer(1).await.unwrap_or(0);
 
     println!("📊 Synapse Statistics");
-    println!("   Total memories: TODO");
-    println!("   Buffer size: TODO");
-    println!("   Layer 0 (facts): TODO");
-    println!("   Layer 1+ (summaries): TODO");
+    println!("   Total memories: {}", total);
+    println!("   Buffer size: TODO (Sled)");
+    println!("   Layer 0 (facts): {}", layer0);
+    println!("   Layer 1+ (summaries): {}", total.saturating_sub(layer0));
 
     Ok(())
 }
