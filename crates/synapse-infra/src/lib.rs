@@ -9,7 +9,9 @@
 //! - `OrtAdapter` - Embeddings using ONNX Runtime
 
 pub mod adapters;
+pub mod commerce;
 pub mod error;
 
 pub use adapters::*;
+pub use commerce::*;
 pub use error::*;

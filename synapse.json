@@ -1,0 +1,7 @@
+{
+  "db_path": "./test_synapse\\lancedb",
+  "buffer_path": "./test_synapse\\sled_buffer",
+  "embedding_dim": 384,
+  "ethical_threshold": 0.95,
+  "default_namespace": "default"
+}

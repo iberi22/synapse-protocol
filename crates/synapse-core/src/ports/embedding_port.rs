@@ -1,7 +1,8 @@
 //! EmbeddingPort - Trait for text embedding generation.
 
 use async_trait::async_trait;
-use crate::CoreError;
+use crate::error::Result;
+
 
 /// Port for generating text embeddings.
 ///
@@ -12,20 +13,24 @@ pub trait EmbeddingPort: Send + Sync {
     /// Generate embedding for text.
     ///
     /// Returns a vector of floats (384-dim for MiniLM, 768 for others).
-    async fn embed(&self, text: &str) -> Result<Vec<f32>, CoreError>;
-    
+    /// Generate embedding for text.
+    ///
+    /// Returns a vector of floats (384-dim for MiniLM, 768 for others).
+    async fn embed(&self, text: &str) -> Result<Vec<f32>>;
+
     /// Generate embeddings for multiple texts (batch).
-    async fn embed_batch(&self, texts: &[String]) -> Result<Vec<Vec<f32>>, CoreError> {
+    async fn embed_batch(&self, texts: &[String]) -> Result<Vec<Vec<f32>>> {
+
         let mut results = Vec::with_capacity(texts.len());
         for text in texts {
             results.push(self.embed(text).await?);
         }
         Ok(results)
     }
-    
+
     /// Get the embedding dimension.
     fn dimension(&self) -> usize;
-    
+
     /// Get the model/provider name.
     fn provider_name(&self) -> &str;
 }

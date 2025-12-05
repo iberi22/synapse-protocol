@@ -1,7 +1,8 @@
 //! LlmPort - Trait for LLM inference.
 
 use async_trait::async_trait;
-use crate::CoreError;
+use crate::error::Result;
+
 
 /// Port for LLM text generation.
 ///
@@ -11,8 +12,8 @@ use crate::CoreError;
 #[async_trait]
 pub trait LlmPort: Send + Sync {
     /// Generate text completion.
-    async fn generate(&self, prompt: &str, max_tokens: usize) -> Result<String, CoreError>;
-    
+    async fn generate(&self, prompt: &str, max_tokens: usize) -> Result<String>;
+
     /// Generate with temperature control.
     async fn generate_with_params(
         &self,
@@ -20,10 +21,11 @@ pub trait LlmPort: Send + Sync {
         max_tokens: usize,
         temperature: f32,
         top_p: f32,
-    ) -> Result<String, CoreError>;
-    
+    ) -> Result<String>;
+
     /// Summarize text (for HiRAG layer creation).
-    async fn summarize(&self, text: &str) -> Result<String, CoreError> {
+    async fn summarize(&self, text: &str) -> Result<String> {
+
         let prompt = format!(
             "Summarize the following text concisely:\n\n{}\n\nSummary:",
             text

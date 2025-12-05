@@ -3,7 +3,7 @@ resolver = "2"
 members = [
     "crates/synapse-core",
     "crates/synapse-infra",
-    "crates/synapse-cli",
+    "crates/synapse-cli", "crates/synapse-immune",
 ]
 
 [workspace.package]
@@ -42,17 +42,20 @@ chrono = { version = "0.4", features = ["serde"] }
 # CLI
 clap = { version = "4", features = ["derive"] }
 
-# Storage - Vector DB
-lancedb = "0.10"
+# Storage - Multi-model DB (Documents + Vectors + Graph)
+# Using kv-mem for testing and kv-surrealkv for persistence (pure Rust, no C++)
+surrealdb = { version = "2", default-features = false, features = ["kv-mem", "kv-surrealkv", "protocol-ws"] }
 
 # Storage - Key-Value Buffer
 sled = "0.34"
 
 # AI Inference
-candle-core = "0.4"
-candle-nn = "0.4"
-candle-transformers = "0.4"
-ort = "2.0.0-rc.10"
+candle-core = "0.8.0"
+candle-nn = "0.8.0"
+candle-transformers = "0.8.0"
+
+ort = { version = "2.0.0-rc.10", features = ["ndarray"] }
+
 
 # Text search
 tantivy = "0.21"
