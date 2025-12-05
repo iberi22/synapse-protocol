@@ -25,7 +25,7 @@ anyhow = { workspace = true }
 tracing = { workspace = true }
 
 # Storage
-lancedb = { workspace = true }
+surrealdb = { workspace = true }
 sled = { workspace = true }
 
 # AI Inference
@@ -56,3 +56,6 @@ windows = { version = "0.52", features = [
 
 [dependencies.image]
 version = "0.24"
+
+[dev-dependencies]
+tempfile = "3.10"

@@ -59,6 +59,17 @@ enum Commands {
     /// Run Metabolism Process (Digest Buffer)
     Process,
 
+    /// Digest buffer and optionally consolidate layers
+    Digest {
+        /// Force digest even if below threshold
+        #[arg(short, long)]
+        force: bool,
+
+        /// Also consolidate Layer 0 into Layer 1+ summaries
+        #[arg(short, long)]
+        consolidate: bool,
+    },
+
     /// Test Sensory Capabilities (Camera/Mic)
     /// Test Sensory Capabilities (Camera/Mic)
     Senses,
@@ -121,6 +132,9 @@ async fn main() -> anyhow::Result<()> {
         }
         Commands::Process => {
             commands::process().await?;
+        }
+        Commands::Digest { force, consolidate } => {
+            commands::digest(force, consolidate).await?;
         }
         Commands::Senses => {
             commands::senses().await?;

@@ -60,4 +60,11 @@ pub trait MemoryPort: Send + Sync {
     /// Count total nodes.
     async fn count(&self) -> Result<usize>;
 
+    /// Add a relationship between two nodes (HiRAG graph edge).
+    ///
+    /// e.g. `add_relationship("summary_id", "summarizes", "fact_id")`
+    async fn add_relationship(&self, from_id: &str, relation: &str, to_id: &str) -> Result<()>;
+
+    /// Count nodes at a specific layer (for consolidation thresholds).
+    async fn count_by_layer(&self, layer: u8) -> Result<usize>;
 }

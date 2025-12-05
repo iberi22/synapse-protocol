@@ -42,8 +42,9 @@ chrono = { version = "0.4", features = ["serde"] }
 # CLI
 clap = { version = "4", features = ["derive"] }
 
-# Storage - Vector DB
-lancedb = "0.22"
+# Storage - Multi-model DB (Documents + Vectors + Graph)
+# Using kv-mem for testing and kv-surrealkv for persistence (pure Rust, no C++)
+surrealdb = { version = "2", default-features = false, features = ["kv-mem", "kv-surrealkv", "protocol-ws"] }
 
 # Storage - Key-Value Buffer
 sled = "0.34"

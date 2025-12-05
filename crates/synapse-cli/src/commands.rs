@@ -225,9 +225,8 @@ pub async fn process() -> Result<()> {
     // Buffer (Sled)
     let buffer = synapse_infra::adapters::sled_adapter::SledAdapter::new("synapse_data/buffer")?;
 
-    // Memory (LanceDB)
-    let memory = synapse_infra::adapters::lancedb_adapter::LanceDbAdapter::new("synapse_data/memory");
-
+    // Memory (SurrealDB with persistence)
+    let memory = synapse_infra::adapters::surrealdb_adapter::SurrealDbAdapter::new("synapse_data/memory").await?;
 
     // LLM (Candle)
     let llm = synapse_infra::adapters::candle_adapter::CandleAdapter::new()?;
@@ -251,6 +250,84 @@ pub async fn process() -> Result<()> {
 
     Ok(())
 }
+
+/// Digest buffer and optionally consolidate layers.
+pub async fn digest(force: bool, consolidate: bool) -> Result<()> {
+    info!("Starting digest process (force: {}, consolidate: {})", force, consolidate);
+
+    // Initialize adapters
+    let buffer = synapse_infra::adapters::sled_adapter::SledAdapter::new("synapse_data/buffer")?;
+    let memory = std::sync::Arc::new(
+        synapse_infra::adapters::surrealdb_adapter::SurrealDbAdapter::new("synapse_data/memory").await?
+    );
+    let llm = std::sync::Arc::new(
+        synapse_infra::adapters::candle_adapter::CandleAdapter::new()?
+    );
+    let embedder = std::sync::Arc::new(
+        synapse_infra::adapters::ort_adapter::OrtAdapter::new()?
+    );
+
+    println!("🧠 Synapse Digest");
+    println!("─────────────────");
+
+    // 1. Run metabolism (digest buffer)
+    let metabolism = if force {
+        synapse_core::logic::metabolism::Metabolism::new(
+            std::sync::Arc::new(buffer),
+            memory.clone(),
+            llm.clone(),
+            embedder.clone(),
+        ).with_threshold(1) // Force: digest even with 1 item
+    } else {
+        synapse_core::logic::metabolism::Metabolism::new(
+            std::sync::Arc::new(buffer),
+            memory.clone(),
+            llm.clone(),
+            embedder.clone(),
+        )
+    };
+
+    println!("📥 Digesting buffer...");
+    match metabolism.digest().await {
+        Ok(count) if count > 0 => println!("   ✅ Digested {} interactions → Layer 0", count),
+        Ok(_) => println!("   ⏭️  Buffer below threshold (use --force to override)"),
+        Err(e) => println!("   ❌ Digest failed: {}", e),
+    }
+
+    // 2. Optionally consolidate layers
+    if consolidate {
+        println!("📊 Consolidating layers...");
+        let consolidator = synapse_core::logic::consolidation::LayerConsolidator::new(
+            memory.clone(),
+            llm,
+            embedder,
+        );
+
+        match consolidator.consolidate_all().await {
+            Ok(count) if count > 0 => println!("   ✅ Created {} layer summaries", count),
+            Ok(_) => println!("   ⏭️  No layers ready for consolidation"),
+            Err(e) => println!("   ❌ Consolidation failed: {}", e),
+        }
+    }
+
+    // 3. Show current stats
+    println!("\n📈 Current Memory Stats");
+    use synapse_core::ports::MemoryPort;
+    let total = memory.count().await.unwrap_or(0);
+    let layer0 = memory.count_by_layer(0).await.unwrap_or(0);
+    let layer1 = memory.count_by_layer(1).await.unwrap_or(0);
+    let layer2_plus = total.saturating_sub(layer0).saturating_sub(layer1);
+
+    println!("   Total nodes: {}", total);
+    println!("   Layer 0 (facts): {}", layer0);
+    println!("   Layer 1 (summaries): {}", layer1);
+    if layer2_plus > 0 {
+        println!("   Layer 2+ (higher): {}", layer2_plus);
+    }
+
+    Ok(())
+}
+
 
 /// Test Sensory Capabilities.
 
