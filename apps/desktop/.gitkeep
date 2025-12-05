@@ -1,0 +1,10 @@
+# Tauri v2 + Svelte 5 Desktop Application
+
+This directory will contain the desktop UI built with:
+- Tauri v2 (Rust backend)
+- Svelte 5 (Frontend framework)
+- Cyberpunk theme
+
+## Setup Instructions
+
+Coming soon - to be implemented by Jules (Issue #12)
