@@ -52,7 +52,7 @@ sled = "0.34"
 # AI Inference
 candle-core = "0.8.0"
 candle-nn = "0.8.0"
-candle-transformers = "0.8.0"
+candle-transformers = "0.9.1"
 
 ort = { version = "2.0.0-rc.10", features = ["ndarray"] }
 
