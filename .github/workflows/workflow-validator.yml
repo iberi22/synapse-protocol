@@ -130,7 +130,7 @@ jobs:
 
       - name: Download Orchestrator (from artifact)
         if: steps.get-binary.outputs.source == 'none'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: workflow-orchestrator
           path: ./bin
