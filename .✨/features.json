@@ -1,0 +1,175 @@
+{
+  "$schema": "./features.schema.json",
+  "version": "1.0.0",
+  "project": "synapse-protocol",
+  "updated": "2025-12-06",
+  "phases": {
+    "1": {
+      "name": "The Skeleton",
+      "status": "in_progress",
+      "target_week": "1-2"
+    },
+    "2": {
+      "name": "The Metabolism",
+      "status": "pending",
+      "target_week": "3-4"
+    },
+    "3": {
+      "name": "The Brain",
+      "status": "pending",
+      "target_week": "5-6"
+    },
+    "4": {
+      "name": "The Network",
+      "status": "pending",
+      "target_week": "7-8"
+    },
+    "5": {
+      "name": "The Face",
+      "status": "pending",
+      "target_week": "9-12"
+    }
+  },
+  "features": [
+    {
+      "id": "core-entities",
+      "name": "Core Entities (MemoryNode, GenesisBlock)",
+      "phase": 1,
+      "crate": "synapse-core",
+      "passes": true,
+      "tests": ["crates/synapse-core/src/entities/mod.rs"],
+      "last_updated": "2025-12-04"
+    },
+    {
+      "id": "core-ports",
+      "name": "Port Traits (MemoryPort, LlmPort, etc.)",
+      "phase": 1,
+      "crate": "synapse-core",
+      "passes": true,
+      "tests": ["crates/synapse-core/src/ports/mod.rs"],
+      "last_updated": "2025-12-04"
+    },
+    {
+      "id": "surrealdb-adapter",
+      "name": "SurrealDB Memory Adapter",
+      "phase": 1,
+      "crate": "synapse-infra",
+      "passes": true,
+      "tests": ["crates/synapse-infra/src/storage/surrealdb.rs"],
+      "last_updated": "2025-12-05"
+    },
+    {
+      "id": "cli-basic",
+      "name": "Basic CLI Application",
+      "phase": 1,
+      "crate": "synapse-cli",
+      "passes": true,
+      "tests": ["crates/synapse-cli/src/main.rs"],
+      "last_updated": "2025-12-05"
+    },
+    {
+      "id": "metabolism-logic",
+      "name": "Metabolism (Buffer → Long-term)",
+      "phase": 2,
+      "crate": "synapse-core",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "hirag-implementation",
+      "name": "HiRAG Hierarchical RAG",
+      "phase": 2,
+      "crate": "synapse-core",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "ort-embeddings",
+      "name": "ORT Embeddings Integration",
+      "phase": 2,
+      "crate": "synapse-infra",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "candle-rwkv",
+      "name": "Candle + RWKV Integration",
+      "phase": 3,
+      "crate": "synapse-infra",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "genesis-block-ethics",
+      "name": "GenesisBlock Ethics Filter",
+      "phase": 3,
+      "crate": "synapse-core",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "sanitizer",
+      "name": "PII Sanitizer",
+      "phase": 3,
+      "crate": "synapse-core",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "libp2p-sync",
+      "name": "Libp2p P2P Sync",
+      "phase": 4,
+      "crate": "synapse-infra",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "encryption",
+      "name": "AES-GCM Encryption",
+      "phase": 4,
+      "crate": "synapse-infra",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "tauri-shell",
+      "name": "Tauri v2 Desktop Shell",
+      "phase": 5,
+      "crate": "apps/desktop",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    },
+    {
+      "id": "svelte-frontend",
+      "name": "Svelte 5 Frontend",
+      "phase": 5,
+      "crate": "apps/desktop",
+      "passes": false,
+      "tests": [],
+      "last_updated": null
+    }
+  ],
+  "agents": {
+    "planner": {
+      "active": true,
+      "last_run": null
+    },
+    "guardian": {
+      "active": true,
+      "auto_merge_threshold": 70
+    },
+    "dispatcher": {
+      "active": true,
+      "default_strategy": "round-robin"
+    }
+  }
+}
