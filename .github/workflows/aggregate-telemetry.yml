@@ -31,7 +31,7 @@ jobs:
       report_created: ${{ steps.report.outputs.created }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Calculate target week
         id: week
