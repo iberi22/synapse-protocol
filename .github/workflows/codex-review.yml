@@ -105,7 +105,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout PR
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: refs/pull/${{ needs.should-run.outputs.pr_number }}/merge
           fetch-depth: 0

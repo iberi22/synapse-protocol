@@ -26,7 +26,7 @@ jobs:
     outputs:
       metrics_json: ${{ steps.metrics.outputs.json }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Calculate date range
         id: dates
