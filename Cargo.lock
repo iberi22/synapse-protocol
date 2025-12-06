@@ -5728,7 +5728,7 @@ dependencies = [
  "chrono",
  "serde",
  "serde_json",
- "thiserror 1.0.69",
+ "thiserror 2.0.17",
  "tokio",
  "uuid",
 ]
@@ -5741,7 +5741,7 @@ dependencies = [
  "async-trait",
  "serde",
  "synapse-core",
- "thiserror 1.0.69",
+ "thiserror 2.0.17",
  "tokio",
  "tracing",
 ]
@@ -5770,7 +5770,7 @@ dependencies = [
  "surrealdb",
  "synapse-core",
  "tempfile",
- "thiserror 1.0.69",
+ "thiserror 2.0.17",
  "tokenizers",
  "tokio",
  "tracing",
