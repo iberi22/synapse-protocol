@@ -1,0 +1,243 @@
+# Planner Agent - Autonomous Issue Creation Workflow
+# Part of Git-Core Protocol v3.0 "Full Autonomy"
+#
+# This agent analyzes the project roadmap and current state to
+# automatically generate atomic issues for development.
+
+name: 🧠 Planner Agent
+
+on:
+  # Daily planning at 6 AM UTC
+  schedule:
+    - cron: '0 6 * * 1-5'  # Weekdays only
+
+  # Manual trigger with specific objective
+  workflow_dispatch:
+    inputs:
+      objective:
+        description: 'High-level objective to plan (optional)'
+        required: false
+        type: string
+      max_issues:
+        description: 'Maximum issues to create'
+        required: false
+        default: '3'
+        type: string
+      dry_run:
+        description: 'Preview without creating issues'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  analyze:
+    name: 📊 Analyze Project State
+    runs-on: ubuntu-latest
+    outputs:
+      current_phase: ${{ steps.roadmap.outputs.current_phase }}
+      incomplete_tasks: ${{ steps.status.outputs.incomplete }}
+      open_issues: ${{ steps.issues.outputs.count }}
+
+    steps:
+      - name: 📋 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🗺️ Parse Roadmap from ARCHITECTURE.md
+        id: roadmap
+        run: |
+          if [ -f ".✨/ARCHITECTURE.md" ]; then
+            # Extract current phase (marked with 🎯 CURRENT)
+            CURRENT_PHASE=$(grep -A 1 "🎯 CURRENT" .✨/ARCHITECTURE.md | head -1 | sed 's/.*Phase \([0-9]\).*/\1/' || echo "1")
+            echo "current_phase=$CURRENT_PHASE" >> $GITHUB_OUTPUT
+            echo "📍 Current Phase: $CURRENT_PHASE"
+
+            # Extract phase tasks
+            PHASE_SECTION=$(sed -n "/Phase $CURRENT_PHASE/,/Phase $((CURRENT_PHASE + 1))/p" .✨/ARCHITECTURE.md)
+            echo "phase_section<<EOF" >> $GITHUB_OUTPUT
+            echo "$PHASE_SECTION" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "current_phase=1" >> $GITHUB_OUTPUT
+            echo "⚠️ No ARCHITECTURE.md found"
+          fi
+
+      - name: 📋 Check Features Status
+        id: status
+        run: |
+          if [ -f ".✨/features.json" ]; then
+            # Get incomplete features
+            INCOMPLETE=$(jq -r '.features[] | select(.passes == false) | .id' .✨/features.json 2>/dev/null | head -5)
+            echo "incomplete<<EOF" >> $GITHUB_OUTPUT
+            echo "$INCOMPLETE" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "incomplete=" >> $GITHUB_OUTPUT
+            echo "📝 No features.json found - will use ARCHITECTURE.md tasks"
+          fi
+
+      - name: 🔍 Get Open Issues
+        id: issues
+        run: |
+          # Count open issues with ai-agent or ai-plan label
+          COUNT=$(gh issue list --label "ai-agent" --state open --json number | jq 'length')
+          PLAN_COUNT=$(gh issue list --label "ai-plan" --state open --json number | jq 'length')
+          TOTAL=$((COUNT + PLAN_COUNT))
+
+          echo "count=$TOTAL" >> $GITHUB_OUTPUT
+          echo "📊 Open AI issues: $TOTAL"
+
+          # Get existing issue titles to avoid duplicates
+          gh issue list --state open --json title --jq '.[].title' > /tmp/existing_titles.txt
+          echo "existing_titles=/tmp/existing_titles.txt" >> $GITHUB_OUTPUT
+
+  plan:
+    name: 📝 Generate Issues
+    runs-on: ubuntu-latest
+    needs: analyze
+    if: needs.analyze.outputs.open_issues < 10  # Don't overload backlog
+
+    steps:
+      - name: 📋 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🧠 Generate Issue Plan
+        id: generate
+        run: |
+          CURRENT_PHASE="${{ needs.analyze.outputs.current_phase }}"
+          MAX_ISSUES="${{ inputs.max_issues || '3' }}"
+          OBJECTIVE="${{ inputs.objective }}"
+
+          echo "📍 Planning for Phase $CURRENT_PHASE"
+          echo "🎯 Max issues: $MAX_ISSUES"
+
+          # Read ARCHITECTURE.md to find unchecked tasks
+          TASKS=()
+
+          if [ -f ".✨/ARCHITECTURE.md" ]; then
+            # Extract unchecked tasks from current phase
+            while IFS= read -r line; do
+              if [[ "$line" =~ ^\-\ \[\ \]\ (.+) ]]; then
+                TASK="${BASH_REMATCH[1]}"
+                TASKS+=("$TASK")
+              fi
+            done < <(sed -n "/Phase $CURRENT_PHASE/,/Phase $((CURRENT_PHASE + 1))/p" .✨/ARCHITECTURE.md)
+          fi
+
+          # If objective provided, add it as priority task
+          if [ -n "$OBJECTIVE" ]; then
+            TASKS=("$OBJECTIVE" "${TASKS[@]}")
+          fi
+
+          # Limit to max issues
+          TASKS=("${TASKS[@]:0:$MAX_ISSUES}")
+
+          echo "📋 Tasks to create:"
+          printf '%s\n' "${TASKS[@]}"
+
+          # Save for next step
+          printf '%s\n' "${TASKS[@]}" > /tmp/planned_tasks.txt
+          echo "task_count=${#TASKS[@]}" >> $GITHUB_OUTPUT
+
+      - name: 🏗️ Create Issues
+        if: inputs.dry_run != 'true'
+        run: |
+          PHASE="${{ needs.analyze.outputs.current_phase }}"
+
+          while IFS= read -r TASK; do
+            [ -z "$TASK" ] && continue
+
+            # Determine issue type from task description
+            if [[ "$TASK" =~ ^(implement|create|add|build) ]]; then
+              TYPE="FEAT"
+              LABEL="enhancement"
+            elif [[ "$TASK" =~ ^(fix|resolve|debug) ]]; then
+              TYPE="BUG"
+              LABEL="bug"
+            elif [[ "$TASK" =~ ^(test|verify) ]]; then
+              TYPE="TEST"
+              LABEL="testing"
+            elif [[ "$TASK" =~ ^(doc|document) ]]; then
+              TYPE="DOCS"
+              LABEL="documentation"
+            else
+              TYPE="TASK"
+              LABEL="enhancement"
+            fi
+
+            TITLE="[$TYPE] $TASK"
+
+            # Check if similar issue exists
+            if gh issue list --state open --json title --jq '.[].title' | grep -qi "$TASK"; then
+              echo "⏭️ Skipping (similar exists): $TASK"
+              continue
+            fi
+
+            # Create issue body
+            BODY=$(cat <<EOF
+          ## 🎯 Objective
+
+          $TASK
+
+          ## 📍 Context
+
+          - **Phase**: $PHASE (from ARCHITECTURE.md)
+          - **Generated by**: 🧠 Planner Agent
+          - **Date**: $(date -u +"%Y-%m-%d %H:%M UTC")
+
+          ## ✅ Acceptance Criteria
+
+          - [ ] Implementation complete
+          - [ ] Tests added (if applicable)
+          - [ ] Documentation updated (if applicable)
+
+          ## 📚 References
+
+          - Architecture: \`.✨/ARCHITECTURE.md\`
+          - Agent Index: \`.✨/AGENT_INDEX.md\`
+
+          ---
+          *🤖 This issue was auto-generated by Planner Agent (Protocol v3.0)*
+          EOF
+          )
+
+            echo "📝 Creating: $TITLE"
+            gh issue create \
+              --title "$TITLE" \
+              --body "$BODY" \
+              --label "ai-agent,$LABEL"
+
+          done < /tmp/planned_tasks.txt
+
+      - name: 🔄 Trigger Dispatcher
+        if: inputs.dry_run != 'true' && steps.generate.outputs.task_count > 0
+        run: |
+          echo "🚀 Triggering Agent Dispatcher..."
+          gh workflow run agent-dispatcher.yml \
+            --field strategy=round-robin \
+            --field max_issues=${{ steps.generate.outputs.task_count }}
+
+      - name: 📊 Summary
+        run: |
+          echo "## 🧠 Planner Agent Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Current Phase | ${{ needs.analyze.outputs.current_phase }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Open AI Issues | ${{ needs.analyze.outputs.open_issues }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tasks Planned | ${{ steps.generate.outputs.task_count || 0 }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dry Run | ${{ inputs.dry_run || 'false' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ inputs.dry_run }}" == "true" ]; then
+            echo "### 📋 Tasks (Dry Run - Not Created)" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            cat /tmp/planned_tasks.txt >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi

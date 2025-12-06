@@ -1,0 +1,314 @@
+# Guardian Agent - Auto-Merge Decision Workflow
+# Part of Git-Core Protocol v3.0 "Full Autonomy"
+#
+# This agent acts as the final gate before merging PRs.
+# It evaluates multiple signals to decide: auto-merge or escalate to human.
+
+name: 🛡️ Guardian Agent (Auto-Merge)
+
+on:
+  # Trigger when a review is submitted
+  pull_request_review:
+    types: [submitted]
+
+  # Trigger when all checks complete
+  check_suite:
+    types: [completed]
+
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to evaluate'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  evaluate:
+    name: 🔍 Evaluate PR for Auto-Merge
+    runs-on: ubuntu-latest
+
+    # Only run on completed check suites or approved reviews
+    if: |
+      (github.event_name == 'check_suite' && github.event.check_suite.conclusion == 'success') ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
+      github.event_name == 'workflow_dispatch'
+
+    outputs:
+      decision: ${{ steps.decision.outputs.result }}
+      confidence: ${{ steps.scoring.outputs.confidence }}
+      reason: ${{ steps.decision.outputs.reason }}
+
+    steps:
+      - name: 📋 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔢 Get PR Number
+        id: pr-number
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            PR_NUMBER="${{ inputs.pr_number }}"
+          elif [ "${{ github.event_name }}" == "check_suite" ]; then
+            # Find PR associated with check suite
+            PR_NUMBER=$(gh pr list --head "${{ github.event.check_suite.head_branch }}" --json number --jq '.[0].number')
+          else
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+          fi
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No PR found, skipping"
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "found=true" >> $GITHUB_OUTPUT
+          echo "📌 Evaluating PR #$PR_NUMBER"
+
+      - name: 🏷️ Check Labels
+        id: labels
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          PR_NUMBER="${{ steps.pr-number.outputs.number }}"
+
+          LABELS=$(gh pr view "$PR_NUMBER" --json labels --jq '.labels[].name')
+          echo "Labels: $LABELS"
+
+          # Check blocking labels
+          if echo "$LABELS" | grep -q "high-stakes"; then
+            echo "has_blocker=true" >> $GITHUB_OUTPUT
+            echo "blocker_reason=PR has 'high-stakes' label - requires human review" >> $GITHUB_OUTPUT
+          elif echo "$LABELS" | grep -q "needs-human"; then
+            echo "has_blocker=true" >> $GITHUB_OUTPUT
+            echo "blocker_reason=PR has 'needs-human' label" >> $GITHUB_OUTPUT
+          elif echo "$LABELS" | grep -q "do-not-merge"; then
+            echo "has_blocker=true" >> $GITHUB_OUTPUT
+            echo "blocker_reason=PR has 'do-not-merge' label" >> $GITHUB_OUTPUT
+          else
+            echo "has_blocker=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: ✅ Check CI Status
+        id: ci-status
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          PR_NUMBER="${{ steps.pr-number.outputs.number }}"
+
+          # Get all check statuses
+          CHECKS=$(gh pr checks "$PR_NUMBER" --json name,state 2>/dev/null || echo "[]")
+
+          FAILED=$(echo "$CHECKS" | jq '[.[] | select(.state != "SUCCESS" and .state != "SKIPPED")] | length')
+          TOTAL=$(echo "$CHECKS" | jq 'length')
+
+          if [ "$FAILED" -gt 0 ]; then
+            echo "all_passed=false" >> $GITHUB_OUTPUT
+            echo "Failed checks: $FAILED / $TOTAL"
+          else
+            echo "all_passed=true" >> $GITHUB_OUTPUT
+            echo "All $TOTAL checks passed"
+          fi
+
+      - name: 📝 Check Reviews
+        id: reviews
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          PR_NUMBER="${{ steps.pr-number.outputs.number }}"
+
+          REVIEWS=$(gh pr view "$PR_NUMBER" --json reviews --jq '.reviews')
+
+          # Check for approvals (from humans or bots like CodeRabbit)
+          APPROVALS=$(echo "$REVIEWS" | jq '[.[] | select(.state == "APPROVED")] | length')
+          CHANGES_REQUESTED=$(echo "$REVIEWS" | jq '[.[] | select(.state == "CHANGES_REQUESTED")] | length')
+
+          echo "approvals=$APPROVALS" >> $GITHUB_OUTPUT
+          echo "changes_requested=$CHANGES_REQUESTED" >> $GITHUB_OUTPUT
+
+          if [ "$CHANGES_REQUESTED" -gt 0 ]; then
+            echo "review_ok=false" >> $GITHUB_OUTPUT
+          elif [ "$APPROVALS" -gt 0 ]; then
+            echo "review_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "review_ok=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📏 Calculate Diff Size
+        id: diff-size
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          PR_NUMBER="${{ steps.pr-number.outputs.number }}"
+
+          STATS=$(gh pr view "$PR_NUMBER" --json additions,deletions,changedFiles)
+          ADDITIONS=$(echo "$STATS" | jq '.additions')
+          DELETIONS=$(echo "$STATS" | jq '.deletions')
+          FILES=$(echo "$STATS" | jq '.changedFiles')
+
+          TOTAL_LINES=$((ADDITIONS + DELETIONS))
+
+          echo "total_lines=$TOTAL_LINES" >> $GITHUB_OUTPUT
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+
+          # Small PR bonus
+          if [ "$TOTAL_LINES" -lt 100 ]; then
+            echo "size_bonus=20" >> $GITHUB_OUTPUT
+          elif [ "$TOTAL_LINES" -lt 300 ]; then
+            echo "size_bonus=10" >> $GITHUB_OUTPUT
+          elif [ "$TOTAL_LINES" -lt 500 ]; then
+            echo "size_bonus=0" >> $GITHUB_OUTPUT
+          else
+            echo "size_bonus=-10" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🧮 Calculate Confidence Score
+        id: scoring
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          # Base score
+          CONFIDENCE=50
+
+          # CI checks (+30 if all pass)
+          if [ "${{ steps.ci-status.outputs.all_passed }}" == "true" ]; then
+            CONFIDENCE=$((CONFIDENCE + 30))
+          fi
+
+          # Reviews (+20 if approved, -30 if changes requested)
+          if [ "${{ steps.reviews.outputs.review_ok }}" == "true" ]; then
+            CONFIDENCE=$((CONFIDENCE + 20))
+          fi
+          if [ "${{ steps.reviews.outputs.changes_requested }}" -gt 0 ]; then
+            CONFIDENCE=$((CONFIDENCE - 30))
+          fi
+
+          # Size bonus/penalty
+          SIZE_BONUS=${{ steps.diff-size.outputs.size_bonus }}
+          CONFIDENCE=$((CONFIDENCE + SIZE_BONUS))
+
+          # Cap at 0-100
+          if [ $CONFIDENCE -lt 0 ]; then CONFIDENCE=0; fi
+          if [ $CONFIDENCE -gt 100 ]; then CONFIDENCE=100; fi
+
+          echo "confidence=$CONFIDENCE" >> $GITHUB_OUTPUT
+          echo "📊 Confidence Score: $CONFIDENCE%"
+
+      - name: 🎯 Make Decision
+        id: decision
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          CONFIDENCE=${{ steps.scoring.outputs.confidence }}
+          HAS_BLOCKER="${{ steps.labels.outputs.has_blocker }}"
+          BLOCKER_REASON="${{ steps.labels.outputs.blocker_reason }}"
+          CI_PASSED="${{ steps.ci-status.outputs.all_passed }}"
+          REVIEW_OK="${{ steps.reviews.outputs.review_ok }}"
+
+          # Decision logic
+          if [ "$HAS_BLOCKER" == "true" ]; then
+            echo "result=escalate" >> $GITHUB_OUTPUT
+            echo "reason=$BLOCKER_REASON" >> $GITHUB_OUTPUT
+          elif [ "$CI_PASSED" != "true" ]; then
+            echo "result=wait" >> $GITHUB_OUTPUT
+            echo "reason=CI checks have not all passed" >> $GITHUB_OUTPUT
+          elif [ "$REVIEW_OK" != "true" ]; then
+            echo "result=wait" >> $GITHUB_OUTPUT
+            echo "reason=Awaiting review approval" >> $GITHUB_OUTPUT
+          elif [ $CONFIDENCE -ge 70 ]; then
+            echo "result=merge" >> $GITHUB_OUTPUT
+            echo "reason=All conditions met (confidence: $CONFIDENCE%)" >> $GITHUB_OUTPUT
+          else
+            echo "result=escalate" >> $GITHUB_OUTPUT
+            echo "reason=Confidence too low: $CONFIDENCE% (threshold: 70%)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🛡️ Execute Decision
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          PR_NUMBER="${{ steps.pr-number.outputs.number }}"
+          DECISION="${{ steps.decision.outputs.result }}"
+          REASON="${{ steps.decision.outputs.reason }}"
+          CONFIDENCE="${{ steps.scoring.outputs.confidence }}"
+
+          case "$DECISION" in
+            "merge")
+              echo "✅ Auto-merging PR #$PR_NUMBER"
+
+              # Add comment before merge
+              gh pr comment "$PR_NUMBER" --body "$(cat <<EOF
+          ## 🛡️ Guardian Agent Decision
+
+          **Decision:** ✅ AUTO-MERGE
+          **Confidence:** $CONFIDENCE%
+          **Reason:** $REASON
+
+          ### Evaluation Summary
+          | Check | Status |
+          |-------|--------|
+          | CI Checks | ${{ steps.ci-status.outputs.all_passed == 'true' && '✅ Passed' || '❌ Failed' }} |
+          | Reviews | ${{ steps.reviews.outputs.review_ok == 'true' && '✅ Approved' || '⏳ Pending' }} |
+          | Blocking Labels | ${{ steps.labels.outputs.has_blocker == 'true' && '🚫 Present' || '✅ None' }} |
+          | Diff Size | ${{ steps.diff-size.outputs.total_lines }} lines |
+
+          ---
+          *🤖 This merge was performed automatically by Guardian Agent (Protocol v3.0)*
+          EOF
+          )"
+
+              # Perform squash merge
+              gh pr merge "$PR_NUMBER" --squash --auto
+              ;;
+
+            "escalate")
+              echo "⚠️ Escalating PR #$PR_NUMBER to human review"
+
+              # Add needs-human label
+              gh pr edit "$PR_NUMBER" --add-label "needs-human"
+
+              # Add comment
+              gh pr comment "$PR_NUMBER" --body "$(cat <<EOF
+          ## 🛡️ Guardian Agent Decision
+
+          **Decision:** ⚠️ ESCALATE TO HUMAN
+          **Confidence:** $CONFIDENCE%
+          **Reason:** $REASON
+
+          ### Why Human Review is Required
+          $REASON
+
+          ### What to Do
+          1. A maintainer should review this PR
+          2. After review, remove the \`needs-human\` label to allow re-evaluation
+          3. Or merge manually if appropriate
+
+          ---
+          *🤖 Guardian Agent (Protocol v3.0)*
+          EOF
+          )"
+              ;;
+
+            "wait")
+              echo "⏳ Waiting - $REASON"
+              # No action, will re-evaluate when conditions change
+              ;;
+          esac
+
+      - name: 📊 Summary
+        if: steps.pr-number.outputs.found == 'true'
+        run: |
+          PR_NUMBER="${{ steps.pr-number.outputs.number }}"
+          DECISION="${{ steps.decision.outputs.result }}"
+          CONFIDENCE="${{ steps.scoring.outputs.confidence }}"
+
+          echo "## 🛡️ Guardian Agent Evaluation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| PR | #$PR_NUMBER |" >> $GITHUB_STEP_SUMMARY
+          echo "| Decision | $DECISION |" >> $GITHUB_STEP_SUMMARY
+          echo "| Confidence | $CONFIDENCE% |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lines Changed | ${{ steps.diff-size.outputs.total_lines }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Files Changed | ${{ steps.diff-size.outputs.files }} |" >> $GITHUB_STEP_SUMMARY
