@@ -50,7 +50,7 @@ surrealdb = { version = "2", default-features = false, features = ["kv-mem", "kv
 sled = "0.34"
 
 # AI Inference
-candle-core = "0.8.0"
+candle-core = "0.9.1"
 candle-nn = "0.8.0"
 candle-transformers = "0.8.0"
 
