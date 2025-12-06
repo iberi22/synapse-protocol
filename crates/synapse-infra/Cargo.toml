@@ -46,7 +46,7 @@ candle-transformers = { workspace = true }
 # Sensory (Vision & Audio)
 nokhwa = { version = "0.10", features = ["input-native"] }
 cpal = "0.15"
-rodio = "0.17"
+rodio = "0.21"
 
 
 
