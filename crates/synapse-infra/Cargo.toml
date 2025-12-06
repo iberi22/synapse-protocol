@@ -37,7 +37,7 @@ futures = "0.3"
 
 # AI Inference
 ort = { workspace = true }
-tokenizers = { version = "0.19", default-features = false, features = ["onig"] }
+tokenizers = { version = "0.22", default-features = false, features = ["onig"] }
 ndarray = "0.16"
 candle-core = { workspace = true }
 candle-nn = { workspace = true }
