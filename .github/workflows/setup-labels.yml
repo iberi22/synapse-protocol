@@ -1,0 +1,73 @@
+name: "🏷️ Setup Labels"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/setup-labels.yml'
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  create-labels:
+    name: "🏷️ Create Git-Core Protocol Labels"
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Create Dependency Lifecycle Labels
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO="${{ github.repository }}"
+          
+          # Function to create or update label
+          create_label() {
+            local name="$1"
+            local color="$2"
+            local description="$3"
+            
+            # Try to create, if exists, update
+            gh label create "$name" --color "$color" --description "$description" --repo "$REPO" 2>/dev/null || \
+            gh label edit "$name" --color "$color" --description "$description" --repo "$REPO" 2>/dev/null || \
+            echo "Label '$name' already exists with same config"
+          }
+          
+          echo "🏷️ Creating Git-Core Protocol labels..."
+          
+          # Dependency Lifecycle Labels
+          create_label "quarantine" "FFA500" "Dependency in 14-day quarantine period"
+          create_label "ready-to-adopt" "28A745" "Dependency passed quarantine, ready for adoption"
+          create_label "implementation-plan" "0366D6" "Implementation plan awaiting review"
+          create_label "awaiting-review" "FBCA04" "Awaiting user review before proceeding"
+          create_label "post-quarantine" "6F42C1" "Post-quarantine analysis in progress"
+          
+          # AI Agent Labels
+          create_label "copilot" "0969DA" "Assigned to GitHub Copilot"
+          create_label "copilot-implementing" "1D76DB" "Copilot is implementing changes"
+          create_label "jules" "EA4335" "Assigned to Google Jules"
+          create_label "ai-agent" "8250DF" "For AI agent auto-assignment"
+          create_label "ai-review-requested" "C5DEF5" "AI code review requested"
+          
+          # Automation Labels
+          create_label "auto-implementation" "FF6B6B" "Scheduled for automatic implementation"
+          create_label "scheduled" "BFD4F2" "Scheduled automation task"
+          create_label "living-context" "7057FF" "Part of Living Context Protocol"
+          
+          # Review Labels
+          create_label "gemini-review" "4285F4" "Gemini Code Assist review"
+          create_label "coderabbit" "FF69B4" "CodeRabbit review"
+          create_label "codex-review" "9B59B6" "Codex AI review"
+          
+          # Status Labels
+          create_label "in-progress" "0E8A16" "Work in progress"
+          create_label "blocked" "D93F0B" "Blocked by dependency"
+          create_label "needs-info" "FBCA04" "Needs more information"
+          
+          # Report Labels
+          create_label "weekly-summary" "BFD4F2" "Weekly summary report"
+          create_label "documentation" "0075CA" "Documentation update"
+          create_label "e2e-report" "1D7DBA" "E2E test report"
+          
+          echo "✅ All labels created/updated successfully!"

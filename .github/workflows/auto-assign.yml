@@ -1,0 +1,87 @@
+# Auto-Assign Issues - Automatically assign issues when mentioned or labeled
+# Simple workflow for AI-first development
+
+name: 🎯 Auto-Assign Issues
+
+on:
+  # When someone comments on an issue
+  issue_comment:
+    types: [created]
+
+  # When issue is labeled
+  issues:
+    types: [labeled]
+
+permissions:
+  issues: write
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  auto-assign-on-comment:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'issue_comment' &&
+      !github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@me') ||
+      contains(github.event.comment.body, 'I will work on this') ||
+      contains(github.event.comment.body, 'Taking this')
+
+    steps:
+      - name: 🎯 Assign commenter to issue
+        run: |
+          echo "🎯 Auto-assigning issue #${{ github.event.issue.number }} to ${{ github.event.comment.user.login }}"
+
+          gh issue edit ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --add-assignee ${{ github.event.comment.user.login }}
+
+          gh issue comment ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --body "✅ Auto-assigned to @${{ github.event.comment.user.login }}"
+
+  auto-assign-on-label:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'issues' &&
+      github.event.label.name == 'in-progress'
+
+    steps:
+      - name: 🎯 Assign issue opener if no assignee
+        run: |
+          ASSIGNEES=$(gh issue view ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --json assignees -q '.assignees | length')
+
+          if [ "$ASSIGNEES" -eq 0 ]; then
+            echo "🎯 No assignee found, assigning to issue author"
+
+            gh issue edit ${{ github.event.issue.number }} \
+              --repo ${{ github.repository }} \
+              --add-assignee ${{ github.event.issue.user.login }}
+
+            gh issue comment ${{ github.event.issue.number }} \
+              --repo ${{ github.repository }} \
+              --body "✅ Auto-assigned to @${{ github.event.issue.user.login }} (label: in-progress)"
+          else
+            echo "⏭️ Issue already has assignees, skipping"
+          fi
+
+  notify-copilot-label:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'issues' &&
+      github.event.label.name == 'copilot'
+
+    steps:
+      - name: 🤖 Notify Copilot assignment
+        run: |
+          gh issue comment ${{ github.event.issue.number }} \
+            --repo ${{ github.repository }} \
+            --body "🤖 **GitHub Copilot** has been assigned to this issue.
+
+          Copilot will analyze this issue and may create a branch with proposed changes.
+
+          ---
+          *Triggered by \`copilot\` label*"

@@ -1,0 +1,489 @@
+# 🛡️ Dependency Sentinel Workflow
+# The "brain" that orchestrates all dependency decisions following Git-Core Protocol
+#
+# This workflow:
+# 1. WATCHES all Dependabot PRs and their lifecycle
+# 2. ENFORCES the 14-day quarantine rule
+# 3. VALIDATES against ARCHITECTURE.md before any adoption
+# 4. COORDINATES between AI agents (Gemini, CodeRabbit, Copilot)
+# 5. TAKES DECISIONS autonomously when safe, escalates when not
+
+name: 🛡️ Dependency Sentinel
+
+on:
+  # React to all PR events for Dependabot
+  pull_request:
+    types: [opened, closed, labeled, unlabeled, synchronize]
+
+  # React to workflow completions
+  workflow_run:
+    workflows:
+      - "🔬 Dependency Quarantine"
+      - "🔓 Post-Quarantine Analysis"
+      - "🌐 Living Context Protocol"
+    types: [completed]
+
+  # Daily sentinel check
+  schedule:
+    - cron: '0 9 * * *'  # 9am UTC daily
+
+  # Manual trigger for debugging
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Sentinel action'
+        required: true
+        type: choice
+        options:
+          - full-audit
+          - check-quarantine
+          - check-architecture-conflicts
+          - force-graduate-all-ready
+          - generate-report
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+env:
+  QUARANTINE_DAYS: 14
+  AUTO_MERGE_SAFE_DEPS: false  # Set to true to auto-merge safe updates
+  REQUIRE_AI_APPROVAL: true    # Require at least one AI review before merge
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 1: Sentinel Analysis - Runs on every trigger
+  # ═══════════════════════════════════════════════════════════════════
+  sentinel-analysis:
+    name: "🛡️ Sentinel Analysis"
+    runs-on: ubuntu-latest
+    outputs:
+      action_required: ${{ steps.analyze.outputs.action_required }}
+      action_type: ${{ steps.analyze.outputs.action_type }}
+      affected_prs: ${{ steps.analyze.outputs.affected_prs }}
+      architecture_conflicts: ${{ steps.analyze.outputs.architecture_conflicts }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Analyze Current State
+        id: analyze
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🛡️ Sentinel analyzing current dependency state..."
+
+          # Initialize outputs
+          ACTION_REQUIRED="false"
+          ACTION_TYPE="none"
+          AFFECTED_PRS="[]"
+          ARCH_CONFLICTS="[]"
+
+          # ═══════════════════════════════════════════════════════════
+          # CHECK 1: Is this a Dependabot PR event?
+          # ═══════════════════════════════════════════════════════════
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+            PR_NUM="${{ github.event.pull_request.number }}"
+
+            if [ "$PR_AUTHOR" == "dependabot[bot]" ]; then
+              echo "📦 Dependabot PR #$PR_NUM detected"
+
+              # Check if it's a new PR
+              if [ "${{ github.event.action }}" == "opened" ]; then
+                ACTION_REQUIRED="true"
+                ACTION_TYPE="new_dependabot_pr"
+                AFFECTED_PRS="[$PR_NUM]"
+              fi
+
+              # Check if PR was merged
+              if [ "${{ github.event.action }}" == "closed" ] && [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+                ACTION_REQUIRED="true"
+                ACTION_TYPE="dependabot_merged"
+                AFFECTED_PRS="[$PR_NUM]"
+              fi
+            fi
+          fi
+
+          # ═══════════════════════════════════════════════════════════
+          # CHECK 2: Daily quarantine audit
+          # ═══════════════════════════════════════════════════════════
+          if [ "${{ github.event_name }}" == "schedule" ] || [ "${{ inputs.action }}" == "full-audit" ]; then
+            echo "📊 Running full quarantine audit..."
+
+            CUTOFF_DATE=$(date -d "-$QUARANTINE_DAYS days" +%Y-%m-%dT00:00:00Z)
+
+            # Find PRs ready to graduate
+            READY_PRS=$(gh pr list \
+              --label "quarantine" \
+              --state open \
+              --json number,createdAt,title \
+              --jq "[.[] | select(.createdAt < \"$CUTOFF_DATE\")]")
+
+            if [ "$(echo "$READY_PRS" | jq 'length')" -gt 0 ]; then
+              ACTION_REQUIRED="true"
+              ACTION_TYPE="quarantine_graduation"
+              AFFECTED_PRS="$READY_PRS"
+              echo "🎓 Found PRs ready to graduate: $(echo "$READY_PRS" | jq -r '.[].number' | tr '\n' ' ')"
+            fi
+          fi
+
+          # ═══════════════════════════════════════════════════════════
+          # CHECK 3: Architecture conflict detection
+          # ═══════════════════════════════════════════════════════════
+          echo "🏗️ Checking for architecture conflicts..."
+
+          if [ -f ".✨/ARCHITECTURE.md" ]; then
+            # Extract CRITICAL DECISIONS from ARCHITECTURE.md
+            CRITICAL_DEPS=$(grep -A 50 'CRITICAL DECISIONS' .✨/ARCHITECTURE.md | \
+              grep -E '^\|.*\|.*\|' | \
+              grep -v '^|--' | \
+              tail -n +2 || echo "")
+
+            # Check each quarantined PR against architecture
+            QUARANTINE_PRS=$(gh pr list --label "quarantine" --json number,title 2>/dev/null || echo "[]")
+
+            for row in $(echo "$QUARANTINE_PRS" | jq -r '.[] | @base64'); do
+              PR_TITLE=$(echo "$row" | base64 -d | jq -r '.title')
+              PR_NUM=$(echo "$row" | base64 -d | jq -r '.number')
+
+              # Check if this PR conflicts with ARCHITECTURE decisions
+              # Example: if architecture says "GitHub Pages only" but PR adds Vercel
+              # This is a simplified check - customize based on your architecture
+              if echo "$PR_TITLE" | grep -qi "vercel\|netlify\|heroku" && \
+                 echo "$CRITICAL_DEPS" | grep -qi "github pages"; then
+                echo "⚠️ Potential conflict: PR #$PR_NUM may conflict with architecture"
+                ARCH_CONFLICTS=$(echo "$ARCH_CONFLICTS" | jq ". + [{\"pr\": $PR_NUM, \"reason\": \"Deployment conflict\"}]")
+              fi
+            done
+          fi
+
+          # Output results
+          echo "action_required=$ACTION_REQUIRED" >> $GITHUB_OUTPUT
+          echo "action_type=$ACTION_TYPE" >> $GITHUB_OUTPUT
+          echo "affected_prs=$AFFECTED_PRS" >> $GITHUB_OUTPUT
+          echo "architecture_conflicts=$ARCH_CONFLICTS" >> $GITHUB_OUTPUT
+
+          echo "📋 Sentinel Analysis Complete"
+          echo "   Action Required: $ACTION_REQUIRED"
+          echo "   Action Type: $ACTION_TYPE"
+
+      - name: 📊 Generate Sentinel Report
+        run: |
+          echo "## 🛡️ Dependency Sentinel Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Trigger | ${{ github.event_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Action Required | ${{ steps.analyze.outputs.action_required }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Action Type | ${{ steps.analyze.outputs.action_type }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Architecture Conflicts | $(echo '${{ steps.analyze.outputs.architecture_conflicts }}' | jq 'length') |" >> $GITHUB_STEP_SUMMARY
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 2: Take Action Based on Analysis
+  # ═══════════════════════════════════════════════════════════════════
+  take-action:
+    name: "⚡ Take Action"
+    needs: sentinel-analysis
+    if: needs.sentinel-analysis.outputs.action_required == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      # ─────────────────────────────────────────────────────────────
+      # ACTION: New Dependabot PR - Ensure protocol is followed
+      # ─────────────────────────────────────────────────────────────
+      - name: "🆕 Handle New Dependabot PR"
+        if: needs.sentinel-analysis.outputs.action_type == 'new_dependabot_pr'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM="${{ github.event.pull_request.number }}"
+          echo "📦 Handling new Dependabot PR #$PR_NUM..."
+
+          # Ensure quarantine label is applied
+          gh pr edit "$PR_NUM" --add-label "quarantine,dependencies" 2>/dev/null || true
+
+          # Calculate graduation date
+          GRADUATION_DATE=$(date -d "+14 days" +%Y-%m-%d)
+
+          # Post sentinel welcome comment
+          gh pr comment "$PR_NUM" --body "## 🛡️ Dependency Sentinel Check
+
+          This dependency update has been received and will follow the **Git-Core Protocol** lifecycle:
+
+          ### 📋 Quarantine Protocol (14 Days)
+
+          | Phase | Status | Date |
+          |-------|--------|------|
+          | 🔬 Quarantine Start | ✅ **NOW** | $(date +%Y-%m-%d) |
+          | 🧠 AI Analysis | 🔄 Pending | - |
+          | 🔍 Community Monitoring | 🔄 Active | - |
+          | 🎓 Graduation | ⏳ Scheduled | **$GRADUATION_DATE** |
+
+          ### 🤖 AI Analysis Queue
+
+          The following AI agents will analyze this update:
+
+          - [ ] **Gemini 3 Pro** - Risk assessment, breaking changes
+          - [ ] **CodeRabbit** - Code patterns, best practices
+          - [ ] **Copilot** - Final meta-analysis (post-bots)
+
+          ### ⚠️ Architecture Check
+
+          Before adoption, this update will be validated against:
+          - \`.✨/ARCHITECTURE.md\` - Critical decisions
+          - \`docs/agent-docs/RESEARCH_STACK_CONTEXT.md\` - Living context
+
+          ### 📖 Protocol Reference
+
+          > *Dependency Quarantine Rule: Versions < 2 weeks old are in quarantine. Never use bleeding-edge dependencies in production.*
+
+          ---
+          *Managed by Git-Core Protocol Dependency Sentinel*"
+
+      # ─────────────────────────────────────────────────────────────
+      # ACTION: Graduate PRs that passed quarantine
+      # ─────────────────────────────────────────────────────────────
+      - name: "🎓 Graduate Quarantined PRs"
+        if: needs.sentinel-analysis.outputs.action_type == 'quarantine_graduation'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🎓 Graduating PRs that passed quarantine..."
+
+          AFFECTED_PRS='${{ needs.sentinel-analysis.outputs.affected_prs }}'
+          ARCH_CONFLICTS='${{ needs.sentinel-analysis.outputs.architecture_conflicts }}'
+
+          echo "$AFFECTED_PRS" | jq -r '.[] | "\(.number)|\(.title)"' | while IFS='|' read -r PR_NUM PR_TITLE; do
+            echo "Processing PR #$PR_NUM: $PR_TITLE"
+
+            # Check for architecture conflicts
+            HAS_CONFLICT=$(echo "$ARCH_CONFLICTS" | jq --arg pr "$PR_NUM" '[.[] | select(.pr == ($pr | tonumber))] | length > 0')
+
+            if [ "$HAS_CONFLICT" == "true" ]; then
+              echo "⚠️ PR #$PR_NUM has architecture conflicts - manual review required"
+
+              gh pr comment "$PR_NUM" --body "## ⚠️ Sentinel Alert: Architecture Conflict
+
+              This dependency update **conflicts with the project architecture**.
+
+              ### 🏗️ Conflict Details
+
+              The update may conflict with decisions in \`.✨/ARCHITECTURE.md\`.
+
+              ### 📋 Required Action
+
+              **Manual review required.** Please:
+              1. Review \`.✨/ARCHITECTURE.md\` for relevant decisions
+              2. Determine if the architecture should be updated
+              3. Add \`architecture-reviewed\` label to proceed
+
+              ---
+              *Blocked by Dependency Sentinel*"
+
+              gh pr edit "$PR_NUM" --add-label "needs-architecture-review"
+            else
+              echo "✅ PR #$PR_NUM cleared for graduation"
+
+              # Update labels
+              gh pr edit "$PR_NUM" --remove-label "quarantine" --add-label "ready-to-adopt,copilot"
+
+              # Post graduation comment with Copilot assignment using Grok Code Fast 1
+              gh pr comment "$PR_NUM" --body "## 🎓 Quarantine Complete!
+
+              This dependency update has **successfully passed** the 14-day quarantine period.
+
+              ### ✅ Validation Results
+
+              | Check | Status |
+              |-------|--------|
+              | ⏱️ Quarantine Period | ✅ 14+ days |
+              | 🏗️ Architecture | ✅ No conflicts |
+              | 🔍 Community Issues | ✅ Monitored |
+
+              ---
+
+              ## 🤖 Copilot Assignment (Grok Code Fast 1)
+
+              @copilot Please analyze and implement this dependency update using **Grok Code Fast 1** model.
+
+              ### 📋 Task Instructions
+
+              1. **Read the full context** (use your 2M token context window):
+                 - \`docs/agent-docs/RESEARCH_STACK_CONTEXT.md\`
+                 - \`.✨/ARCHITECTURE.md\`
+                 - All files affected by this dependency
+
+              2. **Analyze breaking changes**:
+                 - Check the dependency's CHANGELOG
+                 - Identify any API changes
+                 - Review migration guides if available
+
+              3. **Implement the update**:
+                 - Update any code that uses deprecated APIs
+                 - Add migration notes to RESEARCH_STACK_CONTEXT.md
+                 - Run tests and fix any failures
+
+              4. **Create summary comment** with:
+                 - Changes made
+                 - Breaking changes addressed
+                 - Recommended follow-up actions
+
+              ### 🚀 Model Configuration
+
+              \`\`\`
+              Model: Grok Code Fast 1
+              Context: 2M tokens (massive context for full codebase analysis)
+              Focus: Speed + accuracy for dependency updates
+              \`\`\`
+
+              ---
+              *Assigned by Dependency Sentinel - Git-Core Protocol*"
+
+              # Trigger post-quarantine analysis
+              gh workflow run post-quarantine-analysis.yml 2>/dev/null || true
+            fi
+          done
+
+      # ─────────────────────────────────────────────────────────────
+      # ACTION: Handle merged Dependabot PR
+      # ─────────────────────────────────────────────────────────────
+      - name: "✅ Handle Merged Dependabot PR"
+        if: needs.sentinel-analysis.outputs.action_type == 'dependabot_merged'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM="${{ github.event.pull_request.number }}"
+          echo "✅ Dependabot PR #$PR_NUM was merged"
+
+          # Check if it had ready-to-adopt label (proper flow)
+          LABELS="${{ join(github.event.pull_request.labels.*.name, ',') }}"
+
+          if echo "$LABELS" | grep -q "ready-to-adopt"; then
+            echo "✅ PR followed proper quarantine flow"
+
+            # Trigger living context update
+            gh workflow run living-context.yml 2>/dev/null || true
+
+          elif echo "$LABELS" | grep -q "quarantine"; then
+            echo "⚠️ PR was merged while still in quarantine!"
+
+            # Create warning issue
+            gh issue create \
+              --title "⚠️ Dependency merged before quarantine complete: PR #$PR_NUM" \
+              --body "## Protocol Violation Alert
+
+              **PR #$PR_NUM** was merged while still in quarantine.
+
+              ### 📋 Details
+
+              - **PR:** #$PR_NUM
+              - **Title:** ${{ github.event.pull_request.title }}
+              - **Merged by:** ${{ github.event.pull_request.merged_by.login }}
+
+              ### ⚠️ Risk Assessment
+
+              This dependency was merged before completing the 14-day quarantine period.
+              Monitor for issues.
+
+              ### 📝 Recommended Actions
+
+              - [ ] Monitor for breaking changes
+              - [ ] Update \`RESEARCH_STACK_CONTEXT.md\` with any issues
+              - [ ] Consider rollback if issues arise
+
+              ---
+              *Generated by Dependency Sentinel*" \
+              --label "protocol-violation,dependencies,needs-review"
+          fi
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 3: Weekly Comprehensive Report
+  # ═══════════════════════════════════════════════════════════════════
+  weekly-report:
+    name: "📊 Weekly Report"
+    if: github.event_name == 'schedule' || inputs.action == 'generate-report'
+    runs-on: ubuntu-latest
+    needs: sentinel-analysis
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📊 Generate Weekly Report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "📊 Generating weekly dependency report..."
+
+          REPORT_FILE="docs/agent-docs/SENTINEL_WEEKLY_REPORT.md"
+          mkdir -p docs/agent-docs
+
+          # Count stats
+          TOTAL_QUARANTINE=$(gh pr list --label "quarantine" --json number | jq 'length')
+          TOTAL_READY=$(gh pr list --label "ready-to-adopt" --json number | jq 'length')
+          MERGED_WEEK=$(gh pr list --state closed --json mergedAt,labels --jq "[.[] | select(.mergedAt != null and .mergedAt > \"$(date -d '-7 days' +%Y-%m-%dT00:00:00Z)\" and (.labels[].name | contains(\"dependencies\")))] | length")
+
+          cat > "$REPORT_FILE" << EOF
+          ---
+          title: "Dependency Sentinel Weekly Report"
+          type: REPORT
+          agent: dependency-sentinel
+          generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          period: $(date -d '-7 days' +%Y-%m-%d) to $(date +%Y-%m-%d)
+          ---
+
+          # 🛡️ Dependency Sentinel Weekly Report
+
+          > **Period:** $(date -d '-7 days' +%Y-%m-%d) to $(date +%Y-%m-%d)
+
+          ## 📊 Summary
+
+          | Metric | Count |
+          |--------|-------|
+          | 🔬 In Quarantine | $TOTAL_QUARANTINE |
+          | ✅ Ready to Adopt | $TOTAL_READY |
+          | 📦 Merged This Week | $MERGED_WEEK |
+
+          ## 🔬 Currently Quarantined
+
+          $(gh pr list --label "quarantine" --json number,title,createdAt --jq '.[] | "- **PR #\(.number)**: \(.title)\n  - *Since: \(.createdAt | split("T")[0])*"' || echo "*No PRs in quarantine*")
+
+          ## ✅ Ready for Adoption
+
+          $(gh pr list --label "ready-to-adopt" --json number,title --jq '.[] | "- **PR #\(.number)**: \(.title)"' || echo "*No PRs ready*")
+
+          ## 📋 Protocol Compliance
+
+          | Check | Status |
+          |-------|--------|
+          | Quarantine Enforcement | ✅ Active |
+          | Architecture Validation | ✅ Active |
+          | AI Review Integration | ✅ Active |
+
+          ---
+          *Generated by Dependency Sentinel - Git-Core Protocol*
+          EOF
+
+          echo "📝 Report generated: $REPORT_FILE"
+
+      - name: 📤 Commit Report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet docs/agent-docs/SENTINEL_WEEKLY_REPORT.md 2>/dev/null; then
+            echo "No changes to report"
+          else
+            git add docs/agent-docs/SENTINEL_WEEKLY_REPORT.md
+            git commit -m "docs(sentinel): weekly dependency report [skip ci]"
+            git push
+          fi

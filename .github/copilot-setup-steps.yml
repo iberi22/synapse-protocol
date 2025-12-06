@@ -1,0 +1,85 @@
+# Copilot Coding Agent Setup Steps
+# This file configures the environment for GitHub Copilot coding agent
+# when it works on issues assigned to it or PRs where @copilot is mentioned
+
+name: Setup environment for Copilot coding agent
+
+# Environment setup for Copilot coding agent sessions
+setup:
+  # Install dependencies based on detected project type
+  - name: Install Node.js dependencies
+    if: file.exists('package.json')
+    run: |
+      npm ci || npm install
+
+  - name: Install Python dependencies
+    if: file.exists('requirements.txt') || file.exists('pyproject.toml')
+    run: |
+      pip install -r requirements.txt 2>/dev/null || pip install -e . 2>/dev/null || true
+
+  - name: Install Rust dependencies
+    if: file.exists('Cargo.toml')
+    run: |
+      cargo fetch || true
+
+  # Install Codex CLI for hybrid workflows
+  - name: Install Codex CLI
+    run: |
+      npm install -g @openai/codex || true
+
+  # Load Git-Core Protocol context
+  - name: Load protocol context
+    run: |
+      echo "📖 Git-Core Protocol Context:"
+      cat .ai/ARCHITECTURE.md 2>/dev/null || echo "No ARCHITECTURE.md found"
+      echo ""
+      echo "📋 Current Issues:"
+      gh issue list --limit 5 2>/dev/null || echo "gh CLI not available"
+
+# Instructions for Copilot coding agent
+# These are read by Copilot when it starts a session
+instructions: |
+  You are working in a repository that follows the Git-Core Protocol.
+
+  ## Key Rules:
+  1. NEVER create TODO.md, PROGRESS.md, PLANNING.md, or any tracking files
+  2. State management is done via GitHub Issues ONLY
+  3. Use conventional commits: feat|fix|docs|chore(scope): description
+  4. Include AI-Context footer for complex decisions
+  5. Reference issues in commits: "closes #X" or "refs #X"
+
+  ## Before making changes:
+  1. Read .ai/ARCHITECTURE.md for system context
+  2. Check the issue description for requirements
+  3. Review existing code patterns
+
+  ## When creating PRs:
+  1. Use descriptive title following conventional commits
+  2. Reference the issue being addressed
+  3. Include summary of changes in description
+  4. Add AI-Context for architectural decisions
+
+  ## Commit message format:
+  ```
+  feat(scope): description #issue
+
+  Body explaining what and why
+
+  AI-Context: decision-type | rationale
+  ```
+
+# Tools available to Copilot
+tools:
+  - gh: GitHub CLI for issue/PR management
+  - git: Version control operations
+  - codex: OpenAI Codex CLI (if installed)
+
+# Firewall rules (default: restricted)
+# Copilot has limited internet access by default
+firewall:
+  allow:
+    - "*.github.com"
+    - "*.githubusercontent.com"
+    - "registry.npmjs.org"
+    - "pypi.org"
+    - "crates.io"

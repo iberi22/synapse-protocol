@@ -1,0 +1,441 @@
+name: "🎭 E2E Testing Orchestration"
+
+on:
+  # Triggered by implementation workflows
+  workflow_call:
+    inputs:
+      test_type:
+        description: 'Type of E2E test to run'
+        required: true
+        type: string
+        default: 'full'
+      capture_screenshots:
+        description: 'Capture screenshots during tests'
+        required: false
+        type: boolean
+        default: true
+      capture_video:
+        description: 'Record video of test runs'
+        required: false
+        type: boolean
+        default: true
+      base_url:
+        description: 'Base URL for E2E tests'
+        required: false
+        type: string
+        default: 'http://localhost:3000'
+    outputs:
+      report_path:
+        description: 'Path to the E2E test report'
+        value: ${{ jobs.run-e2e.outputs.report_path }}
+      screenshots_count:
+        description: 'Number of screenshots captured'
+        value: ${{ jobs.run-e2e.outputs.screenshots_count }}
+      videos_count:
+        description: 'Number of videos recorded'
+        value: ${{ jobs.run-e2e.outputs.videos_count }}
+      tests_passed:
+        description: 'Number of tests passed'
+        value: ${{ jobs.run-e2e.outputs.tests_passed }}
+      tests_failed:
+        description: 'Number of tests failed'
+        value: ${{ jobs.run-e2e.outputs.tests_failed }}
+
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of E2E test to run'
+        required: true
+        type: choice
+        options:
+          - full
+          - smoke
+          - regression
+          - visual
+        default: 'smoke'
+      capture_screenshots:
+        description: 'Capture screenshots'
+        required: false
+        type: boolean
+        default: true
+      capture_video:
+        description: 'Record video'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  # ============================================================
+  # JOB 1: Detect Test Framework
+  # ============================================================
+  detect-framework:
+    name: "🔍 Detect Framework"
+    runs-on: ubuntu-latest
+    outputs:
+      framework: ${{ steps.detect.outputs.framework }}
+      config_file: ${{ steps.detect.outputs.config_file }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Detect E2E Framework
+        id: detect
+        run: |
+          if [ -f "playwright.config.ts" ]; then
+            echo "framework=playwright" >> $GITHUB_OUTPUT
+            echo "config_file=playwright.config.ts" >> $GITHUB_OUTPUT
+            echo "✅ Detected: Playwright (TypeScript)"
+          elif [ -f "playwright.config.js" ]; then
+            echo "framework=playwright" >> $GITHUB_OUTPUT
+            echo "config_file=playwright.config.js" >> $GITHUB_OUTPUT
+            echo "✅ Detected: Playwright (JavaScript)"
+          elif [ -f "cypress.config.ts" ]; then
+            echo "framework=cypress" >> $GITHUB_OUTPUT
+            echo "config_file=cypress.config.ts" >> $GITHUB_OUTPUT
+            echo "✅ Detected: Cypress (TypeScript)"
+          elif [ -f "cypress.config.js" ]; then
+            echo "framework=cypress" >> $GITHUB_OUTPUT
+            echo "config_file=cypress.config.js" >> $GITHUB_OUTPUT
+            echo "✅ Detected: Cypress (JavaScript)"
+          else
+            echo "framework=none" >> $GITHUB_OUTPUT
+            echo "config_file=" >> $GITHUB_OUTPUT
+            echo "⚠️ No E2E framework detected - will create Playwright setup"
+          fi
+
+  # ============================================================
+  # JOB 2: Setup E2E Environment (if none exists)
+  # ============================================================
+  setup-e2e:
+    name: "📦 Setup E2E"
+    runs-on: ubuntu-latest
+    needs: detect-framework
+    if: needs.detect-framework.outputs.framework == 'none'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Initialize Playwright
+        run: |
+          # Create basic Playwright config
+          cat > playwright.config.ts << 'EOF'
+          import { defineConfig, devices } from '@playwright/test';
+
+          export default defineConfig({
+            testDir: './e2e',
+            fullyParallel: true,
+            forbidOnly: !!process.env.CI,
+            retries: process.env.CI ? 2 : 0,
+            workers: process.env.CI ? 1 : undefined,
+            reporter: [
+              ['html', { outputFolder: 'playwright-report' }],
+              ['json', { outputFile: 'playwright-report/results.json' }],
+            ],
+            use: {
+              baseURL: process.env.BASE_URL || 'http://localhost:3000',
+              trace: 'on-first-retry',
+              screenshot: 'on',
+              video: 'on',
+            },
+            projects: [
+              {
+                name: 'chromium',
+                use: { ...devices['Desktop Chrome'] },
+              },
+            ],
+          });
+          EOF
+          
+          # Create e2e directory with sample test
+          mkdir -p e2e
+          
+          cat > e2e/smoke.spec.ts << 'EOF'
+          import { test, expect } from '@playwright/test';
+
+          test.describe('Smoke Tests', () => {
+            test('homepage loads successfully', async ({ page }) => {
+              await page.goto('/');
+              await expect(page).toHaveTitle(/.+/);
+              await page.screenshot({ path: 'screenshots/homepage.png', fullPage: true });
+            });
+
+            test('navigation works', async ({ page }) => {
+              await page.goto('/');
+              // Add your navigation tests here
+              await page.screenshot({ path: 'screenshots/navigation.png' });
+            });
+          });
+          EOF
+          
+          echo "✅ Created basic Playwright setup"
+      
+      - name: Commit E2E Setup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add playwright.config.ts e2e/
+          git commit -m "test(e2e): initialize Playwright E2E framework
+          
+          Auto-generated by Git-Core Protocol E2E Orchestration.
+          
+          AI-Context: Created basic Playwright setup for automated testing"
+          
+          git push
+
+  # ============================================================
+  # JOB 3: Run E2E Tests
+  # ============================================================
+  run-e2e:
+    name: "🧪 Run E2E Tests"
+    runs-on: ubuntu-latest
+    needs: [detect-framework, setup-e2e]
+    if: always() && !cancelled()
+    outputs:
+      report_path: ${{ steps.run-tests.outputs.report_path }}
+      screenshots_count: ${{ steps.collect.outputs.screenshots_count }}
+      videos_count: ${{ steps.collect.outputs.videos_count }}
+      tests_passed: ${{ steps.collect.outputs.tests_passed }}
+      tests_failed: ${{ steps.collect.outputs.tests_failed }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        run: npm ci || npm install
+      
+      - name: Install Playwright
+        if: needs.detect-framework.outputs.framework == 'playwright' || needs.detect-framework.outputs.framework == 'none'
+        run: |
+          npx playwright install --with-deps chromium
+      
+      - name: Install Cypress
+        if: needs.detect-framework.outputs.framework == 'cypress'
+        run: |
+          npx cypress install
+      
+      - name: Start Application (Background)
+        run: |
+          # Try common start scripts
+          if [ -f "package.json" ]; then
+            if grep -q '"dev"' package.json; then
+              npm run dev &
+            elif grep -q '"start"' package.json; then
+              npm start &
+            fi
+          fi
+          
+          # Wait for app to start
+          sleep 10
+        continue-on-error: true
+      
+      - name: Run Playwright Tests
+        id: run-playwright
+        if: needs.detect-framework.outputs.framework == 'playwright' || needs.detect-framework.outputs.framework == 'none'
+        run: |
+          mkdir -p screenshots videos
+          
+          # Run tests based on type
+          TEST_GREP=""
+          case "${{ inputs.test_type }}" in
+            smoke) TEST_GREP="--grep @smoke" ;;
+            regression) TEST_GREP="--grep @regression" ;;
+            visual) TEST_GREP="--grep @visual" ;;
+            full) TEST_GREP="" ;;
+          esac
+          
+          npx playwright test $TEST_GREP \
+            --reporter=html \
+            --reporter=json \
+            --output=test-results || true
+          
+          echo "report_path=playwright-report" >> $GITHUB_OUTPUT
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+      
+      - name: Run Cypress Tests
+        id: run-cypress
+        if: needs.detect-framework.outputs.framework == 'cypress'
+        run: |
+          mkdir -p screenshots videos
+          
+          # Configure based on inputs
+          CYPRESS_OPTS=""
+          if [ "${{ inputs.capture_video }}" == "true" ]; then
+            CYPRESS_OPTS="$CYPRESS_OPTS --config video=true"
+          fi
+          
+          npx cypress run \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress-report,overwrite=false,html=true,json=true \
+            $CYPRESS_OPTS || true
+          
+          echo "report_path=cypress-report" >> $GITHUB_OUTPUT
+        env:
+          CYPRESS_BASE_URL: ${{ inputs.base_url }}
+      
+      - name: Run Tests Output
+        id: run-tests
+        run: |
+          if [ -d "playwright-report" ]; then
+            echo "report_path=playwright-report" >> $GITHUB_OUTPUT
+          elif [ -d "cypress-report" ]; then
+            echo "report_path=cypress-report" >> $GITHUB_OUTPUT
+          else
+            echo "report_path=test-results" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Collect Artifacts
+        id: collect
+        run: |
+          # Count screenshots
+          SCREENSHOTS=$(find . -name "*.png" -path "*screenshot*" -o -name "*.png" -path "*test-results*" 2>/dev/null | wc -l)
+          echo "screenshots_count=$SCREENSHOTS" >> $GITHUB_OUTPUT
+          
+          # Count videos
+          VIDEOS=$(find . -name "*.webm" -o -name "*.mp4" 2>/dev/null | wc -l)
+          echo "videos_count=$VIDEOS" >> $GITHUB_OUTPUT
+          
+          # Parse test results
+          if [ -f "playwright-report/results.json" ]; then
+            PASSED=$(jq '.stats.expected // 0' playwright-report/results.json 2>/dev/null || echo "0")
+            FAILED=$(jq '.stats.unexpected // 0' playwright-report/results.json 2>/dev/null || echo "0")
+          elif [ -f "cypress-report/mochawesome.json" ]; then
+            PASSED=$(jq '.stats.passes // 0' cypress-report/mochawesome.json 2>/dev/null || echo "0")
+            FAILED=$(jq '.stats.failures // 0' cypress-report/mochawesome.json 2>/dev/null || echo "0")
+          else
+            PASSED="0"
+            FAILED="0"
+          fi
+          
+          echo "tests_passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "tests_failed=$FAILED" >> $GITHUB_OUTPUT
+          
+          echo "📊 Test Results: $PASSED passed, $FAILED failed"
+          echo "📸 Screenshots: $SCREENSHOTS"
+          echo "🎥 Videos: $VIDEOS"
+      
+      - name: Upload Screenshots
+        uses: actions/upload-artifact@v5
+        with:
+          name: e2e-screenshots
+          path: |
+            screenshots/
+            test-results/**/*.png
+            cypress/screenshots/
+          if-no-files-found: ignore
+      
+      - name: Upload Videos
+        if: inputs.capture_video == true || inputs.capture_video == 'true'
+        uses: actions/upload-artifact@v5
+        with:
+          name: e2e-videos
+          path: |
+            videos/
+            test-results/**/*.webm
+            cypress/videos/
+          if-no-files-found: ignore
+      
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: e2e-report
+          path: |
+            playwright-report/
+            cypress-report/
+          if-no-files-found: ignore
+
+  # ============================================================
+  # JOB 4: Generate E2E Report
+  # ============================================================
+  generate-e2e-report:
+    name: "📝 Generate Report"
+    runs-on: ubuntu-latest
+    needs: run-e2e
+    
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v6
+        with:
+          pattern: e2e-*
+          merge-multiple: true
+          path: artifacts/
+      
+      - name: Generate Markdown Report
+        run: |
+          mkdir -p reports
+          
+          cat > reports/E2E_TEST_REPORT.md << EOF
+          ---
+          title: "E2E Test Report"
+          type: REPORT
+          agent: e2e-orchestrator
+          generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          test_type: ${{ inputs.test_type }}
+          ---
+          
+          # 🎭 E2E Test Report
+          
+          > Auto-generated by Git-Core Protocol E2E Orchestration
+          
+          ## 📊 Summary
+          
+          | Metric | Value |
+          |--------|-------|
+          | Tests Passed | ${{ needs.run-e2e.outputs.tests_passed }} |
+          | Tests Failed | ${{ needs.run-e2e.outputs.tests_failed }} |
+          | Screenshots | ${{ needs.run-e2e.outputs.screenshots_count }} |
+          | Videos | ${{ needs.run-e2e.outputs.videos_count }} |
+          | Test Type | ${{ inputs.test_type }} |
+          
+          ## 📸 Screenshots
+          
+          Screenshots are available in the workflow artifacts.
+          
+          Download: [e2e-screenshots artifact]
+          
+          ## 🎥 Videos
+          
+          Test run videos are available in the workflow artifacts.
+          
+          Download: [e2e-videos artifact]
+          
+          ## 📋 Full Report
+          
+          The detailed HTML report is available in the workflow artifacts.
+          
+          Download: [e2e-report artifact]
+          
+          ---
+          *Generated by Git-Core Protocol*
+          EOF
+          
+          echo "✅ E2E report generated"
+      
+      - name: Upload E2E Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: e2e-markdown-report
+          path: reports/E2E_TEST_REPORT.md

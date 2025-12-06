@@ -1,0 +1,341 @@
+#!/bin/bash
+# scripts/hooks/pre-commit
+# 🧠 Git-Core Protocol - Pre-commit Hook for Atomic Commit Validation
+#
+# This hook validates commits for atomicity based on .git-atomize.yml configuration.
+# It can run in three modes:
+#   - solo: Shows warnings, allows all commits (default)
+#   - team: Blocks commits that violate atomicity rules
+#   - strict: Like team, but no bypass allowed except --no-verify
+#
+# Bypass: git commit --no-verify
+#
+# Requirements: Bash 4.0+ (for associative arrays)
+
+# Check Bash version (need 4.0+ for associative arrays)
+if ((BASH_VERSINFO[0] < 4)); then
+    echo "Warning: Bash 4.0+ required for full atomicity checking. Skipping validation."
+    exit 0
+fi
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+# Default configuration
+DEFAULT_MODE="solo"
+DEFAULT_MAX_FILES=10
+DEFAULT_MAX_CONCERNS=1
+
+# Configuration file path
+CONFIG_FILE=".git-atomize.yml"
+
+# Function to parse YAML values (simple implementation)
+parse_yaml_value() {
+    local key="$1"
+    local file="$2"
+    local default="$3"
+    
+    if [ ! -f "$file" ]; then
+        echo "$default"
+        return
+    fi
+    
+    # Simple YAML parsing - handles key: value format
+    local value
+    value=$(grep -E "^${key}:" "$file" 2>/dev/null | head -1 | sed 's/^[^:]*:[[:space:]]*//' | sed 's/#.*//' | tr -d '"' | tr -d "'" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    
+    if [ -z "$value" ]; then
+        echo "$default"
+    else
+        echo "$value"
+    fi
+}
+
+# Function to parse YAML array values (simple implementation)
+parse_yaml_array() {
+    local key="$1"
+    local file="$2"
+    
+    if [ ! -f "$file" ]; then
+        return
+    fi
+    
+    # Find the key and extract array items (handles both - pattern and inline [])
+    awk -v key="$key" '
+        $0 ~ "^"key":" { in_block=1; next }
+        in_block && /^[a-zA-Z]/ { exit }
+        in_block && /^[[:space:]]*-[[:space:]]/ { 
+            gsub(/^[[:space:]]*-[[:space:]]*/, ""); 
+            gsub(/["'\'']/, "");
+            print 
+        }
+    ' "$file" 2>/dev/null
+}
+
+# Function to parse concerns patterns from config
+parse_concerns() {
+    local file="$1"
+    
+    if [ ! -f "$file" ]; then
+        # Default concerns if no config
+        echo "*.github/workflows/*:ci"
+        echo "docs/*:docs"
+        echo "*.md:docs"
+        echo "src/components/*:ui"
+        echo "*.test.*:test"
+        echo "*_test.*:test"
+        echo "test_*:test"
+        echo "supabase/migrations/*:db"
+        echo "migrations/*:db"
+        return
+    fi
+    
+    # Parse concerns section from YAML
+    awk '
+        /^concerns:/ { in_concerns=1; next }
+        in_concerns && /^[a-zA-Z]/ && !/pattern:|scope:/ { exit }
+        in_concerns && /pattern:/ { 
+            gsub(/.*pattern:[[:space:]]*/, ""); 
+            gsub(/["'\'']/, "");
+            pattern=$0
+        }
+        in_concerns && /scope:/ { 
+            gsub(/.*scope:[[:space:]]*/, ""); 
+            gsub(/["'\'']/, "");
+            print pattern":"$0
+        }
+    ' "$file" 2>/dev/null
+}
+
+# Function to parse bypass patterns from config
+parse_bypass_patterns() {
+    local file="$1"
+    
+    if [ ! -f "$file" ]; then
+        # Default bypass patterns
+        echo "chore: initial commit"
+        echo "chore: merge"
+        echo "Merge branch"
+        echo "Merge pull request"
+        return
+    fi
+    
+    # Parse bypass_patterns section from YAML
+    awk '
+        /^bypass_patterns:/ { in_bypass=1; next }
+        in_bypass && /^[a-zA-Z]/ { exit }
+        in_bypass && /^[[:space:]]*-[[:space:]]/ { 
+            gsub(/^[[:space:]]*-[[:space:]]*/, ""); 
+            gsub(/["'\'']/, "");
+            print 
+        }
+    ' "$file" 2>/dev/null
+}
+
+# Function to match a file against a glob pattern
+match_pattern() {
+    local file="$1"
+    local pattern="$2"
+    
+    # Convert glob pattern to regex-like matching
+    # Handle ** for any path, * for any name segment
+    local regex_pattern
+    regex_pattern=$(echo "$pattern" | sed 's/\./\\./g' | sed 's/\*\*/DOUBLESTAR/g' | sed 's/\*/[^\/]*/g' | sed 's/DOUBLESTAR/.*/g')
+    
+    if echo "$file" | grep -qE "^${regex_pattern}$"; then
+        return 0
+    fi
+    
+    # Also try matching just the filename
+    local filename
+    filename=$(basename "$file")
+    if echo "$filename" | grep -qE "^${regex_pattern}$"; then
+        return 0
+    fi
+    
+    return 1
+}
+
+# Function to determine concern scope for a file
+get_file_concern() {
+    local file="$1"
+    local concerns_config="$2"
+    
+    while IFS= read -r concern_line; do
+        [ -z "$concern_line" ] && continue
+        
+        local pattern scope
+        pattern=$(echo "$concern_line" | cut -d: -f1)
+        scope=$(echo "$concern_line" | cut -d: -f2)
+        
+        if match_pattern "$file" "$pattern"; then
+            echo "$scope"
+            return
+        fi
+    done <<< "$concerns_config"
+    
+    # Default scope based on path
+    case "$file" in
+        .github/workflows/*|.github/actions/*) echo "ci" ;;
+        docs/*|*.md) echo "docs" ;;
+        src/components/*|components/*) echo "ui" ;;
+        *test*|*spec*|tests/*) echo "test" ;;
+        migrations/*|*.sql) echo "db" ;;
+        scripts/*) echo "scripts" ;;
+        src/*|lib/*) echo "core" ;;
+        config/*|*.config.*|*.yml|*.yaml|*.json|.*.yml*|.*.yaml*) echo "config" ;;
+        *) echo "other" ;;
+    esac
+}
+
+# Function to check if commit message matches bypass pattern
+check_bypass() {
+    local commit_msg="$1"
+    local bypass_patterns="$2"
+    
+    while IFS= read -r pattern; do
+        [ -z "$pattern" ] && continue
+        if echo "$commit_msg" | grep -qi "$pattern"; then
+            return 0
+        fi
+    done <<< "$bypass_patterns"
+    
+    return 1
+}
+
+# Main validation function
+validate_atomicity() {
+    # Load configuration
+    local mode max_files max_concerns
+    mode=$(parse_yaml_value "mode" "$CONFIG_FILE" "$DEFAULT_MODE")
+    max_files=$(parse_yaml_value "max_files_per_commit" "$CONFIG_FILE" "$DEFAULT_MAX_FILES")
+    max_concerns=$(parse_yaml_value "max_concerns_per_commit" "$CONFIG_FILE" "$DEFAULT_MAX_CONCERNS")
+    
+    # Get nested values from rules section
+    local rules_max_files rules_max_concerns
+    rules_max_files=$(awk '/^rules:/{found=1} found && /max_files_per_commit:/{gsub(/.*:[[:space:]]*/, ""); gsub(/#.*/, ""); gsub(/[[:space:]]+$/, ""); print; exit}' "$CONFIG_FILE" 2>/dev/null)
+    rules_max_concerns=$(awk '/^rules:/{found=1} found && /max_concerns_per_commit:/{gsub(/.*:[[:space:]]*/, ""); gsub(/#.*/, ""); gsub(/[[:space:]]+$/, ""); print; exit}' "$CONFIG_FILE" 2>/dev/null)
+    
+    [ -n "$rules_max_files" ] && max_files="$rules_max_files"
+    [ -n "$rules_max_concerns" ] && max_concerns="$rules_max_concerns"
+    
+    # Parse concerns and bypass patterns
+    local concerns_config bypass_patterns
+    concerns_config=$(parse_concerns "$CONFIG_FILE")
+    bypass_patterns=$(parse_bypass_patterns "$CONFIG_FILE")
+    
+    # Get staged files
+    local staged_files
+    staged_files=$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null)
+    
+    if [ -z "$staged_files" ]; then
+        # No files staged, nothing to validate
+        exit 0
+    fi
+    
+    # Count files and categorize by concern
+    local file_count=0
+    declare -A concern_counts
+    declare -A concern_files
+    
+    while IFS= read -r file; do
+        [ -z "$file" ] && continue
+        file_count=$((file_count + 1))
+        
+        local concern
+        concern=$(get_file_concern "$file" "$concerns_config")
+        
+        concern_counts[$concern]=$((${concern_counts[$concern]:-0} + 1))
+        if [ -z "${concern_files[$concern]}" ]; then
+            concern_files[$concern]="$file"
+        else
+            concern_files[$concern]="${concern_files[$concern]}, $file"
+        fi
+    done <<< "$staged_files"
+    
+    local concern_count=${#concern_counts[@]}
+    
+    # Check if within limits
+    local has_warning=false
+    local has_error=false
+    
+    if [ "$file_count" -gt "$max_files" ]; then
+        has_warning=true
+        if [ "$mode" = "team" ] || [ "$mode" = "strict" ]; then
+            has_error=true
+        fi
+    fi
+    
+    if [ "$concern_count" -gt "$max_concerns" ]; then
+        has_warning=true
+        if [ "$mode" = "team" ] || [ "$mode" = "strict" ]; then
+            has_error=true
+        fi
+    fi
+    
+    # If no issues, allow commit
+    if [ "$has_warning" = false ]; then
+        echo -e "${GREEN}✅ Commit passes atomicity check${NC}"
+        echo -e "   Files: ${file_count}/${max_files}"
+        echo -e "   Concerns: ${concern_count}/${max_concerns}"
+        exit 0
+    fi
+    
+    # Build concern breakdown
+    local concern_breakdown=""
+    for concern in "${!concern_counts[@]}"; do
+        concern_breakdown="${concern_breakdown}    - ${concern} (${concern_counts[$concern]})\n"
+    done
+    
+    # Handle based on mode
+    if [ "$has_error" = true ]; then
+        # Team or Strict mode - block the commit
+        echo -e "\n${RED}❌ ERROR: Commit rejected - violates atomicity policy${NC}\n"
+        echo -e "${BOLD}📊 Analysis:${NC}"
+        echo -e "   - Files: ${file_count} (max: ${max_files})"
+        echo -e "   - Concerns detected: ${concern_count} (max: ${max_concerns})"
+        echo -e "\n${BOLD}📁 Concerns breakdown:${NC}"
+        echo -e "$concern_breakdown"
+        echo -e "${BOLD}💡 Suggestion:${NC} Split your changes into smaller, focused commits."
+        echo -e "   Each commit should address only one concern."
+        echo ""
+        if [ "$mode" != "strict" ]; then
+            echo -e "${YELLOW}For emergency bypass: git commit --no-verify${NC}"
+        fi
+        echo ""
+        exit 1
+    else
+        # Solo mode - show warning but allow
+        echo -e "\n${YELLOW}⚠️  WARNING: Commit has ${file_count} files from ${concern_count} different concerns:${NC}"
+        echo -e "$concern_breakdown"
+        echo -e "${BOLD}💡 Suggestion:${NC} Consider splitting into smaller commits for better history.\n"
+        
+        # In interactive mode, ask for confirmation
+        if [ -t 0 ] && [ -t 1 ] && [ -e /dev/tty ]; then
+            echo -e "${CYAN}Continue anyway? [y/N]${NC} "
+            read -r response </dev/tty 2>/dev/null || response="y"
+            case "$response" in
+                [yY]|[yY][eE][sS])
+                    echo -e "${GREEN}✅ Proceeding with commit...${NC}"
+                    exit 0
+                    ;;
+                *)
+                    echo -e "${YELLOW}Commit cancelled. Split your changes and try again.${NC}"
+                    exit 1
+                    ;;
+            esac
+        else
+            # Non-interactive mode in solo, just warn and continue
+            echo -e "${GREEN}✅ Proceeding (solo mode)...${NC}"
+            exit 0
+        fi
+    fi
+}
+
+# Run validation
+validate_atomicity

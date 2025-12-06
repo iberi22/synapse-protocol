@@ -1,0 +1,378 @@
+name: "🔓 Post-Quarantine Analysis"
+
+on:
+  # Scheduled: Check daily for dependencies that completed quarantine
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  
+  # Manual trigger with specific dependency
+  workflow_dispatch:
+    inputs:
+      dependency_name:
+        description: 'Specific dependency to analyze (leave empty for all)'
+        required: false
+        type: string
+      force_analysis:
+        description: 'Force analysis even if not past quarantine'
+        required: false
+        type: boolean
+        default: false
+
+  # Triggered by Living Context when quarantine completes
+  workflow_call:
+    inputs:
+      dependency_name:
+        description: 'Dependency that completed quarantine'
+        required: true
+        type: string
+      dependency_version:
+        description: 'Version to analyze'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  QUARANTINE_DAYS: 14
+  AUTO_IMPLEMENT_DELAY_DAYS: 3
+
+jobs:
+  # ============================================================
+  # JOB 1: Identify Dependencies Ready for Analysis
+  # ============================================================
+  identify-ready:
+    name: "🔍 Identify Ready Dependencies"
+    runs-on: ubuntu-latest
+    outputs:
+      dependencies: ${{ steps.check.outputs.dependencies }}
+      has_ready: ${{ steps.check.outputs.has_ready }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: living-context/main
+          fetch-depth: 0
+      
+      - name: Check Living Context for Graduated Dependencies
+        id: check
+        run: |
+          CONTEXT_FILE="docs/agent-docs/RESEARCH_STACK_CONTEXT.md"
+          
+          # Check if manual input provided
+          if [ -n "${{ inputs.dependency_name }}" ]; then
+            echo "📦 Manual analysis requested for: ${{ inputs.dependency_name }}"
+            echo "dependencies=[{\"name\":\"${{ inputs.dependency_name }}\",\"version\":\"${{ inputs.dependency_version || 'latest' }}\"}]" >> $GITHUB_OUTPUT
+            echo "has_ready=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          # Parse RESEARCH_STACK_CONTEXT.md for "Ready to Adopt" section
+          if [ -f "$CONTEXT_FILE" ]; then
+            # Extract dependencies from Ready to Adopt section
+            READY_DEPS=$(awk '/## ✅ Ready to Adopt/,/^##/{
+              if(/^\| \*\*/) {
+                gsub(/\| \*\*/, ""); gsub(/\*\* \|.*/, ""); print
+              }
+            }' "$CONTEXT_FILE" | head -10)
+            
+            if [ -n "$READY_DEPS" ]; then
+              echo "📦 Found dependencies ready for analysis:"
+              echo "$READY_DEPS"
+              
+              # Convert to JSON array
+              JSON_ARRAY=$(echo "$READY_DEPS" | jq -R -s 'split("\n") | map(select(length > 0)) | map({name: ., version: "latest"})' )
+              echo "dependencies=$JSON_ARRAY" >> $GITHUB_OUTPUT
+              echo "has_ready=true" >> $GITHUB_OUTPUT
+            else
+              echo "✅ No dependencies ready for post-quarantine analysis"
+              echo "dependencies=[]" >> $GITHUB_OUTPUT
+              echo "has_ready=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️ Living Context file not found"
+            echo "dependencies=[]" >> $GITHUB_OUTPUT
+            echo "has_ready=false" >> $GITHUB_OUTPUT
+          fi
+
+  # ============================================================
+  # JOB 2: Deep Analysis of Graduated Dependencies
+  # ============================================================
+  deep-analysis:
+    name: "🧠 Deep Analysis"
+    runs-on: ubuntu-latest
+    needs: identify-ready
+    if: needs.identify-ready.outputs.has_ready == 'true'
+    outputs:
+      report_path: ${{ steps.analyze.outputs.report_path }}
+      has_breaking_changes: ${{ steps.analyze.outputs.has_breaking_changes }}
+      implementation_plan: ${{ steps.analyze.outputs.implementation_plan }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js (for Gemini CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Analysis Tools
+        run: |
+          # Install Gemini CLI for AI analysis
+          npm install -g @google/gemini-cli || echo "Gemini CLI not available"
+          
+          # Install jq for JSON processing
+          sudo apt-get install -y jq
+      
+      - name: Deep Dependency Analysis
+        id: analyze
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DEPS='${{ needs.identify-ready.outputs.dependencies }}'
+          REPORT_FILE="docs/agent-docs/POST_QUARANTINE_REPORT.md"
+          
+          echo "---" > "$REPORT_FILE"
+          echo "title: \"Post-Quarantine Analysis Report\"" >> "$REPORT_FILE"
+          echo "type: REPORT" >> "$REPORT_FILE"
+          echo "agent: post-quarantine-analyzer" >> "$REPORT_FILE"
+          echo "generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$REPORT_FILE"
+          echo "status: pending-review" >> "$REPORT_FILE"
+          echo "---" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "# 🔓 Post-Quarantine Analysis Report" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "> Dependencies that have passed the 14-day quarantine period." >> "$REPORT_FILE"
+          echo "> This report contains implementation recommendations based on community feedback." >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          
+          HAS_BREAKING="false"
+          IMPL_PLAN=""
+          
+          # Process each dependency
+          echo "$DEPS" | jq -r '.[] | "\(.name)|\(.version)"' | while IFS='|' read -r DEP_NAME DEP_VERSION; do
+            echo "## 📦 $DEP_NAME ($DEP_VERSION)" >> "$REPORT_FILE"
+            echo "" >> "$REPORT_FILE"
+            
+            # Search for issues/PRs in the last 14 days
+            echo "### 📊 Community Feedback (Last 14 Days)" >> "$REPORT_FILE"
+            echo "" >> "$REPORT_FILE"
+            
+            # Get GitHub issues
+            ISSUES=$(gh search issues "$DEP_NAME" --created=">=$(date -d '14 days ago' +%Y-%m-%d)" --limit 5 --json title,url,state 2>/dev/null || echo "[]")
+            
+            if [ "$ISSUES" != "[]" ]; then
+              echo "| Issue | Status |" >> "$REPORT_FILE"
+              echo "|-------|--------|" >> "$REPORT_FILE"
+              echo "$ISSUES" | jq -r '.[] | "| [\(.title)](\(.url)) | \(.state) |"' >> "$REPORT_FILE"
+              echo "" >> "$REPORT_FILE"
+            else
+              echo "*No significant issues found.*" >> "$REPORT_FILE"
+              echo "" >> "$REPORT_FILE"
+            fi
+            
+            # Check for breaking changes
+            echo "### ⚠️ Breaking Changes Assessment" >> "$REPORT_FILE"
+            echo "" >> "$REPORT_FILE"
+            
+            BREAKING_ISSUES=$(gh search issues "$DEP_NAME breaking change" --created=">=$(date -d '14 days ago' +%Y-%m-%d)" --limit 3 --json title 2>/dev/null || echo "[]")
+            
+            if [ "$(echo "$BREAKING_ISSUES" | jq 'length')" -gt 0 ]; then
+              echo "⚠️ **Potential breaking changes detected:**" >> "$REPORT_FILE"
+              echo "$BREAKING_ISSUES" | jq -r '.[] | "- \(.title)"' >> "$REPORT_FILE"
+              HAS_BREAKING="true"
+            else
+              echo "✅ No breaking changes reported." >> "$REPORT_FILE"
+            fi
+            echo "" >> "$REPORT_FILE"
+            
+            # Implementation recommendations
+            echo "### 🛠️ Implementation Recommendations" >> "$REPORT_FILE"
+            echo "" >> "$REPORT_FILE"
+            echo "1. Update dependency in manifest file" >> "$REPORT_FILE"
+            echo "2. Run test suite to verify compatibility" >> "$REPORT_FILE"
+            echo "3. Review changelog for migration notes" >> "$REPORT_FILE"
+            echo "" >> "$REPORT_FILE"
+            
+            IMPL_PLAN="${IMPL_PLAN}Update $DEP_NAME to $DEP_VERSION\n"
+          done
+          
+          # Summary section
+          echo "---" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "## 📋 Implementation Plan" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "### Automated Steps (Copilot will execute):" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "- [ ] Update dependency versions in manifest files" >> "$REPORT_FILE"
+          echo "- [ ] Run automated tests" >> "$REPORT_FILE"
+          echo "- [ ] Generate migration diff" >> "$REPORT_FILE"
+          echo "- [ ] Create E2E test report with screenshots" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "### User Validation Required:" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "- [ ] Review breaking changes (if any)" >> "$REPORT_FILE"
+          echo "- [ ] Approve implementation PR" >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "> ⏰ **Auto-implementation** will trigger in **${{ env.AUTO_IMPLEMENT_DELAY_DAYS }} days** if no action is taken." >> "$REPORT_FILE"
+          echo "" >> "$REPORT_FILE"
+          echo "---" >> "$REPORT_FILE"
+          echo "*Generated by Git-Core Protocol Post-Quarantine Analyzer*" >> "$REPORT_FILE"
+          
+          echo "report_path=$REPORT_FILE" >> $GITHUB_OUTPUT
+          echo "has_breaking_changes=$HAS_BREAKING" >> $GITHUB_OUTPUT
+          echo "implementation_plan<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$IMPL_PLAN" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Upload Analysis Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: post-quarantine-report
+          path: docs/agent-docs/POST_QUARANTINE_REPORT.md
+
+  # ============================================================
+  # JOB 3: Create Implementation PR
+  # ============================================================
+  create-implementation-pr:
+    name: "📝 Create Implementation PR"
+    runs-on: ubuntu-latest
+    needs: [identify-ready, deep-analysis]
+    if: needs.deep-analysis.outputs.report_path != ''
+    outputs:
+      pr_number: ${{ steps.create-pr.outputs.pr_number }}
+      pr_url: ${{ steps.create-pr.outputs.pr_url }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Download Analysis Report
+        uses: actions/download-artifact@v6
+        with:
+          name: post-quarantine-report
+          path: docs/agent-docs/
+      
+      - name: Create Implementation Branch
+        run: |
+          BRANCH_NAME="deps/post-quarantine-$(date +%Y%m%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git checkout -b "$BRANCH_NAME"
+          git add docs/agent-docs/POST_QUARANTINE_REPORT.md
+          git commit -m "docs(deps): post-quarantine analysis report
+
+          Dependencies analyzed after 14-day quarantine period.
+          
+          AI-Context: Generated by post-quarantine-analysis workflow
+          
+          Closes #(auto-created-issue)"
+          
+          git push origin "$BRANCH_NAME"
+          
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+      
+      - name: Create Implementation PR
+        id: create-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BREAKING_WARNING=""
+          if [ "${{ needs.deep-analysis.outputs.has_breaking_changes }}" == "true" ]; then
+            BREAKING_WARNING="⚠️ **BREAKING CHANGES DETECTED** - Review carefully before approving."
+          fi
+          
+          PR_BODY="## 🔓 Post-Quarantine Implementation Plan
+          
+          This PR contains the analysis report for dependencies that have passed the 14-day quarantine period.
+          
+          $BREAKING_WARNING
+          
+          ### 📋 What happens next?
+          
+          1. **Review this PR** - Check the analysis report for any concerns
+          2. **Approve or Request Changes** - Your feedback shapes the implementation
+          3. **Auto-Implementation** - If no action in **${{ env.AUTO_IMPLEMENT_DELAY_DAYS }} days**, Copilot will implement automatically
+          
+          ### 🤖 Automated Implementation
+          
+          After approval (or auto-trigger), Copilot will:
+          - Update dependency versions
+          - Run E2E tests with screenshots/videos
+          - Create a detailed implementation report
+          
+          ---
+          *Generated by Git-Core Protocol*
+          "
+          
+          PR_URL=$(gh pr create \
+            --title "🔓 Post-Quarantine: Implementation Plan Ready" \
+            --body "$PR_BODY" \
+            --label "post-quarantine,implementation-plan,awaiting-review" \
+            --base main \
+            --head "$BRANCH_NAME")
+          
+          PR_NUMBER=$(echo "$PR_URL" | grep -oP '\d+$')
+          
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+          
+          echo "✅ Created PR #$PR_NUMBER: $PR_URL"
+
+  # ============================================================
+  # JOB 4: Schedule Auto-Implementation
+  # ============================================================
+  schedule-auto-implementation:
+    name: "⏰ Schedule Auto-Implementation"
+    runs-on: ubuntu-latest
+    needs: create-implementation-pr
+    if: needs.create-implementation-pr.outputs.pr_number != ''
+    
+    steps:
+      - name: Create Auto-Implementation Trigger Issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Calculate trigger date (3 days from now)
+          TRIGGER_DATE=$(date -d "+${{ env.AUTO_IMPLEMENT_DELAY_DAYS }} days" +%Y-%m-%d)
+          
+          ISSUE_BODY="## ⏰ Scheduled Auto-Implementation
+          
+          **PR:** #${{ needs.create-implementation-pr.outputs.pr_number }}
+          **Trigger Date:** $TRIGGER_DATE
+          **Status:** ⏳ Awaiting user validation
+          
+          ---
+          
+          ### What will happen?
+          
+          If PR #${{ needs.create-implementation-pr.outputs.pr_number }} is not approved or closed by **$TRIGGER_DATE**:
+          
+          1. Copilot will be assigned to implement the changes
+          2. E2E tests will run automatically
+          3. Screenshots and videos will be captured
+          4. A detailed implementation report will be generated
+          
+          ### To prevent auto-implementation:
+          
+          - ✅ Approve the PR (implementation proceeds with your oversight)
+          - ❌ Close the PR (changes are rejected)
+          - 💬 Comment on the PR with concerns (pauses auto-implementation)
+          
+          ---
+          *This issue will auto-close when resolved.*
+          "
+          
+          gh issue create \
+            --title "⏰ Auto-Implementation Scheduled: $TRIGGER_DATE" \
+            --body "$ISSUE_BODY" \
+            --label "auto-implementation,scheduled,copilot" \
+            --assignee ""
+          
+          echo "✅ Auto-implementation scheduled for $TRIGGER_DATE"

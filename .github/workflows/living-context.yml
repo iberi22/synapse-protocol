@@ -1,0 +1,391 @@
+name: 🌐 Living Context Protocol
+
+# This workflow implements a Context7-like system natively in Git-Core Protocol
+# but BETTER: it uses async AI agents (Gemini, Copilot, CodeRabbit) to analyze
+# the context PR and provide rich insights directly in GitHub.
+
+on:
+  # Weekly scheduled run
+  schedule:
+    - cron: "0 8 * * 1" # Every Monday at 8am UTC
+
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      request_ai_review:
+        description: "Request AI agents to review the context"
+        required: false
+        default: true
+        type: boolean
+      specific_deps:
+        description: "Comma-separated list of specific deps to analyze (empty = all)"
+        required: false
+        default: ""
+        type: string
+
+  # Trigger on manifest changes
+  push:
+    paths:
+      - "Cargo.toml"
+      - "package.json"
+      - "requirements.txt"
+      - "pyproject.toml"
+      - "go.mod"
+      - "Gemfile"
+      - "pom.xml"
+      - "build.gradle"
+
+  # Trigger when dependency PRs graduate from quarantine
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  CONTEXT_PR_BRANCH: living-context/main
+  CONTEXT_FILE: docs/agent-docs/RESEARCH_STACK_CONTEXT.md
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════
+  # STEP 1: Generate the Living Context Document
+  # ═══════════════════════════════════════════════════════════════════
+  generate-context:
+    name: 📚 Generate Living Context
+    if: >
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       (contains(github.event.pull_request.labels.*.name, 'dependencies') ||
+        contains(github.event.pull_request.labels.*.name, 'ready-to-adopt')))
+
+    runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.create-pr.outputs.pull-request-number }}
+      pr_url: ${{ steps.create-pr.outputs.pull-request-url }}
+      has_changes: ${{ steps.create-pr.outputs.pull-request-operation == 'created' || steps.create-pr.outputs.pull-request-operation == 'updated' }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🦀 Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: 📦 Cache Rust build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tools/context-research-agent/target
+          key: ${{ runner.os }}-cargo-context-${{ hashFiles('tools/context-research-agent/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-context-
+
+      - name: 📥 Download or Build Context Research Agent
+        run: |
+          # Try to download pre-built binary first (faster)
+          if [ -f "bin/context-research-agent-linux" ]; then
+            echo "✅ Found pre-built binary in bin/"
+            cp bin/context-research-agent-linux tools/context-research-agent/target/release/context-research-agent
+            chmod +x tools/context-research-agent/target/release/context-research-agent
+          else
+            echo "⚠️ Pre-built binary not found, compiling from source..."
+            cargo build --release --manifest-path tools/context-research-agent/Cargo.toml
+          fi
+
+      - name: 🧠 Run Research Agent
+        id: research
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p docs/agent-docs
+
+          if [ -f "./tools/context-research-agent/target/release/context-research-agent" ]; then
+            echo "🧠 Running Context Research Agent..."
+            ./tools/context-research-agent/target/release/context-research-agent \
+              --output "${{ env.CONTEXT_FILE }}" \
+              --workspace .
+          else
+            echo "⚠️ Agent binary not found, creating minimal context file"
+            cat > "${{ env.CONTEXT_FILE }}" << 'EOF'
+          ---
+          title: "Living Research Context"
+          type: RESEARCH
+          agent: context-research-agent
+          updated: $(date +%Y-%m-%d)
+          ---
+
+          # 🧠 Living Research Context
+
+          > **Status**: Pending full analysis. Run the Context Research Agent locally or wait for scheduled update.
+
+          ## 📦 Current Stack
+
+          *Analysis pending...*
+          EOF
+          fi
+
+      - name: 📊 Add Quarantine Status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "" >> "${{ env.CONTEXT_FILE }}"
+          echo "## 🚧 Quarantine Status" >> "${{ env.CONTEXT_FILE }}"
+          echo "" >> "${{ env.CONTEXT_FILE }}"
+          echo "Dependencies currently in quarantine (< 14 days since release):" >> "${{ env.CONTEXT_FILE }}"
+          echo "" >> "${{ env.CONTEXT_FILE }}"
+
+          # List PRs with quarantine label
+          QUARANTINE_PRS=$(gh pr list --label "quarantine" --json number,title,createdAt --jq '.[] | "- PR #\(.number): \(.title) (since \(.createdAt | split("T")[0]))"' 2>/dev/null || echo "")
+
+          if [ -z "$QUARANTINE_PRS" ]; then
+            echo "*No dependencies in quarantine.*" >> "${{ env.CONTEXT_FILE }}"
+          else
+            echo "$QUARANTINE_PRS" >> "${{ env.CONTEXT_FILE }}"
+          fi
+
+          echo "" >> "${{ env.CONTEXT_FILE }}"
+          echo "---" >> "${{ env.CONTEXT_FILE }}"
+          echo "*Last updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')*" >> "${{ env.CONTEXT_FILE }}"
+
+      - name: 🔀 Create/Update Living Context PR
+        id: create-pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(context): update living research context [skip ci]"
+          title: "🌐 Living Context - Stack Intelligence Report"
+          body: |
+            ## 🌐 Living Context Protocol
+
+            This PR maintains the **Living Research Context** for the Git-Core Protocol.
+
+            ### 📊 What's Included
+
+            - **Current Stack**: All dependencies with exact versions
+            - **Known Anomalies**: Bugs and quirks in specific versions
+            - **Intelligent Patterns**: Recommended usage patterns
+            - **Quarantine Status**: Dependencies awaiting community feedback
+
+            ### 🤖 AI Analysis Requested
+
+            The following AI agents will analyze this context:
+
+            | Agent | Status | Command |
+            |-------|--------|---------|
+            | **Gemini Code Assist** | 🔄 Pending | `/gemini review` |
+            | **CodeRabbit** | 🔄 Auto-review | Automatic |
+            | **Copilot** | 🔄 On-demand | `@copilot analyze` |
+
+            ### 📝 Usage
+
+            After this PR is reviewed and merged, AI agents should read:
+            ```bash
+            cat docs/agent-docs/RESEARCH_STACK_CONTEXT.md
+            ```
+
+            ### 🔗 Related
+
+            - This implements a Context7-like system natively
+            - Part of the Git-Core Protocol
+
+            ---
+            *Auto-generated by Living Context Protocol*
+          branch: ${{ env.CONTEXT_PR_BRANCH }}
+          delete-branch: false
+          labels: |
+            living-context
+            ai-review-requested
+            documentation
+
+  # ═══════════════════════════════════════════════════════════════════
+  # STEP 2: Request AI Agent Reviews
+  # ═══════════════════════════════════════════════════════════════════
+  request-ai-reviews:
+    name: 🤖 Request AI Reviews
+    needs: generate-context
+    if: needs.generate-context.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔍 Request Gemini Code Assist Review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ needs.generate-context.outputs.pr_number }}"
+
+          if [ -n "$PR_NUMBER" ]; then
+            echo "📨 Requesting Gemini Code Assist review on PR #$PR_NUMBER..."
+
+            # Add comment to trigger Gemini review
+            gh pr comment "$PR_NUMBER" \
+              --repo "${{ github.repository }}" \
+              --body "/gemini review
+
+            Please analyze the Living Context document and provide:
+            1. **Accuracy Check**: Are the dependency versions correct?
+            2. **Risk Assessment**: Any security concerns with listed versions?
+            3. **Pattern Validation**: Are the 'Intelligent Patterns' actually intelligent?
+            4. **Suggestions**: What additional context would be helpful?
+
+            Focus on actionable insights for AI coding agents."
+          fi
+
+      - name: 🐰 Wait for CodeRabbit Auto-Review
+        run: |
+          echo "✅ CodeRabbit will automatically review the PR"
+          echo "📝 Review will appear as PR comments within ~5 minutes"
+
+      - name: 📋 Add Review Checklist Comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ needs.generate-context.outputs.pr_number }}"
+
+          if [ -n "$PR_NUMBER" ]; then
+            gh pr comment "$PR_NUMBER" \
+              --repo "${{ github.repository }}" \
+              --body "## 🤖 AI Review Checklist
+
+            This PR is being analyzed by multiple AI agents:
+
+            - [ ] **Gemini Code Assist** - Requested via \`/gemini review\`
+            - [ ] **CodeRabbit** - Auto-review in progress
+            - [ ] **Human Review** - Final approval needed
+
+            ### 📌 For Human Reviewers
+
+            Please verify:
+            1. Dependency versions match \`Cargo.toml\`/\`package.json\`
+            2. Known anomalies are accurate (check linked issues)
+            3. Intelligent patterns are actually useful
+
+            ### 🔄 To Re-run Analysis
+
+            Comment \`/gemini review\` to request a fresh Gemini analysis.
+
+            ---
+            *Living Context Protocol v1.0*"
+          fi
+
+  # ═══════════════════════════════════════════════════════════════════
+  # STEP 3: Check for Post-Quarantine Dependencies
+  # ═══════════════════════════════════════════════════════════════════
+  check-quarantine-graduation:
+    name: 🔓 Check Quarantine Graduation
+    needs: generate-context
+    if: always() && needs.generate-context.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      has_graduated: ${{ steps.check.outputs.has_graduated }}
+      graduated_deps: ${{ steps.check.outputs.graduated_deps }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CONTEXT_PR_BRANCH }}
+
+      - name: Check for Graduated Dependencies
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check for PRs that have passed quarantine (14 days old)
+          CUTOFF_DATE=$(date -d "-14 days" +%Y-%m-%d)
+
+          GRADUATED=$(gh pr list \
+            --label "quarantine" \
+            --state open \
+            --json number,title,createdAt \
+            --jq "[.[] | select(.createdAt < \"${CUTOFF_DATE}T00:00:00Z\")]")
+
+          if [ "$(echo "$GRADUATED" | jq 'length')" -gt 0 ]; then
+            echo "🔓 Found dependencies ready to graduate from quarantine:"
+            echo "$GRADUATED" | jq -r '.[] | "  - #\(.number): \(.title)"'
+            echo "has_graduated=true" >> $GITHUB_OUTPUT
+            echo "graduated_deps=$GRADUATED" >> $GITHUB_OUTPUT
+
+            # Update labels on graduated PRs
+            echo "$GRADUATED" | jq -r '.[].number' | while read PR_NUM; do
+              gh pr edit "$PR_NUM" \
+                --remove-label "quarantine" \
+                --add-label "ready-to-adopt"
+              echo "✅ PR #$PR_NUM promoted to ready-to-adopt"
+            done
+          else
+            echo "✅ No dependencies ready to graduate"
+            echo "has_graduated=false" >> $GITHUB_OUTPUT
+            echo "graduated_deps=[]" >> $GITHUB_OUTPUT
+          fi
+
+  # ═══════════════════════════════════════════════════════════════════
+  # STEP 4: Trigger Post-Quarantine Analysis
+  # ═══════════════════════════════════════════════════════════════════
+  trigger-post-quarantine:
+    name: 🔬 Trigger Post-Quarantine Analysis
+    needs: check-quarantine-graduation
+    if: needs.check-quarantine-graduation.outputs.has_graduated == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Post-Quarantine Workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔬 Triggering post-quarantine analysis workflow..."
+          gh workflow run post-quarantine-analysis.yml \
+            --repo "${{ github.repository }}"
+          echo "✅ Post-quarantine analysis triggered"
+
+  # ═══════════════════════════════════════════════════════════════════
+  # STEP 5: Notify and Track
+  # ═══════════════════════════════════════════════════════════════════
+  notify:
+    name: 📢 Notify
+    needs: [generate-context, request-ai-reviews, check-quarantine-graduation]
+    if: always() && needs.generate-context.outputs.pr_number != ''
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📊 Summary
+        run: |
+          echo "## 🌐 Living Context Protocol Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| PR Number | #${{ needs.generate-context.outputs.pr_number }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| PR URL | ${{ needs.generate-context.outputs.pr_url }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Has Changes | ${{ needs.generate-context.outputs.has_changes }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Quarantine Graduation | ${{ needs.check-quarantine-graduation.outputs.has_graduated || 'N/A' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🤖 AI Agents Notified" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Gemini Code Assist (via /gemini review)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ CodeRabbit (automatic)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔄 Dependency Lifecycle" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Phase | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Quarantine Check | ✅ Completed |" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.check-quarantine-graduation.outputs.has_graduated }}" == "true" ]; then
+            echo "| Post-Quarantine | 🔄 Analysis Triggered |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Post-Quarantine | ⏳ No deps ready |" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Wait for AI reviews (~5-10 minutes)" >> $GITHUB_STEP_SUMMARY
+          echo "2. Address any suggestions" >> $GITHUB_STEP_SUMMARY
+          echo "3. Merge to update the Living Context" >> $GITHUB_STEP_SUMMARY

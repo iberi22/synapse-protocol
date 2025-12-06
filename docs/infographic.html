@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Git-Core Protocol Infographic</title>
+   <style>
+      :root {
+         --primary: #2563eb;
+         --secondary: #475569;
+         --bg: #f8fafc;
+         --card-bg: #ffffff;
+         --text: #1e293b;
+         --accent: #0f172a;
+         --code-bg: #1e293b;
+         --code-text: #e2e8f0;
+      }
+
+      body {
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         background-color: var(--bg);
+         color: var(--text);
+         margin: 0;
+         padding: 40px;
+         display: flex;
+         justify-content: center;
+         min-height: 100vh;
+      }
+
+      .container {
+         width: 100%;
+         max-width: 1200px;
+         background: var(--card-bg);
+         border-radius: 20px;
+         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+         overflow: hidden;
+         display: flex;
+         flex-direction: column;
+      }
+
+      .header {
+         background: var(--accent);
+         color: white;
+         padding: 40px;
+         text-align: center;
+         position: relative;
+         overflow: hidden;
+      }
+
+      .header::before {
+         content: "";
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         background: linear-gradient(45deg, #2563eb, #0f172a);
+         opacity: 0.8;
+         z-index: 0;
+      }
+
+      .header-content {
+         position: relative;
+         z-index: 1;
+      }
+
+      .header h1 {
+         margin: 0;
+         font-size: 3.5em;
+         letter-spacing: -1px;
+         font-weight: 800;
+      }
+
+      .header p {
+         margin-top: 10px;
+         opacity: 0.9;
+         font-size: 1.4em;
+         font-weight: 300;
+      }
+
+      .content {
+         display: flex;
+         flex-wrap: wrap;
+      }
+
+      .column {
+         flex: 1;
+         min-width: 400px;
+         padding: 50px;
+         border-right: 1px solid #e2e8f0;
+      }
+
+      .column:last-child {
+         border-right: none;
+      }
+
+      h2 {
+         color: var(--primary);
+         font-size: 2em;
+         border-bottom: 3px solid #e2e8f0;
+         padding-bottom: 15px;
+         margin-top: 0;
+         margin-bottom: 30px;
+         display: flex;
+         align-items: center;
+         gap: 15px;
+      }
+
+      .step {
+         margin-bottom: 40px;
+      }
+
+      .step-title {
+         font-weight: 700;
+         font-size: 1.2em;
+         margin-bottom: 12px;
+         display: flex;
+         align-items: center;
+         gap: 10px;
+         color: var(--accent);
+      }
+
+      .badge {
+         background: var(--primary);
+         color: white;
+         padding: 4px 10px;
+         border-radius: 6px;
+         font-size: 0.75em;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+         font-weight: 600;
+      }
+
+      code {
+         display: block;
+         background: var(--code-bg);
+         color: var(--code-text);
+         padding: 20px;
+         border-radius: 10px;
+         font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+         font-size: 0.95em;
+         line-height: 1.5;
+         overflow-x: auto;
+         white-space: pre-wrap;
+         box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+         border-left: 4px solid #3b82f6;
+      }
+
+      .loop-container {
+         display: flex;
+         flex-direction: column;
+         gap: 15px;
+      }
+
+      .loop-item {
+         background: #f8fafc;
+         padding: 20px;
+         border-radius: 12px;
+         border: 1px solid #e2e8f0;
+         border-left: 5px solid var(--primary);
+         transition: transform 0.2s;
+      }
+
+      .loop-item:hover {
+         transform: translateX(5px);
+         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .loop-item strong {
+         color: var(--primary);
+         font-size: 1.1em;
+         display: block;
+         margin-bottom: 5px;
+      }
+
+      .agents-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+         gap: 10px;
+         margin-top: 10px;
+      }
+
+      .agent-card {
+         background: #f1f5f9;
+         padding: 10px;
+         border-radius: 8px;
+         text-align: center;
+         font-size: 0.9em;
+         border: 1px solid #cbd5e1;
+      }
+
+      .agent-card b {
+         display: block;
+         color: var(--accent);
+         margin-bottom: 4px;
+      }
+
+      .warning {
+         background: #fef2f2;
+         color: #991b1b;
+         padding: 20px;
+         border-radius: 12px;
+         border: 2px solid #fecaca;
+         margin-top: 30px;
+         display: flex;
+         align-items: flex-start;
+         gap: 15px;
+      }
+
+      .warning-icon {
+         font-size: 1.5em;
+      }
+
+      .footer {
+         background: #f1f5f9;
+         padding: 25px;
+         text-align: center;
+         font-size: 0.9em;
+         color: var(--secondary);
+         border-top: 1px solid #e2e8f0;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="container">
+      <div class="header">
+         <div class="header-content">
+            <h1>Git-Core Protocol</h1>
+            <p>Intelligent, sophisticated but minimalist in complexity</p>
+         </div>
+      </div>
+
+      <div class="content">
+         <!-- Column 1: Installation -->
+         <div class="column">
+            <h2>📥 How to Install</h2>
+
+            <div class="step">
+               <div class="step-title"><span class="badge">Option 1</span> Shell Scripts (Recommended)</div>
+               <p>Transparent, visible code you can read before running.</p>
+               <code># Windows (PowerShell)
+irm https://raw.githubusercontent.com/iberi22/Git-Core-Protocol/main/install.ps1 | iex
+
+# Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/iberi22/Git-Core-Protocol/main/install.sh | bash</code>
+            </div>
+
+            <div class="step">
+               <div class="step-title"><span class="badge">Option 2</span> Git-Core CLI</div>
+               <p>Full management experience with Rust CLI.</p>
+               <code>cargo install git-core-cli
+git-core init my-project</code>
+            </div>
+
+            <div class="step">
+               <div class="step-title"><span class="badge">Option 3</span> GitHub Template</div>
+               <p>Click the <strong>"Use this template"</strong> button on the repository to start a new repo with the
+                  protocol pre-loaded.</p>
+            </div>
+         </div>
+
+         <!-- Column 2: Usage -->
+         <div class="column">
+            <h2>🚀 How to Use</h2>
+
+            <div class="step">
+               <div class="step-title">🔄 The Workflow Loop</div>
+               <div class="loop-container">
+                  <div class="loop-item">
+                     <strong>1. READ (Context)</strong>
+                     Read <code>.✨/ARCHITECTURE.md</code><br>
+                     Check assigned issues: <code>gh issue list</code>
+                  </div>
+                  <div class="loop-item">
+                     <strong>2. ACT (Develop)</strong>
+                     Create branch <code>feat/issue-123</code><br>
+                     Code & Test (Atomic Commits)
+                  </div>
+                  <div class="loop-item">
+                     <strong>3. UPDATE (Close)</strong>
+                     Commit: <code>feat: ... (closes #123)</code><br>
+                     Create PR & Generate AI Report
+                  </div>
+               </div>
+            </div>
+
+            <div class="step">
+               <div class="step-title">🤖 AI Agents</div>
+               <div class="agents-grid">
+                  <div class="agent-card"><b>@architect</b>Claude Opus</div>
+                  <div class="agent-card"><b>@gemini</b>Gemini Pro</div>
+                  <div class="agent-card"><b>@quick</b>Claude Haiku</div>
+                  <div class="agent-card"><b>@grok</b>Grok Fast</div>
+               </div>
+            </div>
+
+            <div class="warning">
+               <div class="warning-icon">⛔</div>
+               <div>
+                  <strong>HARD RULE:</strong><br>
+                  NEVER create <code>TODO.md</code> or <code>TASKS.md</code>.<br>
+                  <strong>Your state is GitHub Issues.</strong>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="footer">
+         Generated by Git-Core Protocol Agent • 2025 • Open Source
+      </div>
+   </div>
+</body>
+
+</html>

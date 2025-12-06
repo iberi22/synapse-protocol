@@ -1,0 +1,68 @@
+name: Check Protocol Updates
+
+on:
+  push:
+    branches: [main, master]
+  schedule:
+    # Cada lunes a las 9am UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for protocol updates
+        id: check
+        run: |
+          LOCAL=$(cat .git-core-protocol-version 2>/dev/null || echo "0.0.0")
+          REMOTE=$(curl -s https://raw.githubusercontent.com/iberi22/Git-Core-Protocol/main/.git-core-protocol-version)
+          
+          echo "local=$LOCAL" >> $GITHUB_OUTPUT
+          echo "remote=$REMOTE" >> $GITHUB_OUTPUT
+          
+          if [ "$LOCAL" != "$REMOTE" ]; then
+            echo "update_available=true" >> $GITHUB_OUTPUT
+            echo "::warning::🔄 Protocol update available: $LOCAL → $REMOTE"
+          else
+            echo "update_available=false" >> $GITHUB_OUTPUT
+            echo "✅ Protocol is up to date: $LOCAL"
+          fi
+      
+      - name: Create update issue if needed
+        if: steps.check.outputs.update_available == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if issue already exists
+          EXISTING=$(gh issue list --label "protocol-upgrade" --state open --json number --jq '.[0].number')
+          
+          if [ -z "$EXISTING" ]; then
+            gh issue create \
+              --title "🔄 Upgrade Git-Core Protocol to v${{ steps.check.outputs.remote }}" \
+              --body "## Nueva versión disponible
+          
+          - **Versión actual:** ${{ steps.check.outputs.local }}
+          - **Versión nueva:** ${{ steps.check.outputs.remote }}
+          
+          ### Cómo actualizar
+          
+          **Opción 1: Prompt (recomendado)**
+          Escribe \`#prompt:update\` en el chat de Copilot.
+          
+          **Opción 2: Manual**
+          \`\`\`powershell
+          \$env:GIT_CORE_UPGRADE = \"1\"; irm https://raw.githubusercontent.com/iberi22/Git-Core-Protocol/main/install.ps1 | iex
+          \`\`\`
+          
+          **Opción 3: CLI**
+          \`\`\`bash
+          git-core upgrade
+          \`\`\`
+          
+          ---
+          *Issue generado automáticamente por el workflow check-protocol-update*" \
+              --label "protocol-upgrade,automated"
+          fi

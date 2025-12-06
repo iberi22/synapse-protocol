@@ -1,0 +1,10 @@
+# Esta carpeta contiene issues pendientes en formato .md
+# Los archivos aquí se sincronizan automáticamente con GitHub Issues
+#
+# Formato del nombre: TYPE_titulo-del-issue.md
+# Ejemplos:
+#   FEAT_add-user-authentication.md
+#   BUG_fix-login-error.md
+#   TASK_update-dependencies.md
+#
+# Cuando un issue se cierra en GitHub, el archivo se elimina automáticamente

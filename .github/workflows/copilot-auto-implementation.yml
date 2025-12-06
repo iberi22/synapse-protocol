@@ -1,0 +1,390 @@
+name: "🤖 Copilot Auto-Implementation"
+
+on:
+  # Scheduled: Check daily for PRs awaiting auto-implementation
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8 AM UTC
+
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to implement'
+        required: true
+        type: number
+      force_implement:
+        description: 'Force implementation without waiting period'
+        required: false
+        type: boolean
+        default: false
+
+  # Triggered when implementation PR times out
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  AUTO_IMPLEMENT_DELAY_DAYS: 3
+
+jobs:
+  # ============================================================
+  # JOB 1: Check for PRs Ready for Auto-Implementation
+  # ============================================================
+  check-ready-prs:
+    name: "🔍 Check PRs Ready for Implementation"
+    runs-on: ubuntu-latest
+    outputs:
+      prs_to_implement: ${{ steps.check.outputs.prs }}
+      has_prs: ${{ steps.check.outputs.has_prs }}
+
+    steps:
+      - name: Check for Eligible PRs
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO="${{ github.repository }}"
+
+          # If manual trigger with specific PR
+          if [ -n "${{ inputs.pr_number }}" ]; then
+            echo "📋 Manual implementation requested for PR #${{ inputs.pr_number }}"
+            echo "prs=[{\"number\":${{ inputs.pr_number }},\"title\":\"Manual Implementation\"}]" >> $GITHUB_OUTPUT
+            echo "has_prs=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Find PRs with 'implementation-plan' label older than AUTO_IMPLEMENT_DELAY_DAYS
+          CUTOFF_DATE=$(date -d "-${{ env.AUTO_IMPLEMENT_DELAY_DAYS }} days" +%Y-%m-%d)
+
+          ELIGIBLE_PRS=$(gh pr list \
+            --repo "$REPO" \
+            --label "implementation-plan,awaiting-review" \
+            --state open \
+            --json number,title,createdAt \
+            --jq "[.[] | select(.createdAt < \"${CUTOFF_DATE}T00:00:00Z\")]")
+
+          if [ "$(echo "$ELIGIBLE_PRS" | jq 'length')" -gt 0 ]; then
+            echo "📋 Found PRs ready for auto-implementation:"
+            echo "$ELIGIBLE_PRS" | jq -r '.[] | "  - PR #\(.number): \(.title)"'
+            echo "prs=$ELIGIBLE_PRS" >> $GITHUB_OUTPUT
+            echo "has_prs=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ No PRs ready for auto-implementation"
+            echo "prs=[]" >> $GITHUB_OUTPUT
+            echo "has_prs=false" >> $GITHUB_OUTPUT
+          fi
+
+  # ============================================================
+  # JOB 2: Assign Copilot to Implement Changes
+  # ============================================================
+  assign-copilot:
+    name: "🤖 Assign Copilot"
+    runs-on: ubuntu-latest
+    needs: check-ready-prs
+    if: needs.check-ready-prs.outputs.has_prs == 'true'
+    strategy:
+      matrix:
+        pr: ${{ fromJson(needs.check-ready-prs.outputs.prs_to_implement) }}
+      max-parallel: 1  # Process one PR at a time
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Implementation Issue for Copilot
+        id: create-issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ matrix.pr.number }}"
+
+          # Get PR details
+          PR_DETAILS=$(gh pr view "$PR_NUMBER" --json body,files,title)
+          PR_TITLE=$(echo "$PR_DETAILS" | jq -r '.title')
+          PR_FILES=$(echo "$PR_DETAILS" | jq -r '.files[].path' | head -10)
+
+          # Read the post-quarantine report if exists
+          REPORT_CONTENT=""
+          if [ -f "docs/agent-docs/POST_QUARANTINE_REPORT.md" ]; then
+            REPORT_CONTENT=$(cat docs/agent-docs/POST_QUARANTINE_REPORT.md | head -100)
+          fi
+
+          ISSUE_BODY="## 🤖 Auto-Implementation Request
+
+          **Source PR:** #$PR_NUMBER
+          **Title:** $PR_TITLE
+          **Trigger:** Auto-implementation after ${{ env.AUTO_IMPLEMENT_DELAY_DAYS }} days without user action
+
+          ---
+
+          ### 📋 Implementation Tasks
+
+          Based on the post-quarantine analysis, please implement the following:
+
+          1. **Update Dependencies**
+             - Update version numbers in manifest files (Cargo.toml, package.json, etc.)
+             - Ensure lock files are regenerated
+
+          2. **Run Tests**
+             - Execute the full test suite
+             - Report any failures
+
+          3. **E2E Testing** (if UI changes detected)
+             - Run Playwright E2E tests
+             - Capture screenshots of key UI states
+             - Record video of critical user flows
+
+          4. **Generate Implementation Report**
+             - Document all changes made
+             - Include before/after comparisons
+             - List any manual steps required
+
+          ---
+
+          ### 📄 Analysis Context
+
+          \`\`\`markdown
+          $REPORT_CONTENT
+          \`\`\`
+
+          ---
+
+          ### ✅ Acceptance Criteria
+
+          - [ ] All dependencies updated to post-quarantine versions
+          - [ ] All existing tests pass
+          - [ ] No new security vulnerabilities introduced
+          - [ ] E2E screenshots attached (if applicable)
+          - [ ] Implementation report generated
+
+          ---
+          *Auto-generated by Git-Core Protocol*
+          "
+
+          # Create issue and assign to Copilot
+          ISSUE_URL=$(gh issue create \
+            --title "🤖 Implement: $PR_TITLE" \
+            --body "$ISSUE_BODY" \
+            --label "copilot,auto-implementation,in-progress")
+
+          ISSUE_NUMBER=$(echo "$ISSUE_URL" | grep -oP '\d+$')
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+
+          echo "✅ Created implementation issue #$ISSUE_NUMBER"
+
+      - name: Assign Copilot to Issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER="${{ steps.create-issue.outputs.issue_number }}"
+
+          # Add copilot label (triggers Copilot assignment)
+          gh issue edit "$ISSUE_NUMBER" --add-label "copilot"
+
+          # Comment to trigger Copilot
+          gh issue comment "$ISSUE_NUMBER" --body "@copilot please implement the changes described in this issue. Follow the Git-Core Protocol conventions for commits and PRs."
+
+          echo "✅ Copilot assigned to issue #$ISSUE_NUMBER"
+
+      - name: Update Original PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ matrix.pr.number }}"
+          ISSUE_NUMBER="${{ steps.create-issue.outputs.issue_number }}"
+
+          # Update PR labels
+          gh pr edit "$PR_NUMBER" \
+            --remove-label "awaiting-review" \
+            --add-label "copilot-implementing"
+
+          # Add comment to PR
+          gh pr comment "$PR_NUMBER" --body "## 🤖 Auto-Implementation Started
+
+          The ${{ env.AUTO_IMPLEMENT_DELAY_DAYS }}-day waiting period has elapsed without user action.
+
+          **Copilot has been assigned** to implement the changes automatically.
+
+          📋 **Implementation Issue:** #$ISSUE_NUMBER
+
+          ---
+
+          ### What happens now?
+
+          1. Copilot will analyze the implementation plan
+          2. Dependencies will be updated
+          3. Tests will be executed
+          4. A detailed report will be generated
+
+          You can still:
+          - 💬 Comment on issue #$ISSUE_NUMBER to guide the implementation
+          - ❌ Close this PR to abort the implementation
+
+          ---
+          *Auto-triggered by Git-Core Protocol*"
+
+          echo "✅ Updated PR #$PR_NUMBER with implementation status"
+
+  # ============================================================
+  # JOB 3: Setup E2E Testing Environment
+  # ============================================================
+  setup-e2e-tests:
+    name: "🎭 Setup E2E Tests"
+    runs-on: ubuntu-latest
+    needs: assign-copilot
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for E2E Test Configuration
+        id: check-e2e
+        run: |
+          if [ -f "playwright.config.ts" ] || [ -f "playwright.config.js" ]; then
+            echo "has_playwright=true" >> $GITHUB_OUTPUT
+            echo "✅ Playwright configuration found"
+          elif [ -f "cypress.config.ts" ] || [ -f "cypress.config.js" ]; then
+            echo "has_cypress=true" >> $GITHUB_OUTPUT
+            echo "✅ Cypress configuration found"
+          else
+            echo "has_e2e=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No E2E test framework detected"
+          fi
+
+      - name: Create E2E Test Workflow Artifact
+        if: steps.check-e2e.outputs.has_playwright == 'true' || steps.check-e2e.outputs.has_cypress == 'true'
+        run: |
+          mkdir -p e2e-config
+
+          cat > e2e-config/run-e2e.sh << 'EOF'
+          #!/bin/bash
+          # E2E Test Runner for Git-Core Protocol
+
+          set -e
+
+          echo "🎭 Starting E2E Tests..."
+
+          # Detect test framework
+          if [ -f "playwright.config.ts" ] || [ -f "playwright.config.js" ]; then
+            echo "📦 Installing Playwright..."
+            npx playwright install --with-deps
+
+            echo "🧪 Running Playwright tests..."
+            npx playwright test --reporter=html --reporter=json
+
+            echo "📸 Collecting artifacts..."
+            mkdir -p e2e-results
+            cp -r playwright-report/* e2e-results/ 2>/dev/null || true
+            cp -r test-results/* e2e-results/ 2>/dev/null || true
+
+          elif [ -f "cypress.config.ts" ] || [ -f "cypress.config.js" ]; then
+            echo "📦 Installing Cypress..."
+            npm ci
+
+            echo "🧪 Running Cypress tests..."
+            npx cypress run --reporter mochawesome
+
+            echo "📸 Collecting artifacts..."
+            mkdir -p e2e-results
+            cp -r cypress/screenshots/* e2e-results/ 2>/dev/null || true
+            cp -r cypress/videos/* e2e-results/ 2>/dev/null || true
+          fi
+
+          echo "✅ E2E tests complete!"
+          EOF
+
+          chmod +x e2e-config/run-e2e.sh
+
+      - name: Upload E2E Config
+        uses: actions/upload-artifact@v5
+        with:
+          name: e2e-config
+          path: e2e-config/
+
+  # ============================================================
+  # JOB 4: Generate Implementation Report Template
+  # ============================================================
+  generate-report-template:
+    name: "📝 Generate Report Template"
+    runs-on: ubuntu-latest
+    needs: assign-copilot
+
+    steps:
+      - name: Create Implementation Report Template
+        run: |
+          mkdir -p reports
+
+          cat > reports/IMPLEMENTATION_REPORT_TEMPLATE.md << 'EOF'
+          ---
+          title: "Implementation Report"
+          type: REPORT
+          agent: copilot
+          status: pending
+          generated: {{ DATE }}
+          source_pr: {{ PR_NUMBER }}
+          ---
+
+          # 🛠️ Implementation Report
+
+          > Auto-generated by Copilot via Git-Core Protocol
+
+          ## 📋 Summary
+
+          | Metric | Value |
+          |--------|-------|
+          | Dependencies Updated | {{ DEPS_COUNT }} |
+          | Tests Passed | {{ TESTS_PASSED }} / {{ TESTS_TOTAL }} |
+          | Breaking Changes | {{ BREAKING_CHANGES }} |
+          | E2E Screenshots | {{ SCREENSHOTS_COUNT }} |
+
+          ## 📦 Changes Made
+
+          ### Dependencies Updated
+
+          | Package | Old Version | New Version | Ecosystem |
+          |---------|-------------|-------------|-----------|
+          {{ DEPS_TABLE }}
+
+          ### Files Modified
+
+          {{ FILES_MODIFIED }}
+
+          ## 🧪 Test Results
+
+          ### Unit Tests
+          {{ UNIT_TEST_RESULTS }}
+
+          ### E2E Tests
+          {{ E2E_TEST_RESULTS }}
+
+          ## 📸 Screenshots
+
+          {{ SCREENSHOTS }}
+
+          ## 🎥 Videos
+
+          {{ VIDEOS }}
+
+          ## ⚠️ Notes & Warnings
+
+          {{ WARNINGS }}
+
+          ## ✅ Next Steps
+
+          - [ ] Review changes in this report
+          - [ ] Verify E2E screenshots match expectations
+          - [ ] Approve and merge the implementation PR
+
+          ---
+          *Generated by Git-Core Protocol Auto-Implementation*
+          EOF
+
+      - name: Upload Report Template
+        uses: actions/upload-artifact@v5
+        with:
+          name: report-template
+          path: reports/

@@ -1,0 +1,113 @@
+name: Build Tools
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/context-research-agent/**"
+      - "tools/workflow-orchestrator/**"
+      - "tools/atomicity-checker/**"
+      - ".github/workflows/build-tools.yml"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-tools:
+    name: Build ${{ matrix.tool }} (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux (Standard for GitHub Actions)
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            tool: context-research-agent
+            path: tools/context-research-agent
+
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            tool: workflow-orchestrator
+            path: tools/workflow-orchestrator
+
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            tool: atomicity-checker
+            path: tools/atomicity-checker
+
+          # Windows (Optional, for local users)
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            tool: context-research-agent
+            path: tools/context-research-agent
+            ext: .exe
+
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            tool: atomicity-checker
+            path: tools/atomicity-checker
+            ext: .exe
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build ${{ matrix.tool }}
+        working-directory: ${{ matrix.path }}
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.tool }}-${{ matrix.target }}
+          path: ${{ matrix.path }}/target/${{ matrix.target }}/release/${{ matrix.tool }}${{ matrix.ext }}
+
+  # Job to update the bin/ folder in the repo with the latest Linux binaries
+  # This allows workflows to just curl/download them instead of compiling
+  update-repo-binaries:
+    needs: build-tools
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: downloaded-artifacts
+
+      - name: Update bin/ folder
+        run: |
+          mkdir -p bin
+
+          # Linux
+          cp downloaded-artifacts/context-research-agent-x86_64-unknown-linux-gnu/context-research-agent bin/context-research-agent-linux
+          cp downloaded-artifacts/workflow-orchestrator-x86_64-unknown-linux-gnu/workflow-orchestrator bin/workflow-orchestrator-linux
+          cp downloaded-artifacts/atomicity-checker-x86_64-unknown-linux-gnu/atomicity-checker bin/atomicity-checker-linux
+
+          # Windows
+          cp downloaded-artifacts/context-research-agent-x86_64-pc-windows-msvc/context-research-agent.exe bin/context-research-agent.exe
+          cp downloaded-artifacts/atomicity-checker-x86_64-pc-windows-msvc/atomicity-checker.exe bin/atomicity-checker.exe
+
+          chmod +x bin/*
+
+          # Commit if changed
+          git config --global user.name "Git-Core Bot"
+          git config --global user.email "bot@git-core.protocol"
+
+          git add bin/
+          if git diff --staged --quiet; then
+            echo "No changes to binaries"
+          else
+            git commit -m "chore(tools): update pre-built binaries [skip ci]"
+            git push
+          fi

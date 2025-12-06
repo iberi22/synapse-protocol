@@ -1,0 +1,212 @@
+# Codex AI Review Workflow
+# Triggers on PR comments with specific commands or labels
+# Uses OpenAI Codex in headless mode for automated code review and analysis
+
+name: 🤖 Codex AI Review
+
+on:
+  # Trigger on PR review comments with @codex mention
+  issue_comment:
+    types: [created]
+
+  # Trigger when specific labels are added
+  pull_request:
+    types: [labeled, opened]
+
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
+      task:
+        description: 'Task type'
+        required: true
+        type: choice
+        options:
+          - review
+          - security-audit
+          - performance-analysis
+          - documentation-check
+
+# Prevent concurrent runs on the same PR
+concurrency:
+  group: codex-${{ github.event.pull_request.number || github.event.issue.number || github.event.inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  # Check if we should run based on trigger
+  should-run:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+      task: ${{ steps.check.outputs.task }}
+      pr_number: ${{ steps.check.outputs.pr_number }}
+    steps:
+      - name: Check trigger conditions
+        id: check
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          LABEL_NAME: ${{ github.event.label.name }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          RUN="false"
+          TASK="review"
+          PR_NUMBER=""
+
+          # Manual dispatch
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            RUN="true"
+            TASK="${{ github.event.inputs.task }}"
+            PR_NUMBER="${{ github.event.inputs.pr_number }}"
+
+          # Comment trigger: @codex review, @codex security, @codex analyze
+          elif [ "$EVENT_NAME" = "issue_comment" ]; then
+            if [[ "$COMMENT_BODY" == *"@codex"* ]]; then
+              RUN="true"
+              PR_NUMBER="${{ github.event.issue.number }}"
+
+              if [[ "$COMMENT_BODY" == *"security"* ]]; then
+                TASK="security-audit"
+              elif [[ "$COMMENT_BODY" == *"performance"* ]] || [[ "$COMMENT_BODY" == *"analyze"* ]]; then
+                TASK="performance-analysis"
+              elif [[ "$COMMENT_BODY" == *"docs"* ]] || [[ "$COMMENT_BODY" == *"documentation"* ]]; then
+                TASK="documentation-check"
+              fi
+            fi
+
+          # Label trigger
+          elif [ "$EVENT_NAME" = "pull_request" ]; then
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            case "$LABEL_NAME" in
+              "codex-review") RUN="true"; TASK="review" ;;
+              "codex-security") RUN="true"; TASK="security-audit" ;;
+              "codex-performance") RUN="true"; TASK="performance-analysis" ;;
+              "codex-docs") RUN="true"; TASK="documentation-check" ;;
+            esac
+          fi
+
+          echo "run=$RUN" >> $GITHUB_OUTPUT
+          echo "task=$TASK" >> $GITHUB_OUTPUT
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+  # Main Codex review job
+  codex-review:
+    needs: should-run
+    if: needs.should-run.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    outputs:
+      final_message: ${{ steps.run_codex.outputs.final-message }}
+
+    steps:
+      - name: 📥 Checkout PR
+        uses: actions/checkout@v5
+        with:
+          ref: refs/pull/${{ needs.should-run.outputs.pr_number }}/merge
+          fetch-depth: 0
+
+      - name: 🔄 Fetch base and head refs
+        run: |
+          git fetch --no-tags origin \
+            ${{ github.event.pull_request.base.ref || 'main' }} \
+            +refs/pull/${{ needs.should-run.outputs.pr_number }}/head
+
+      - name: 📖 Read AGENTS.md for context
+        id: agents_context
+        run: |
+          if [ -f "AGENTS.md" ]; then
+            AGENTS_CONTENT=$(cat AGENTS.md | head -100)
+            echo "agents_context<<EOF" >> $GITHUB_OUTPUT
+            echo "$AGENTS_CONTENT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🤖 Run Codex Review
+        id: run_codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          model: gpt-5.1-codex-high
+          sandbox: read-only
+          prompt: |
+            You are reviewing PR #${{ needs.should-run.outputs.pr_number }} for repository ${{ github.repository }}.
+
+            Task: ${{ needs.should-run.outputs.task }}
+
+            Repository follows Git-Core Protocol. Key rules:
+            - No TODO.md, PROGRESS.md, or tracking files
+            - State management via GitHub Issues only
+            - Use conventional commits with AI-Context footer
+
+            ${{ steps.agents_context.outputs.agents_context }}
+
+            Review ONLY the changes introduced by the PR:
+            ```
+            git diff ${{ github.event.pull_request.base.sha || 'main' }}..HEAD
+            ```
+
+            Based on task type, focus on:
+            - review: Code quality, best practices, potential bugs
+            - security-audit: Security vulnerabilities, injection risks, secrets exposure
+            - performance-analysis: Performance bottlenecks, memory leaks, optimization opportunities
+            - documentation-check: Missing docs, outdated comments, unclear code
+
+            Format response as:
+            ## 🤖 Codex Analysis: ${{ needs.should-run.outputs.task }}
+
+            ### Summary
+            [Brief overview]
+
+            ### Findings
+            [Detailed findings with file:line references]
+
+            ### Recommendations
+            [Actionable suggestions]
+
+            ---
+            *Analyzed by Codex (gpt-5.1-codex-high) via Git-Core Protocol*
+
+  # Post the review as a comment
+  post-review:
+    needs: [should-run, codex-review]
+    if: needs.codex-review.outputs.final_message != ''
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: 💬 Post Codex feedback
+        uses: actions/github-script@v8
+        env:
+          CODEX_FINAL_MESSAGE: ${{ needs.codex-review.outputs.final_message }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const prNumber = ${{ needs.should-run.outputs.pr_number }};
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: process.env.CODEX_FINAL_MESSAGE,
+            });
+
+      - name: 🏷️ Remove trigger label
+        if: github.event_name == 'pull_request' && github.event.action == 'labeled'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const labelName = '${{ github.event.label.name }}';
+            if (labelName.startsWith('codex-')) {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: ${{ needs.should-run.outputs.pr_number }},
+                name: labelName,
+              });
+            }

@@ -1,13 +1,4 @@
 {
-  "FEAT_setup-cargo-workspace.md": 1,
-  "FEAT_cli-application.md": 5,
-  "FEAT_define-core-entities.md": 6,
-  "FEAT_define-core-ports.md": 7,
-  "FEAT_dojo-component.md": 8,
-  "FEAT_lancedb-adapter.md": 9,
-  "FEAT_sled-adapter.md": 10,
-  "FEAT_status-hud-component.md": 11,
-  "FEAT_tauri-svelte-setup.md": 12,
-  "FEAT_terminal-component.md": 13,
-  "FEAT_wallet-tokenomics.md": 14
+  "DOCS_dependency-workflow-system.md": 49,
+  "FEAT_prompt-export-continuation.md": 50
 }

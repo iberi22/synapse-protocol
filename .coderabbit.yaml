@@ -1,0 +1,74 @@
+# CodeRabbit Configuration
+# https://docs.coderabbit.ai/configuration
+#
+# CodeRabbit provides automatic AI-powered code reviews on every PR.
+# Pro tier is FREE for open source repositories.
+
+language: en
+
+reviews:
+  # Enable automatic reviews on new PRs
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+
+  # Path-specific instructions for reviewers
+  path_instructions:
+    - path: "**/*.md"
+      instructions: |
+        Check for:
+        - Conventional commits references
+        - Protocol compliance (no TODO.md, PROGRESS.md, etc.)
+        - Proper YAML frontmatter in agent-docs/
+
+    - path: "scripts/**"
+      instructions: |
+        Verify:
+        - Cross-platform compatibility (bash + PowerShell equivalents)
+        - Proper error handling
+        - Atomic operation principles
+
+    - path: ".github/workflows/**"
+      instructions: |
+        Check for:
+        - Proper permissions
+        - Security best practices
+        - Reusable workflow patterns
+
+    - path: "**/*.sh"
+      instructions: |
+        Verify:
+        - POSIX compatibility where possible
+        - Proper quoting and escaping
+        - Error handling with set -e
+
+    - path: "**/*.ps1"
+      instructions: |
+        Check for:
+        - PowerShell best practices
+        - Proper error handling
+        - Cross-platform paths
+
+# Chat settings for interactive code discussions
+chat:
+  auto_reply: true
+
+# Review tone and focus (max 250 chars)
+tone_instructions: |
+  Focus on atomic commits, security, maintainability.
+  For Living Context PRs: verify versions, check CVEs, validate patterns.
+  Be constructive with actionable suggestions.
+
+# Knowledge base for context
+knowledge_base:
+  learnings:
+    scope: auto
+  issues:
+    scope: auto
+  jira:
+    project_keys: []
+  linear:
+    team_keys: []

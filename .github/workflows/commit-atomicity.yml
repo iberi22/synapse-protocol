@@ -1,0 +1,192 @@
+# Commit Atomicity Check Workflow
+# 🔍 Validates that commits in PRs follow the atomic commit principle
+#
+# NOW POWERED BY RUST 🦀 - 10-50x faster than shell version
+#
+# An atomic commit addresses a single concern (feature, bugfix, docs, etc.)
+# Mixing concerns makes history harder to understand and reverts more difficult.
+#
+# Configuration: .github/atomicity-config.yml
+
+name: 🔍 Commit Atomicity Check
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-atomicity:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Download atomicity-checker
+        run: |
+          # Try to use pre-built binary first (faster)
+          if [ -f "bin/atomicity-checker-linux" ]; then
+            echo "Using pre-built binary from repo"
+            chmod +x bin/atomicity-checker-linux
+            cp bin/atomicity-checker-linux /usr/local/bin/atomicity-checker
+          else
+            echo "Building from source..."
+            cd tools/atomicity-checker
+            cargo build --release
+            cp target/release/atomicity-checker /usr/local/bin/atomicity-checker
+          fi
+          atomicity-checker --version
+
+      - name: 🔍 Analyze commits
+        id: analyze
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+        run: |
+          # Run the Rust atomicity checker with JSON output
+          set +e
+          RESULT=$(atomicity-checker check \
+            --base "$GITHUB_BASE_REF" \
+            --head HEAD \
+            --output json 2>&1)
+          EXIT_CODE=$?
+          set -e
+
+          echo "Raw output:"
+          echo "$RESULT"
+
+          # Parse JSON output for GitHub outputs
+          if echo "$RESULT" | jq empty 2>/dev/null; then
+            HAS_ISSUES=$(echo "$RESULT" | jq -r '.has_issues // false')
+            TOTAL=$(echo "$RESULT" | jq -r '.total_commits // 0')
+            ATOMIC=$(echo "$RESULT" | jq -r '.atomic_commits // 0')
+            NON_ATOMIC=$(echo "$RESULT" | jq -r '.non_atomic_commits // 0')
+            SKIPPED=$(echo "$RESULT" | jq -r '.skipped_commits // 0')
+          else
+            # Fallback if JSON parsing fails
+            HAS_ISSUES="false"
+            TOTAL="0"
+            ATOMIC="0"
+            NON_ATOMIC="0"
+            SKIPPED="0"
+          fi
+
+          echo "has_issues=$HAS_ISSUES" >> $GITHUB_OUTPUT
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "atomic=$ATOMIC" >> $GITHUB_OUTPUT
+          echo "non_atomic=$NON_ATOMIC" >> $GITHUB_OUTPUT
+          echo "skipped=$SKIPPED" >> $GITHUB_OUTPUT
+
+          # Generate markdown report
+          atomicity-checker report \
+            --base "$GITHUB_BASE_REF" \
+            --head HEAD \
+            --output markdown \
+            --file /tmp/atomicity-report.md 2>/dev/null || true
+
+          # Store report for summary
+          if [ -f /tmp/atomicity-report.md ]; then
+            {
+              echo 'report<<EOF'
+              cat /tmp/atomicity-report.md
+              echo 'EOF'
+            } >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📋 Generate summary
+        run: |
+          if [ -n "${{ steps.analyze.outputs.report }}" ]; then
+            cat << 'EOF' >> $GITHUB_STEP_SUMMARY
+          ${{ steps.analyze.outputs.report }}
+
+          ---
+          *Powered by [atomicity-checker](./tools/atomicity-checker) 🦀*
+          EOF
+          else
+            cat << 'EOF' >> $GITHUB_STEP_SUMMARY
+          ## 🔍 Commit Atomicity Check
+
+          ✅ **All commits are atomic**
+
+          | Metric | Count |
+          |--------|-------|
+          | Total commits | ${{ steps.analyze.outputs.total }} |
+          | ✅ Atomic | ${{ steps.analyze.outputs.atomic }} |
+          | ⚠️ Non-atomic | ${{ steps.analyze.outputs.non_atomic }} |
+          | ⏭️ Skipped (bots) | ${{ steps.analyze.outputs.skipped }} |
+
+          ---
+          *Powered by [atomicity-checker](./tools/atomicity-checker) 🦀*
+          EOF
+          fi
+
+      - name: 💬 Comment on PR (with issues)
+        if: steps.analyze.outputs.has_issues == 'true'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const nonAtomic = '${{ steps.analyze.outputs.non_atomic }}';
+            const total = '${{ steps.analyze.outputs.total }}';
+
+            const body = `⚠️ **Atomicity Check Warning**
+
+            **${nonAtomic}** of **${total}** commits mix multiple concerns.
+
+            ### Why does this matter?
+
+            Atomic commits make your git history easier to:
+            - 📖 **Read** - Each commit tells a clear story
+            - 🔍 **Review** - Smaller, focused changes are easier to review
+            - ⏪ **Revert** - You can undo specific changes without side effects
+            - 🔬 **Bisect** - Finding bugs is faster with atomic commits
+
+            ### What to do?
+
+            Consider reorganizing your commits to address one concern per commit:
+            - **source** - Code changes
+            - **tests** - Test files
+            - **docs** - Documentation
+            - **config** - Configuration files
+            - **infra** - CI/CD, scripts, Docker
+
+            You can use interactive rebase to reorganize:
+            \`\`\`bash
+            git rebase -i origin/${{ github.base_ref }}
+            \`\`\`
+
+            ---
+            *This check is powered by [atomicity-checker](./tools/atomicity-checker) 🦀*
+            *Configured in \`.github/atomicity-config.yml\`*`;
+
+            // Check if we already commented
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+
+            const botComment = comments.data.find(c =>
+              c.user.type === 'Bot' &&
+              c.body.includes('Atomicity Check')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }

@@ -1,0 +1,13 @@
+# Agent Documentation Folder
+#
+# This folder contains documents created BY AI agents AT USER REQUEST ONLY.
+#
+# Valid document types:
+#   - PROMPT_*.md      - Prompts for other AI systems
+#   - RESEARCH_*.md    - Research findings and analysis
+#   - STRATEGY_*.md    - Business/technical strategies
+#   - SPEC_*.md        - Technical specifications
+#   - GUIDE_*.md       - User-requested guides
+#
+# ⚠️ IMPORTANT: Agents should ONLY create files here when explicitly
+#    requested by the user. All other output goes to chat responses.

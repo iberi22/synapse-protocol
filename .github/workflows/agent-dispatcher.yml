@@ -1,0 +1,183 @@
+# Agent Dispatcher - Automatically distribute issues to AI coding agents
+# Supports: GitHub Copilot and Google Jules
+
+name: 🤖 Agent Dispatcher
+
+on:
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      strategy:
+        description: 'Distribution strategy'
+        required: true
+        default: 'round-robin'
+        type: choice
+        options:
+          - round-robin      # Alternate between agents
+          - copilot-only     # Send all to Copilot
+          - jules-only       # Send all to Jules
+          - random           # Random assignment
+      max_issues:
+        description: 'Maximum issues to dispatch (0 = all)'
+        required: false
+        default: '5'
+        type: string
+      label_filter:
+        description: 'Only dispatch issues with this label'
+        required: false
+        default: 'ai-agent'
+        type: string
+
+  # Auto-trigger when ai-agent label is added
+  issues:
+    types: [labeled]
+
+permissions:
+  issues: write
+  contents: read
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && github.event.label.name == 'ai-agent')
+
+    steps:
+      - name: 📋 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔍 Get unassigned issues
+        id: get-issues
+        run: |
+          LABEL_FILTER="${{ inputs.label_filter || 'ai-agent' }}"
+          MAX_ISSUES="${{ inputs.max_issues || '5' }}"
+
+          if [ "${{ github.event_name }}" == "issues" ]; then
+            # Single issue from label event
+            echo "issues=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+            echo "count=1" >> $GITHUB_OUTPUT
+          else
+            # Get issues without copilot/jules labels
+            ISSUES=$(gh issue list \
+              --label "$LABEL_FILTER" \
+              --json number,labels \
+              --jq '[.[] | select(.labels | map(.name) | (contains(["copilot"]) or contains(["jules"])) | not) | .number] | join(",")' \
+              --limit ${MAX_ISSUES:-100})
+
+            if [ -z "$ISSUES" ]; then
+              echo "No unassigned issues found with label: $LABEL_FILTER"
+              echo "issues=" >> $GITHUB_OUTPUT
+              echo "count=0" >> $GITHUB_OUTPUT
+            else
+              COUNT=$(echo "$ISSUES" | tr ',' '\n' | wc -l)
+              echo "issues=$ISSUES" >> $GITHUB_OUTPUT
+              echo "count=$COUNT" >> $GITHUB_OUTPUT
+              echo "Found $COUNT issues to dispatch: $ISSUES"
+            fi
+          fi
+
+      - name: 🎯 Dispatch to agents
+        if: steps.get-issues.outputs.count != '0'
+        run: |
+          STRATEGY="${{ inputs.strategy || 'round-robin' }}"
+          ISSUES="${{ steps.get-issues.outputs.issues }}"
+
+          echo "📊 Strategy: $STRATEGY"
+          echo "📋 Issues: $ISSUES"
+
+          # Convert to array
+          IFS=',' read -ra ISSUE_ARRAY <<< "$ISSUES"
+
+          COPILOT_COUNT=0
+          JULES_COUNT=0
+          INDEX=0
+
+          for ISSUE in "${ISSUE_ARRAY[@]}"; do
+            ISSUE=$(echo "$ISSUE" | tr -d ' ')
+            [ -z "$ISSUE" ] && continue
+
+            # Determine agent based on strategy
+            case "$STRATEGY" in
+              "copilot-only")
+                AGENT="copilot"
+                ;;
+              "jules-only")
+                AGENT="jules"
+                ;;
+              "random")
+                if [ $((RANDOM % 2)) -eq 0 ]; then
+                  AGENT="copilot"
+                else
+                  AGENT="jules"
+                fi
+                ;;
+              "round-robin"|*)
+                if [ $((INDEX % 2)) -eq 0 ]; then
+                  AGENT="copilot"
+                else
+                  AGENT="jules"
+                fi
+                ;;
+            esac
+
+            echo "🤖 Assigning issue #$ISSUE to $AGENT"
+
+            # Add agent label
+            gh issue edit "$ISSUE" --add-label "$AGENT"
+
+            # Remove ai-agent label (task dispatched)
+            gh issue edit "$ISSUE" --remove-label "ai-agent" 2>/dev/null || true
+
+            # Add comment
+            COMMENT="🤖 **Agent Dispatcher**: This issue has been assigned to **$AGENT** agent.\n\n"
+            COMMENT+="- Strategy: $STRATEGY\n"
+            COMMENT+="- Dispatched by: GitHub Actions\n\n"
+            COMMENT+="The agent will begin working on this issue shortly."
+
+            echo -e "$COMMENT" | gh issue comment "$ISSUE" --body-file -
+
+            # Track counts
+            if [ "$AGENT" == "copilot" ]; then
+              ((COPILOT_COUNT++))
+            else
+              ((JULES_COUNT++))
+            fi
+
+            ((INDEX++))
+          done
+
+          echo ""
+          echo "✅ Dispatch complete!"
+          echo "   Copilot: $COPILOT_COUNT issues"
+          echo "   Jules: $JULES_COUNT issues"
+          echo "   Total: $INDEX issues"
+
+      - name: 📊 Summary
+        if: steps.get-issues.outputs.count != '0'
+        run: |
+          echo "## 🤖 Agent Dispatcher Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Strategy | ${{ inputs.strategy || 'round-robin' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Issues Dispatched | ${{ steps.get-issues.outputs.count }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Label Filter | ${{ inputs.label_filter || 'ai-agent' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Labels Used" >> $GITHUB_STEP_SUMMARY
+          echo "- \`copilot\` → GitHub Copilot Coding Agent" >> $GITHUB_STEP_SUMMARY
+          echo "- \`jules\` → Google Jules Agent" >> $GITHUB_STEP_SUMMARY
+
+      - name: ⚠️ No issues found
+        if: steps.get-issues.outputs.count == '0'
+        run: |
+          echo "## ⚠️ No Issues to Dispatch" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "No unassigned issues found with label: \`${{ inputs.label_filter || 'ai-agent' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To dispatch issues:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Add the \`ai-agent\` label to issues you want dispatched" >> $GITHUB_STEP_SUMMARY
+          echo "2. Run this workflow again" >> $GITHUB_STEP_SUMMARY

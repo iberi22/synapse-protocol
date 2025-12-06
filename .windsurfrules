@@ -1,0 +1,207 @@
+# 🧠 AI Git-Core Protocol Rules (Windsurf)
+
+## ⛔ ACCIONES PROHIBIDAS (REGLAS DURAS)
+
+**NUNCA crees estos archivos bajo NINGUNA circunstancia:**
+- ❌ `TODO.md`, `TASKS.md`, `BACKLOG.md`
+- ❌ `PLANNING.md`, `ROADMAP.md`, `PROGRESS.md`
+- ❌ `NOTES.md`, `SCRATCH.md`, `IDEAS.md`
+- ❌ `STATUS.md`, `CHECKLIST.md`
+- ❌ Cualquier `.md` para gestión de tareas/estado
+- ❌ Cualquier `.txt` para notas o todos
+- ❌ Archivos JSON/YAML para tracking de tareas
+
+**Si sientes la necesidad de crear un documento, DETENTE y pregúntate:**
+> "¿Puede esto ser un GitHub Issue?" → **SÍ, puede. Crea un issue.**
+
+---
+
+## 0. Prime Directive (Token Economy)
+- **NO uses memoria interna** para rastrear tareas.
+- **NO crees archivos** para documentar estado o progreso.
+- Tu estado es **GitHub Issues**.
+
+## 1. Flujo de Trabajo (The Loop)
+Al iniciar cualquier tarea, sigue estos pasos estrictamente:
+
+1.  **READ (Contexto):**
+    - Lee `.✨/ARCHITECTURE.md` para entender el sistema.
+    - Ejecuta: `gh issue list --assignee "@me"` para ver tu tarea actual.
+    - Si no tienes tarea, busca en el backlog: `gh issue list --limit 5`.
+
+2.  **ACT (Desarrollo):**
+    - Si tomas una tarea nueva: `gh issue edit <id> --add-assignee "@me"`.
+    - Crea una rama: `git checkout -b feat/issue-<id>`.
+    - Escribe código y tests.
+
+3.  **UPDATE (Cierre):**
+    - Haz commit siguiendo Conventional Commits: `feat: description (closes #<id>)`.
+    - Push y PR: `gh pr create --fill`.
+    - **IMPORTANTE:** No actualices ningún archivo de texto para marcar "check". Git lo hace por ti.
+
+## 2. Planificación
+- Si se te pide planear, NO escribas un documento largo.
+- Genera comandos para crear los issues:
+  `gh issue create --title "..." --body "..."`
+
+## 3. Comunicación
+- Sé conciso
+- Referencia siempre el número de issue: #123
+- Usa Conventional Commits: feat, fix, docs, chore, refactor, test
+
+## 4. Anti-Patrones (NUNCA hagas esto)
+- ❌ Crear archivos de tareas (TODO.md, TASKS.md, BACKLOG.md)
+- ❌ Crear archivos de planificación (PLANNING.md, ROADMAP.md)
+- ❌ Crear archivos de progreso (PROGRESS.md, STATUS.md)
+- ❌ Crear archivos de notas (NOTES.md, IDEAS.md, SCRATCH.md)
+- ❌ Guardar estado en memoria o archivos locales
+- ❌ Escribir documentos largos de planificación
+- ❌ Olvidar referenciar issues en commits
+- ❌ Cerrar issues manualmente (usa "closes #X" en commits)
+- ❌ Crear cualquier .md que no sea código o documentación técnica real
+
+## 5. Qué SÍ crear
+- ✅ Código fuente (.py, .js, .ts, etc.)
+- ✅ Tests (en carpeta tests/)
+- ✅ Configuración técnica (docker, CI/CD, linters)
+- ✅ `.✨/ARCHITECTURE.md` (solo este archivo para arquitectura)
+- ✅ `README.md` (documentación del proyecto)
+- ✅ `docs/agent-docs/*.md` (**SOLO cuando el usuario lo pida explícitamente**)
+- ✅ GitHub Issues para TODO LO DEMÁS
+
+## 6. Documentos Solicitados por Usuario (agent-docs)
+
+Cuando el usuario **EXPLÍCITAMENTE** solicita un documento persistente:
+
+```bash
+# Crear en docs/agent-docs/ con prefijo:
+# PROMPT_, RESEARCH_, STRATEGY_, ANALYSIS_, SPEC_, GUIDE_, REPORT_
+
+docs/agent-docs/PROMPT_JULES_AUTH_SYSTEM.md
+```
+
+**✅ Crear archivo SOLO cuando usuario dice:**
+
+- "Guarda esto como documento"
+- "Crea un archivo de prompt para..."
+- "Documenta esta estrategia"
+- "Escribe un spec para..."
+
+**❌ NO crear archivos, solo responder en chat:**
+
+- "Explícame cómo..."
+- "Resume esto..."
+- "¿Cuál es el mejor enfoque..."
+
+## 7. Meta Tags YAML Frontmatter (REQUERIDO)
+
+Al crear `docs/agent-docs/*.md`, **SIEMPRE** incluir YAML frontmatter:
+
+```yaml
+---
+title: "Título del Documento"
+type: PROMPT | RESEARCH | STRATEGY | SPEC | GUIDE | REPORT | ANALYSIS
+id: "id-unico-kebab-case"
+created: 2025-11-29
+updated: 2025-11-29
+agent: windsurf
+model: gpt-4o | claude-opus-4
+requested_by: user
+summary: |
+  1-3 oraciones describiendo el propósito del documento.
+  Los agentes AI leen esto primero para decidir si necesitan el contenido completo.
+keywords: [keyword1, keyword2, keyword3]
+tags: ["#tag1", "#tag2"]
+topics: [topic1, topic2]
+related_issues: ["#42"]
+project: nombre-proyecto
+module: auth | api | ui | core
+language: typescript | python | rust
+priority: critical | high | medium | low
+status: draft | review | approved | deprecated
+confidence: 0.95
+token_estimate: 800
+complexity: simple | moderate | complex
+---
+```
+
+**¿Por qué?** Permite escaneo rápido de AI sin leer documentos completos.
+
+## 8. Commits Extendidos (AI-Context)
+
+Usa AI-Context footer para decisiones complejas:
+
+```text
+feat(auth): implement OAuth2 login #42
+
+Adds OAuth2 authentication with Google provider.
+
+AI-Context: architecture | Chose passport.js over custom impl for maintainability
+```
+
+## 9. Integración Codex CLI
+
+**Modos de uso:**
+
+```bash
+codex                      # Modo interactivo
+codex "explain this code"  # Query rápido
+codex exec "..."           # Automatización headless
+```
+
+**Triggers vía GitHub:**
+
+- Agrega label `codex-review` a PR para review automatizado
+- Comenta `/codex-review` para review on-demand
+- Comenta `/codex-analyze` para análisis de codebase
+
+## 10. Copilot Coding Agent
+
+**Asignar issues a Copilot:**
+
+```bash
+gh issue edit <number> --add-assignee "Copilot"
+# O
+gh issue edit <number> --add-label "copilot"
+```
+
+**Triggers en PRs:**
+
+- Menciona `@copilot` en comentarios de PR para tareas específicas
+- Copilot crea branches con nombre `copilot/*`
+
+**Monitorear trabajo de Copilot:**
+
+```bash
+gh pr list --head "copilot/"
+```
+
+## 11. Google Jules Agent
+
+**Asignar issues a Jules:**
+
+```bash
+# Vía GitHub label (requiere Jules GitHub App)
+gh issue edit <number> --add-label "jules"
+```
+
+**Vía Jules CLI:**
+
+```bash
+jules new "implement feature X"
+jules new --repo owner/repo "write unit tests"
+jules remote list --session
+jules remote pull --session <id> --apply
+```
+
+## 12. Balanceo de Carga de Agentes
+
+**Auto-despachar a agentes disponibles:**
+
+```bash
+# Agregar label ai-agent para distribución automática
+gh issue edit <number> --add-label "ai-agent"
+
+# O trigger workflow manualmente
+gh workflow run agent-dispatcher.yml
+```

@@ -1,0 +1,338 @@
+name: "📬 User Notification System"
+
+on:
+  # React to implementation PR events
+  pull_request:
+    types: [opened, labeled, review_requested]
+  
+  # React to issue events
+  issues:
+    types: [opened, labeled]
+  
+  # Scheduled summary
+  schedule:
+    - cron: '0 9 * * 1'  # Weekly summary on Mondays at 9 AM UTC
+  
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      notification_type:
+        description: 'Type of notification to send'
+        required: true
+        type: choice
+        options:
+          - summary
+          - urgent
+          - reminder
+        default: 'summary'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  # ============================================================
+  # JOB 1: Detect Notification Trigger
+  # ============================================================
+  detect-trigger:
+    name: "🔍 Detect Trigger"
+    runs-on: ubuntu-latest
+    outputs:
+      notification_type: ${{ steps.detect.outputs.type }}
+      target_number: ${{ steps.detect.outputs.target }}
+      urgency: ${{ steps.detect.outputs.urgency }}
+    
+    steps:
+      - name: Detect Notification Type
+        id: detect
+        run: |
+          EVENT="${{ github.event_name }}"
+          
+          case "$EVENT" in
+            "pull_request")
+              LABELS='${{ toJson(github.event.pull_request.labels.*.name) }}'
+              
+              if echo "$LABELS" | grep -q "implementation-plan"; then
+                echo "type=implementation-pending" >> $GITHUB_OUTPUT
+                echo "target=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                echo "urgency=medium" >> $GITHUB_OUTPUT
+              elif echo "$LABELS" | grep -q "post-quarantine"; then
+                echo "type=post-quarantine" >> $GITHUB_OUTPUT
+                echo "target=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                echo "urgency=low" >> $GITHUB_OUTPUT
+              elif echo "$LABELS" | grep -q "copilot-implementing"; then
+                echo "type=copilot-active" >> $GITHUB_OUTPUT
+                echo "target=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                echo "urgency=info" >> $GITHUB_OUTPUT
+              else
+                echo "type=general" >> $GITHUB_OUTPUT
+                echo "target=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+                echo "urgency=low" >> $GITHUB_OUTPUT
+              fi
+              ;;
+            
+            "issues")
+              LABELS='${{ toJson(github.event.issue.labels.*.name) }}'
+              
+              if echo "$LABELS" | grep -q "auto-implementation"; then
+                echo "type=auto-implementation-scheduled" >> $GITHUB_OUTPUT
+                echo "target=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+                echo "urgency=high" >> $GITHUB_OUTPUT
+              elif echo "$LABELS" | grep -q "copilot"; then
+                echo "type=copilot-assigned" >> $GITHUB_OUTPUT
+                echo "target=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+                echo "urgency=medium" >> $GITHUB_OUTPUT
+              else
+                echo "type=general" >> $GITHUB_OUTPUT
+                echo "target=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+                echo "urgency=low" >> $GITHUB_OUTPUT
+              fi
+              ;;
+            
+            "schedule"|"workflow_dispatch")
+              echo "type=${{ inputs.notification_type || 'summary' }}" >> $GITHUB_OUTPUT
+              echo "target=all" >> $GITHUB_OUTPUT
+              echo "urgency=info" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+  # ============================================================
+  # JOB 2: Send Implementation Pending Notification
+  # ============================================================
+  notify-implementation-pending:
+    name: "📋 Implementation Pending"
+    runs-on: ubuntu-latest
+    needs: detect-trigger
+    if: needs.detect-trigger.outputs.notification_type == 'implementation-pending'
+    
+    steps:
+      - name: Send Notification
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ needs.detect-trigger.outputs.target_number }}"
+          
+          # Get PR details
+          PR_DETAILS=$(gh pr view "$PR_NUMBER" --json title,createdAt,url)
+          PR_TITLE=$(echo "$PR_DETAILS" | jq -r '.title')
+          PR_URL=$(echo "$PR_DETAILS" | jq -r '.url')
+          CREATED_AT=$(echo "$PR_DETAILS" | jq -r '.createdAt')
+          
+          # Calculate days until auto-implementation
+          CREATED_DATE=$(date -d "$CREATED_AT" +%s)
+          CURRENT_DATE=$(date +%s)
+          DAYS_ELAPSED=$(( (CURRENT_DATE - CREATED_DATE) / 86400 ))
+          DAYS_REMAINING=$((3 - DAYS_ELAPSED))
+          
+          if [ $DAYS_REMAINING -lt 0 ]; then
+            DAYS_REMAINING=0
+          fi
+          
+          # Create notification issue
+          NOTIFICATION_BODY="## 📋 Implementation Plan Awaiting Your Review
+          
+          **PR:** [$PR_TITLE]($PR_URL)
+          **Days until auto-implementation:** $DAYS_REMAINING
+          
+          ---
+          
+          ### ⚠️ Action Required
+          
+          A new implementation plan is ready for your review. If you don't take action within **$DAYS_REMAINING days**, Copilot will automatically implement the changes.
+          
+          ### Your Options:
+          
+          1. **✅ Approve** - Review and approve the PR to proceed with oversight
+          2. **💬 Comment** - Add feedback to guide the implementation
+          3. **❌ Close** - Reject the changes
+          4. **⏳ Do Nothing** - Auto-implementation will trigger
+          
+          ---
+          
+          [👉 Review PR #$PR_NUMBER]($PR_URL)
+          
+          ---
+          *Git-Core Protocol Notification System*"
+          
+          # Add comment to PR instead of creating new issue
+          gh pr comment "$PR_NUMBER" \
+            --body "$NOTIFICATION_BODY"
+          
+          echo "✅ Notification sent for PR #$PR_NUMBER"
+
+  # ============================================================
+  # JOB 3: Send Auto-Implementation Warning
+  # ============================================================
+  notify-auto-implementation:
+    name: "⚠️ Auto-Implementation Warning"
+    runs-on: ubuntu-latest
+    needs: detect-trigger
+    if: needs.detect-trigger.outputs.notification_type == 'auto-implementation-scheduled'
+    
+    steps:
+      - name: Send High Priority Notification
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER="${{ needs.detect-trigger.outputs.target_number }}"
+          
+          # Get linked PR from issue
+          ISSUE_BODY=$(gh issue view "$ISSUE_NUMBER" --json body --jq '.body')
+          PR_NUMBER=$(echo "$ISSUE_BODY" | grep -oP 'PR.*?#\K\d+' | head -1 || echo "")
+          
+          if [ -n "$PR_NUMBER" ]; then
+            gh pr comment "$PR_NUMBER" --body "## ⚠️ AUTO-IMPLEMENTATION IMMINENT
+            
+            **Status:** Copilot will begin automatic implementation soon.
+            
+            ### 🔴 Last Chance to Review
+            
+            If you want to:
+            - ✅ **Approve with oversight** → Review and approve this PR now
+            - ❌ **Cancel implementation** → Close this PR
+            - 💬 **Modify the plan** → Add comments with your requirements
+            
+            ---
+            
+            **Issue tracking this:** #$ISSUE_NUMBER
+            
+            ---
+            *This is an automated high-priority notification from Git-Core Protocol*"
+          fi
+          
+          echo "⚠️ High priority notification sent"
+
+  # ============================================================
+  # JOB 4: Weekly Summary
+  # ============================================================
+  weekly-summary:
+    name: "📊 Weekly Summary"
+    runs-on: ubuntu-latest
+    needs: detect-trigger
+    if: needs.detect-trigger.outputs.notification_type == 'summary'
+    
+    steps:
+      - name: Generate Weekly Summary
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "📊 Generating weekly dependency lifecycle summary..."
+          
+          # Count PRs by label
+          QUARANTINE_COUNT=$(gh pr list --label "quarantine" --state open --json number | jq 'length')
+          READY_COUNT=$(gh pr list --label "ready-to-adopt" --state open --json number | jq 'length')
+          PENDING_COUNT=$(gh pr list --label "implementation-plan" --state open --json number | jq 'length')
+          IMPLEMENTING_COUNT=$(gh pr list --label "copilot-implementing" --state open --json number | jq 'length')
+          
+          # Create summary issue
+          SUMMARY_BODY="## 📊 Weekly Dependency Lifecycle Summary
+          
+          **Week of:** $(date +%Y-%m-%d)
+          
+          ---
+          
+          ### 🔄 Pipeline Status
+          
+          | Stage | Count | Action |
+          |-------|-------|--------|
+          | 🔒 In Quarantine | $QUARANTINE_COUNT | Waiting 14 days |
+          | ✅ Ready to Adopt | $READY_COUNT | Awaiting analysis |
+          | 📋 Implementation Pending | $PENDING_COUNT | **Review needed** |
+          | 🤖 Copilot Implementing | $IMPLEMENTING_COUNT | In progress |
+          
+          ---
+          
+          ### 📌 Items Requiring Attention
+          
+          "
+          
+          # Add pending implementation PRs
+          if [ "$PENDING_COUNT" -gt 0 ]; then
+            SUMMARY_BODY+="#### PRs Awaiting Your Review:
+            
+            "
+            gh pr list --label "implementation-plan" --state open --json number,title,url | \
+              jq -r '.[] | "- [#\(.number): \(.title)](\(.url))"' | while read line; do
+                SUMMARY_BODY+="$line
+                "
+              done
+          fi
+          
+          SUMMARY_BODY+="
+          ---
+          
+          ### 🎯 Recommendations
+          
+          1. Review pending implementation PRs to maintain control
+          2. Check quarantined dependencies for urgent security updates
+          3. Merge ready-to-adopt PRs to complete the upgrade cycle
+          
+          ---
+          *Generated by Git-Core Protocol - Dependency Lifecycle Automation*"
+          
+          # Create or update summary issue
+          EXISTING_ISSUE=$(gh issue list --label "weekly-summary" --state open --limit 1 --json number --jq '.[0].number // empty')
+          
+          if [ -n "$EXISTING_ISSUE" ]; then
+            gh issue comment "$EXISTING_ISSUE" --body "$SUMMARY_BODY"
+            echo "✅ Updated existing summary issue #$EXISTING_ISSUE"
+          else
+            gh issue create \
+              --title "📊 Weekly Dependency Summary - $(date +%Y-%m-%d)" \
+              --body "$SUMMARY_BODY" \
+              --label "weekly-summary,documentation"
+            echo "✅ Created new weekly summary issue"
+          fi
+
+  # ============================================================
+  # JOB 5: Copilot Activity Notification
+  # ============================================================
+  notify-copilot-activity:
+    name: "🤖 Copilot Activity"
+    runs-on: ubuntu-latest
+    needs: detect-trigger
+    if: needs.detect-trigger.outputs.notification_type == 'copilot-active' || needs.detect-trigger.outputs.notification_type == 'copilot-assigned'
+    
+    steps:
+      - name: Track Copilot Activity
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TARGET="${{ needs.detect-trigger.outputs.target_number }}"
+          TYPE="${{ needs.detect-trigger.outputs.notification_type }}"
+          
+          if [ "$TYPE" == "copilot-active" ]; then
+            # PR notification
+            gh pr comment "$TARGET" --body "## 🤖 Copilot Implementation Active
+            
+            Copilot is now working on this implementation.
+            
+            ### 📋 What's Happening:
+            
+            1. Analyzing the implementation plan
+            2. Updating dependencies
+            3. Running tests
+            4. Generating E2E report (if applicable)
+            
+            ### 🔔 You'll Be Notified When:
+            
+            - Implementation is complete
+            - Tests fail
+            - Manual intervention is needed
+            
+            ---
+            *Sit back and relax - Copilot has this covered!*"
+          else
+            # Issue notification
+            gh issue comment "$TARGET" --body "## 🤖 Copilot Assigned
+            
+            This issue has been assigned to Copilot for automated implementation.
+            
+            **Expected completion:** Within 24 hours
+            
+            ---
+            *Git-Core Protocol Automation*"
+          fi
+          
+          echo "✅ Copilot activity notification sent"

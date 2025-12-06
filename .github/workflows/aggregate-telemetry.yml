@@ -1,0 +1,251 @@
+name: Aggregate Telemetry (Weekly)
+
+on:
+  schedule:
+    # Runs every Monday at 10:00 UTC (after users submit on Monday morning)
+    - cron: '0 10 * * 1'
+  workflow_dispatch:
+    inputs:
+      week_override:
+        description: 'Week number to aggregate (default: last week)'
+        required: false
+      dry_run:
+        description: 'Dry run - do not create issue'
+        required: false
+        default: 'false'
+
+permissions:
+  discussions: read
+  issues: write
+  contents: read
+
+env:
+  TELEMETRY_CATEGORY_SLUG: "telemetry-submissions"
+
+jobs:
+  aggregate:
+    name: 📊 Aggregate Telemetry
+    runs-on: ubuntu-latest
+    outputs:
+      total_projects: ${{ steps.aggregate.outputs.total_projects }}
+      report_created: ${{ steps.report.outputs.created }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Calculate target week
+        id: week
+        run: |
+          if [ -n "${{ github.event.inputs.week_override }}" ]; then
+            WEEK="${{ github.event.inputs.week_override }}"
+          else
+            # Get last week's number
+            WEEK=$(date -d "last week" +%V)
+          fi
+          YEAR=$(date +%Y)
+          echo "week=$WEEK" >> $GITHUB_OUTPUT
+          echo "year=$YEAR" >> $GITHUB_OUTPUT
+          echo "Aggregating Week $WEEK ($YEAR)"
+
+      - name: Fetch telemetry discussions
+        id: fetch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Fetching discussions from category..."
+
+          # Query all discussions (we'll filter by week in the next step)
+          gh api graphql -f query='
+            query($owner: String!, $name: String!) {
+              repository(owner: $owner, name: $name) {
+                discussions(first: 100, orderBy: {field: CREATED_AT, direction: DESC}) {
+                  nodes {
+                    id
+                    title
+                    body
+                    createdAt
+                    category {
+                      slug
+                    }
+                    labels(first: 5) {
+                      nodes {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ' -f owner="${{ github.repository_owner }}" -f name="${{ github.event.repository.name }}" > all_discussions.json
+
+          echo "Fetched discussions"
+          cat all_discussions.json | jq '.data.repository.discussions.nodes | length'
+
+      - name: Extract and aggregate metrics
+        id: aggregate
+        run: |
+          WEEK="${{ steps.week.outputs.week }}"
+          YEAR="${{ steps.week.outputs.year }}"
+
+          echo "Filtering for Week $WEEK ($YEAR)..."
+
+          # Filter discussions for this week and parse metrics
+          cat all_discussions.json | jq --arg week "$WEEK" --arg year "$YEAR" '
+            .data.repository.discussions.nodes
+            | map(select(.title | contains("Week " + $week) and contains($year)))
+            | map({
+                id: .id,
+                title: .title,
+                metrics: (
+                  .body
+                  | capture("```json\\n(?<json>[\\s\\S]*?)\\n```"; "g")
+                  | .json
+                  | fromjson?
+                )
+              })
+            | map(select(.metrics != null))
+          ' > week_submissions.json
+
+          TOTAL_PROJECTS=$(cat week_submissions.json | jq 'length')
+          echo "Found $TOTAL_PROJECTS submissions for Week $WEEK"
+          echo "total_projects=$TOTAL_PROJECTS" >> $GITHUB_OUTPUT
+
+          if [ "$TOTAL_PROJECTS" -eq 0 ]; then
+            echo "No submissions found for this week"
+            echo "has_data=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "has_data=true" >> $GITHUB_OUTPUT
+
+          # Aggregate Order 1 metrics
+          cat week_submissions.json | jq '
+            {
+              total_projects: length,
+              order1: {
+                avg_issues_open: ([.[].metrics.order1.issues_open] | add / length),
+                avg_issues_closed: ([.[].metrics.order1.issues_closed_total] | add / length),
+                avg_prs_merged: ([.[].metrics.order1.prs_merged_total] | add / length)
+              },
+              order2: {
+                avg_agent_state_usage: ([.[].metrics.order2.agent_state_usage_pct] | add / length),
+                avg_atomic_commit_ratio: ([.[].metrics.order2.atomic_commit_ratio] | add / length)
+              },
+              order3: {
+                total_friction_reports: ([.[].metrics.order3.friction_reports] | add),
+                total_evolution_proposals: ([.[].metrics.order3.evolution_proposals] | add)
+              }
+            }
+          ' > aggregated.json
+
+          echo "=== Aggregated Metrics ==="
+          cat aggregated.json
+
+      - name: Detect ecosystem patterns
+        id: patterns
+        if: steps.aggregate.outputs.has_data == 'true'
+        run: |
+          PATTERNS=()
+
+          AVG_ADOPTION=$(cat aggregated.json | jq '.order2.avg_agent_state_usage')
+          AVG_ATOMIC=$(cat aggregated.json | jq '.order2.avg_atomic_commit_ratio')
+          TOTAL_FRICTION=$(cat aggregated.json | jq '.order3.total_friction_reports')
+
+          if (( $(echo "$AVG_ADOPTION < 50" | bc -l) )); then
+            PATTERNS+=("⚠️ Low agent-state adoption across ecosystem ($AVG_ADOPTION%)")
+          elif (( $(echo "$AVG_ADOPTION >= 80" | bc -l) )); then
+            PATTERNS+=("✅ Excellent agent-state adoption ($AVG_ADOPTION%)")
+          fi
+
+          if (( $(echo "$AVG_ATOMIC < 70" | bc -l) )); then
+            PATTERNS+=("⚠️ Low atomic commit ratio ($AVG_ATOMIC%)")
+          fi
+
+          if (( $(echo "$TOTAL_FRICTION > 10" | bc -l) )); then
+            PATTERNS+=("🔴 High friction reports ($TOTAL_FRICTION across ecosystem)")
+          fi
+
+          # Join patterns
+          PATTERNS_MD=""
+          for p in "${PATTERNS[@]}"; do
+            PATTERNS_MD="$PATTERNS_MD\n- $p"
+          done
+
+          echo "patterns<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$PATTERNS_MD" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Evolution Report Issue
+        id: report
+        if: steps.aggregate.outputs.has_data == 'true' && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          WEEK="${{ steps.week.outputs.week }}"
+          YEAR="${{ steps.week.outputs.year }}"
+          TOTAL="${{ steps.aggregate.outputs.total_projects }}"
+
+          BODY=$(cat << 'EOF'
+          ## 📊 Ecosystem Evolution Report - Week $WEEK ($YEAR)
+
+          **Data source:** Federated Telemetry from $TOTAL projects
+
+          ### Aggregated Metrics
+
+          #### Order 1: Operational Health
+          | Metric | Average |
+          |--------|---------|
+          | Issues Open | $(cat aggregated.json | jq '.order1.avg_issues_open | floor') |
+          | Issues Closed | $(cat aggregated.json | jq '.order1.avg_issues_closed | floor') |
+          | PRs Merged | $(cat aggregated.json | jq '.order1.avg_prs_merged | floor') |
+
+          #### Order 2: Protocol Adoption
+          | Metric | Average |
+          |--------|---------|
+          | Agent-State Usage | $(cat aggregated.json | jq '.order2.avg_agent_state_usage | . * 10 | floor / 10')% |
+          | Atomic Commit Ratio | $(cat aggregated.json | jq '.order2.avg_atomic_commit_ratio | . * 10 | floor / 10')% |
+
+          #### Order 3: Evolution Signals
+          | Metric | Total Across Ecosystem |
+          |--------|------------------------|
+          | Friction Reports | $(cat aggregated.json | jq '.order3.total_friction_reports') |
+          | Evolution Proposals | $(cat aggregated.json | jq '.order3.total_evolution_proposals') |
+
+          ### Ecosystem Patterns
+
+          ${{ steps.patterns.outputs.patterns }}
+
+          ---
+
+          📚 **Protocol:** [EVOLUTION_PROTOCOL.md](docs/agent-docs/EVOLUTION_PROTOCOL.md)
+          📡 **Telemetry:** [telemetry/README.md](telemetry/README.md)
+
+          *Auto-generated from $TOTAL federated telemetry submissions*
+          EOF
+          )
+
+          # Replace shell variables in the body
+          BODY=$(echo "$BODY" | envsubst)
+
+          gh issue create \
+            --title "[Evolution] Ecosystem Report - Week $WEEK ($YEAR)" \
+            --body "$BODY" \
+            --label "evolution,weekly-report,telemetry"
+
+          echo "created=true" >> $GITHUB_OUTPUT
+
+      - name: Summary
+        run: |
+          echo "## 📊 Telemetry Aggregation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Week:** ${{ steps.week.outputs.week }} (${{ steps.week.outputs.year }})" >> $GITHUB_STEP_SUMMARY
+          echo "**Projects Reporting:** ${{ steps.aggregate.outputs.total_projects }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.aggregate.outputs.has_data }}" == "true" ]; then
+            echo "### Aggregated Data" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat aggregated.json >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No submissions found for this week" >> $GITHUB_STEP_SUMMARY
+          fi

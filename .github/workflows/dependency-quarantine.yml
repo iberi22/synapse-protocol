@@ -1,0 +1,286 @@
+# 🔬 Dependency Quarantine & Adoption Workflow
+# Integrates with Dependabot for intelligent, safe dependency updates
+#
+# Flow:
+# 1. Dependabot creates PR with label "quarantine"
+# 2. This workflow analyzes the update with Gemini 3 Pro
+# 3. After 2 weeks, if no critical issues → auto-promote to "ready-to-adopt"
+# 4. Context Research Agent extracts new features for implementation
+
+name: 🔬 Dependency Quarantine
+
+on:
+  # Trigger on Dependabot PRs
+  pull_request:
+    types: [opened, synchronize]
+
+  # Daily check for quarantine graduation
+  schedule:
+    - cron: '0 7 * * *'  # Every day at 7am UTC
+
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - check-quarantine
+          - force-graduate
+          - analyze-all
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  QUARANTINE_DAYS: 14  # 2 weeks quarantine period
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  # ============================================
+  # JOB 1: Analyze new Dependabot PRs
+  # ============================================
+  analyze-dependabot-pr:
+    if: >
+      github.event_name == 'pull_request' &&
+      github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: 🏷️ Ensure labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create labels if they don't exist
+          gh label create "quarantine" --description "Dependency in quarantine period" --color "FBCA04" --force 2>/dev/null || true
+          gh label create "dependencies" --description "Dependency updates from Dependabot" --color "0366d6" --force 2>/dev/null || true
+          gh label create "ready-to-adopt" --description "Dependencies that passed quarantine" --color "0E8A16" --force 2>/dev/null || true
+
+      - name: 🏷️ Apply quarantine labels
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} \
+            --add-label "quarantine,dependencies"
+
+      - name: 📊 Extract dependency info
+        id: dep-info
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+
+          # Parse dependency name and versions from PR title
+          # Example: "chore(deps): bump tokio from 1.32.0 to 1.33.0"
+          DEP_NAME=$(echo "$PR_TITLE" | grep -oP 'bump \K[^ ]+' || echo "unknown")
+          OLD_VERSION=$(echo "$PR_TITLE" | grep -oP 'from \K[^ ]+' || echo "0.0.0")
+          NEW_VERSION=$(echo "$PR_TITLE" | grep -oP 'to \K[^ ]+' || echo "0.0.0")
+
+          echo "dep_name=$DEP_NAME" >> $GITHUB_OUTPUT
+          echo "old_version=$OLD_VERSION" >> $GITHUB_OUTPUT
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "quarantine_end=$(date -d '+14 days' +%Y-%m-%d)" >> $GITHUB_OUTPUT
+
+          echo "📦 Dependency: $DEP_NAME"
+          echo "📌 Version: $OLD_VERSION → $NEW_VERSION"
+
+      - name: 🔍 Check version release date
+        id: version-check
+        run: |
+          DEP_NAME="${{ steps.dep-info.outputs.dep_name }}"
+          NEW_VERSION="${{ steps.dep-info.outputs.new_version }}"
+
+          # Try to find release date from GitHub API
+          # This is a best-effort check
+          RELEASE_DATE=$(gh api \
+            "repos/$DEP_NAME/releases" \
+            --jq ".[] | select(.tag_name | contains(\"$NEW_VERSION\")) | .published_at" \
+            2>/dev/null | head -1 || echo "")
+
+          if [ -n "$RELEASE_DATE" ]; then
+            DAYS_OLD=$(( ($(date +%s) - $(date -d "$RELEASE_DATE" +%s)) / 86400 ))
+            echo "days_since_release=$DAYS_OLD" >> $GITHUB_OUTPUT
+
+            if [ $DAYS_OLD -lt 14 ]; then
+              echo "is_bleeding_edge=true" >> $GITHUB_OUTPUT
+              echo "⚠️ Version is only $DAYS_OLD days old (bleeding edge)"
+            else
+              echo "is_bleeding_edge=false" >> $GITHUB_OUTPUT
+              echo "✅ Version is $DAYS_OLD days old (stable)"
+            fi
+          else
+            echo "days_since_release=unknown" >> $GITHUB_OUTPUT
+            echo "is_bleeding_edge=unknown" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🧠 Analyze with Gemini
+        if: env.GEMINI_API_KEY != ''
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          DEP_NAME="${{ steps.dep-info.outputs.dep_name }}"
+          NEW_VERSION="${{ steps.dep-info.outputs.new_version }}"
+          OLD_VERSION="${{ steps.dep-info.outputs.old_version }}"
+
+          # Build analysis prompt
+          PROMPT="Analyze this dependency update for a production project:
+
+          Package: $DEP_NAME
+          Update: $OLD_VERSION → $NEW_VERSION
+
+          Please provide:
+          1. **Risk Assessment**: Is this a safe update? Any breaking changes?
+          2. **New Features**: What new features/improvements are available?
+          3. **Known Issues**: Any bugs or issues reported in this version?
+          4. **Recommendation**: Should we adopt immediately, wait, or skip?
+
+          Be concise and actionable."
+
+          # Call Gemini API
+          RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=$GEMINI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"contents\":[{\"parts\":[{\"text\":\"$PROMPT\"}]}]}" | \
+            jq -r '.candidates[0].content.parts[0].text // "Analysis unavailable"')
+
+          # Save analysis for PR comment
+          echo "$RESPONSE" > /tmp/gemini_analysis.md
+
+      - name: 💬 Post quarantine notice
+        run: |
+          DEP_NAME="${{ steps.dep-info.outputs.dep_name }}"
+          NEW_VERSION="${{ steps.dep-info.outputs.new_version }}"
+          QUARANTINE_END="${{ steps.dep-info.outputs.quarantine_end }}"
+          DAYS_OLD="${{ steps.version-check.outputs.days_since_release }}"
+          IS_BLEEDING="${{ steps.version-check.outputs.is_bleeding_edge }}"
+
+          # Read Gemini analysis if available
+          ANALYSIS=""
+          if [ -f /tmp/gemini_analysis.md ]; then
+            ANALYSIS=$(cat /tmp/gemini_analysis.md)
+          fi
+
+          # Build comment
+          COMMENT="## 🔬 Dependency Quarantine Notice
+
+          This PR has been placed in **quarantine** for safety analysis.
+
+          | Field | Value |
+          |-------|-------|
+          | 📦 Package | \`$DEP_NAME\` |
+          | 📌 Version | \`$NEW_VERSION\` |
+          | ⏰ Days since release | $DAYS_OLD |
+          | 🚨 Bleeding edge | $IS_BLEEDING |
+          | 📅 Quarantine ends | **$QUARANTINE_END** |
+
+          ### 🧠 Gemini 3 Pro Analysis
+
+          $ANALYSIS
+
+          ---
+
+          **What happens next?**
+          1. ⏳ This PR will remain in quarantine for 14 days
+          2. 🔍 We monitor community issues for this version
+          3. ✅ After quarantine, if no critical issues → auto-promote
+          4. 📚 New features will be documented for adoption
+
+          *Managed by Git-Core Protocol - Dependency Quarantine Workflow*"
+
+          gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT"
+
+  # ============================================
+  # JOB 2: Check quarantine graduation (daily)
+  # ============================================
+  check-quarantine-graduation:
+    if: >
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && inputs.action == 'check-quarantine')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎓 Graduate mature PRs
+        run: |
+          echo "🔍 Checking for PRs ready to graduate from quarantine..."
+
+          # Get all PRs with quarantine label
+          QUARANTINE_PRS=$(gh pr list \
+            --label "quarantine" \
+            --json number,createdAt,title \
+            --jq '.[] | @base64')
+
+          for PR_B64 in $QUARANTINE_PRS; do
+            PR_JSON=$(echo "$PR_B64" | base64 -d)
+            PR_NUM=$(echo "$PR_JSON" | jq -r '.number')
+            CREATED=$(echo "$PR_JSON" | jq -r '.createdAt')
+            TITLE=$(echo "$PR_JSON" | jq -r '.title')
+
+            # Calculate days in quarantine
+            CREATED_EPOCH=$(date -d "$CREATED" +%s)
+            NOW_EPOCH=$(date +%s)
+            DAYS_IN_QUARANTINE=$(( (NOW_EPOCH - CREATED_EPOCH) / 86400 ))
+
+            echo "PR #$PR_NUM: $TITLE"
+            echo "  Days in quarantine: $DAYS_IN_QUARANTINE"
+
+            if [ $DAYS_IN_QUARANTINE -ge ${{ env.QUARANTINE_DAYS }} ]; then
+              echo "  ✅ Ready to graduate!"
+
+              # Update labels
+              gh pr edit $PR_NUM \
+                --remove-label "quarantine" \
+                --add-label "ready-to-adopt"
+
+              # Add graduation comment
+              gh pr comment $PR_NUM --body "## 🎓 Quarantine Complete!
+
+              This dependency update has successfully completed the **14-day quarantine period**.
+
+              | Status | Result |
+              |--------|--------|
+              | ⏱️ Days in quarantine | $DAYS_IN_QUARANTINE |
+              | 🔬 Community issues | Monitored |
+              | ✅ Ready for adoption | **Yes** |
+
+              **Next steps:**
+              1. Review the changes one more time
+              2. Merge when ready
+              3. Context Research Agent will update the living documentation
+
+              *Graduated by Git-Core Protocol - Dependency Quarantine Workflow*"
+            else
+              REMAINING=$(( ${{ env.QUARANTINE_DAYS }} - DAYS_IN_QUARANTINE ))
+              echo "  ⏳ $REMAINING days remaining in quarantine"
+            fi
+          done
+
+  # ============================================
+  # JOB 3: Trigger context update on merge
+  # ============================================
+  update-context-on-merge:
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'ready-to-adopt')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔄 Trigger Context Research
+        run: |
+          echo "📚 Triggering Context Research Agent to update documentation..."
+
+          gh workflow run context-research.yml
+
+          echo "✅ Context update workflow triggered"

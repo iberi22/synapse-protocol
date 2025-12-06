@@ -1,0 +1,77 @@
+# Configuration for Commit Atomicity Check workflow
+# See: .github/workflows/commit-atomicity.yml
+
+# Enable or disable the atomicity check
+enabled: true
+
+# Mode: "warning" or "error"
+# - warning: Reports issues but doesn't fail the check
+# - error: Fails the check if atomicity issues are found
+mode: warning
+
+# Ignore commits from bot accounts (they typically already create atomic commits)
+ignore_bots: true
+
+# List of bot names/patterns to ignore
+bot_patterns:
+  - "github-actions[bot]"
+  - "dependabot[bot]"
+  - "copilot"
+  - "jules"
+  - "renovate[bot]"
+
+# Maximum number of concerns per commit
+# A "concern" is a logical unit (feature, bugfix, docs, etc.)
+max_concerns: 1
+
+# Patterns to detect different concern types based on files changed
+concern_patterns:
+  # Source code changes
+  source:
+    - "src/**"
+    - "lib/**"
+    - "*.py"
+    - "*.js"
+    - "*.ts"
+    - "*.rs"
+    - "*.go"
+  
+  # Test files
+  tests:
+    - "tests/**"
+    - "test/**"
+    - "**/*.test.*"
+    - "**/*.spec.*"
+    - "*_test.*"
+    - "test_*.*"
+  
+  # Documentation
+  docs:
+    - "docs/**"
+    - "*.md"
+    - "README*"
+  
+  # Configuration files
+  config:
+    - "*.yml"
+    - "*.yaml"
+    - "*.json"
+    - "*.toml"
+    - ".github/**"
+    - ".*rc"
+    - ".*ignore"
+  
+  # Scripts/CI
+  infra:
+    - "scripts/**"
+    - ".github/workflows/**"
+    - "Dockerfile*"
+    - "docker-compose*"
+
+# Files/patterns to exclude from analysis (always allowed)
+exclude_patterns:
+  - ".gitignore"
+  - "*.lock"
+  - "package-lock.json"
+  - "yarn.lock"
+  - "Cargo.lock"

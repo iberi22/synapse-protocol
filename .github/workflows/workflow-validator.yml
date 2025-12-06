@@ -1,0 +1,599 @@
+name: "🔬 Workflow Validator"
+
+# This workflow runs AFTER specific important workflows complete
+# It analyzes results, creates validation PRs, and triggers continuous improvement
+# NOTE: Using explicit workflow list instead of wildcard (*) to:
+#   1. Prevent infinite loops and cascade effects
+#   2. Comply with GitHub Actions abuse prevention policies
+#   3. Reduce unnecessary workflow executions
+
+on:
+  # Trigger only after specific critical workflows complete (NOT wildcard)
+  workflow_run:
+    workflows:
+      - "🔨 Build Tools"
+      - "🏗️ Structure Validator"
+      - "📝 Commit Atomicity Check"
+      - "🔄 Sync Issues from Files"
+    types: [completed]
+
+  # Manual trigger for specific validation
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Workflow run ID to validate"
+        required: false
+        type: string
+      analysis_type:
+        description: "Type of analysis"
+        required: false
+        type: choice
+        options:
+          - full
+          - errors-only
+          - performance
+          - security
+        default: "full"
+      create_pr:
+        description: "Create validation PR"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+env:
+  RUST_BACKTRACE: 1
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 1: Build Orchestrator (Cached)
+  # ═══════════════════════════════════════════════════════════════════
+  build-orchestrator:
+    name: "🔧 Build Orchestrator"
+    runs-on: ubuntu-latest
+    # Prevent infinite loops: Do not validate the validator itself or other meta-workflows
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.name != 'Workflow Validator' &&
+       github.event.workflow_run.name != 'Copilot Meta-Analysis')
+    outputs:
+      cache_hit: ${{ steps.cache.outputs.cache-hit }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            tools/workflow-orchestrator/target
+          key: ${{ runner.os }}-cargo-orchestrator-${{ hashFiles('tools/workflow-orchestrator/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-orchestrator-
+
+      - name: Build Orchestrator
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          cd tools/workflow-orchestrator
+          cargo build --release
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v5
+        with:
+          name: workflow-orchestrator
+          path: tools/workflow-orchestrator/target/release/workflow-orchestrator
+          if-no-files-found: warn
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 2: Parallel Analysis
+  # ═══════════════════════════════════════════════════════════════════
+  analyze:
+    name: "🔍 Parallel Analysis"
+    runs-on: ubuntu-latest
+    needs: build-orchestrator
+    outputs:
+      has_errors: ${{ steps.analyze.outputs.has_errors }}
+      has_warnings: ${{ steps.analyze.outputs.has_warnings }}
+      performance_score: ${{ steps.analyze.outputs.performance_score }}
+      report_json: ${{ steps.analyze.outputs.report_json }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Orchestrator (from artifact or pre-built)
+        id: get-binary
+        run: |
+          # Try pre-built binary first (fastest)
+          if [ -f "bin/workflow-orchestrator-linux" ]; then
+            echo "📦 Using pre-built binary from repo"
+            cp bin/workflow-orchestrator-linux ./workflow-orchestrator
+            chmod +x ./workflow-orchestrator
+            echo "source=prebuilt" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "source=none" >> $GITHUB_OUTPUT
+
+      - name: Download Orchestrator (from artifact)
+        if: steps.get-binary.outputs.source == 'none'
+        uses: actions/download-artifact@v4
+        with:
+          name: workflow-orchestrator
+          path: ./bin
+        continue-on-error: true
+
+      - name: Make Executable
+        if: steps.get-binary.outputs.source == 'none'
+        run: |
+          if [ -f "./bin/workflow-orchestrator" ]; then
+            chmod +x ./bin/workflow-orchestrator
+            mv ./bin/workflow-orchestrator ./workflow-orchestrator
+          fi
+
+      - name: Determine Run ID
+        id: run-id
+        run: |
+          if [ -n "${{ inputs.run_id }}" ]; then
+            echo "run_id=${{ inputs.run_id }}" >> $GITHUB_OUTPUT
+          elif [ -n "${{ github.event.workflow_run.id }}" ]; then
+            echo "run_id=${{ github.event.workflow_run.id }}" >> $GITHUB_OUTPUT
+          else
+            echo "run_id=latest" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Parallel Analysis
+        id: analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          RUN_ID="${{ steps.run-id.outputs.run_id }}"
+          MAX_PARALLEL="${{ inputs.max_parallel || 10 }}"
+
+          # Use Rust orchestrator if available (FAST + PARALLEL)
+          if [ -f "./workflow-orchestrator" ]; then
+            echo "🦀 Using Rust orchestrator with --max-parallel $MAX_PARALLEL"
+            ./workflow-orchestrator analyze \
+              --repo "$GITHUB_REPOSITORY" \
+              --token "$GITHUB_TOKEN" \
+              --output json \
+              --max-parallel "$MAX_PARALLEL" > analysis.json 2>&1 || true
+
+            if [ -f "analysis.json" ] && jq -e . analysis.json >/dev/null 2>&1; then
+              HAS_ERRORS=$(jq -r '.has_errors // false' analysis.json)
+              HAS_WARNINGS=$(jq -r '.has_warnings // false' analysis.json)
+              PERF_SCORE=$(jq -r '.performance_score // 0' analysis.json)
+              echo "✅ Rust analysis completed"
+            else
+              echo "⚠️ Rust analysis produced invalid JSON, falling back to shell"
+              HAS_ERRORS="false"
+              HAS_WARNINGS="false"
+              PERF_SCORE="0"
+            fi
+          else
+            echo "📜 Using shell fallback (slower, sequential)..."
+            # Get recent runs
+            RUNS=$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs?per_page=20" \
+              --jq '.workflow_runs[].id' 2>/dev/null || echo "")
+
+            # Sequential analysis (shell fallback)
+            HAS_ERRORS="false"
+            HAS_WARNINGS="false"
+
+            for run in $RUNS; do
+              JOBS=$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$run/jobs" \
+                --jq '.jobs[] | select(.conclusion == "failure") | .name' 2>/dev/null)
+              if [ -n "$JOBS" ]; then
+                HAS_ERRORS="true"
+                echo "❌ Run #$run has failures: $JOBS"
+              fi
+            done &
+            wait
+          fi
+
+          echo "has_errors=${HAS_ERRORS:-false}" >> $GITHUB_OUTPUT
+          echo "has_warnings=${HAS_WARNINGS:-false}" >> $GITHUB_OUTPUT
+          echo "performance_score=${PERF_SCORE:-0}" >> $GITHUB_OUTPUT
+
+          # Save full report
+          if [ -f "analysis.json" ]; then
+            echo "report_json=$(cat analysis.json | jq -c .)" >> $GITHUB_OUTPUT
+          fi
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 3: Generate Validation Report
+  # ═══════════════════════════════════════════════════════════════════
+  generate-report:
+    name: "📝 Generate Report"
+    runs-on: ubuntu-latest
+    needs: analyze
+    outputs:
+      report_path: ${{ steps.report.outputs.path }}
+      branch_name: ${{ steps.report.outputs.branch }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Markdown Report
+        id: report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TIMESTAMP=$(date -u +%Y%m%d%H%M%S)
+          BRANCH_NAME="validation/auto-${TIMESTAMP}"
+          REPORT_FILE="docs/agent-docs/VALIDATION_REPORT_${TIMESTAMP}.md"
+
+          mkdir -p docs/agent-docs
+
+          # Get triggering workflow info
+          TRIGGER_NAME="${{ github.event.workflow_run.name || 'Manual' }}"
+          TRIGGER_CONCLUSION="${{ github.event.workflow_run.conclusion || 'N/A' }}"
+          TRIGGER_URL="${{ github.event.workflow_run.html_url || 'N/A' }}"
+
+          cat > "$REPORT_FILE" << EOF
+          ---
+          title: "Workflow Validation Report"
+          type: REPORT
+          agent: workflow-validator
+          generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          trigger_workflow: "${TRIGGER_NAME}"
+          trigger_conclusion: "${TRIGGER_CONCLUSION}"
+          ---
+
+          # 🔬 Workflow Validation Report
+
+          > **Auto-generated** after workflow completion
+          > **Trigger:** ${TRIGGER_NAME} (${TRIGGER_CONCLUSION})
+
+          ## 📊 Analysis Summary
+
+          | Metric | Value | Status |
+          |--------|-------|--------|
+          | Has Errors | ${{ needs.analyze.outputs.has_errors }} | ${{ needs.analyze.outputs.has_errors == 'true' && '🔴' || '✅' }} |
+          | Has Warnings | ${{ needs.analyze.outputs.has_warnings }} | ${{ needs.analyze.outputs.has_warnings == 'true' && '🟡' || '✅' }} |
+          | Performance Score | ${{ needs.analyze.outputs.performance_score }}% | ${{ needs.analyze.outputs.performance_score > 80 && '✅' || '🟡' }} |
+
+          ## 🔗 Workflow Details
+
+          - **Workflow:** [${TRIGGER_NAME}](${TRIGGER_URL})
+          - **Conclusion:** ${TRIGGER_CONCLUSION}
+          - **Repository:** ${{ github.repository }}
+          - **Branch:** ${{ github.event.workflow_run.head_branch || github.ref_name }}
+
+          ## 🤖 AI Review Queue
+
+          This report will be analyzed by:
+
+          | Agent | Focus | Status |
+          |-------|-------|--------|
+          | **CodeRabbit** | Code patterns, best practices | 🔄 Pending |
+          | **Gemini Code Assist** | Performance, security | 🔄 Pending |
+          | **Copilot (Sonnet 4.5)** | Meta-analysis, final validation | ⏳ After bots |
+
+          ## 📋 Continuous Improvement Actions
+
+          Based on this analysis, the following actions may be taken:
+
+          - [ ] Fix identified errors
+          - [ ] Implement performance optimizations
+          - [ ] Address security concerns
+          - [ ] Update workflow configurations
+
+          ---
+
+          ### 🔄 Next Steps
+
+          1. AI bots will analyze this report
+          2. Copilot will review AI feedback
+          3. Implementation PRs will be created
+          4. Human approval for merge
+
+          ---
+          *Generated by Git-Core Protocol Workflow Validator*
+          EOF
+
+          echo "path=$REPORT_FILE" >> $GITHUB_OUTPUT
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create Validation Branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "${{ steps.report.outputs.branch }}"
+          git add "${{ steps.report.outputs.path }}"
+          git commit -m "docs(validation): auto-generated report
+
+          Trigger: ${{ github.event.workflow_run.name || 'Manual' }}
+          Conclusion: ${{ github.event.workflow_run.conclusion || 'N/A' }}
+
+          AI-Context: Workflow validation for continuous improvement"
+
+          git push origin "${{ steps.report.outputs.branch }}"
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 4: Create Validation PR with AI Reviews
+  # ═══════════════════════════════════════════════════════════════════
+  create-pr:
+    name: "📤 Create Validation PR"
+    runs-on: ubuntu-latest
+    needs: [analyze, generate-report]
+    if: inputs.create_pr != false
+    outputs:
+      pr_number: ${{ steps.pr.outputs.number }}
+      pr_url: ${{ steps.pr.outputs.url }}
+
+    steps:
+      - name: Create PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TRIGGER_NAME="${{ github.event.workflow_run.name || 'Manual Validation' }}"
+          TRIGGER_CONCLUSION="${{ github.event.workflow_run.conclusion || 'N/A' }}"
+          HAS_ERRORS="${{ needs.analyze.outputs.has_errors }}"
+
+          # Determine priority
+          if [ "$HAS_ERRORS" == "true" ]; then
+            PRIORITY="🔴 HIGH"
+            TITLE_PREFIX="❌"
+          elif [ "$TRIGGER_CONCLUSION" == "failure" ]; then
+            PRIORITY="🔴 HIGH"
+            TITLE_PREFIX="❌"
+          else
+            PRIORITY="🟢 LOW"
+            TITLE_PREFIX="✅"
+          fi
+
+          PR_BODY="## 🔬 Workflow Validation Report
+
+          **Trigger:** ${TRIGGER_NAME}
+          **Conclusion:** ${TRIGGER_CONCLUSION}
+          **Priority:** ${PRIORITY}
+
+          ---
+
+          ### 📊 Analysis Results
+
+          | Check | Result |
+          |-------|--------|
+          | Errors Detected | ${{ needs.analyze.outputs.has_errors == 'true' && '❌ Yes' || '✅ No' }} |
+          | Warnings | ${{ needs.analyze.outputs.has_warnings == 'true' && '⚠️ Yes' || '✅ No' }} |
+          | Performance | ${{ needs.analyze.outputs.performance_score }}% |
+
+          ---
+
+          ### 🤖 AI Review Protocol
+
+          This PR follows the **multi-agent validation protocol**:
+
+          1. **CodeRabbit** → Automated patterns analysis
+          2. **Gemini Code Assist** → Performance & security review
+          3. **Copilot (Claude Sonnet 4.5)** → Final meta-analysis
+
+          #### Review Commands:
+
+          \`\`\`
+          /gemini review --focus performance,security
+          @coderabbitai full review
+          \`\`\`
+
+          ---
+
+          ### 📋 Continuous Improvement
+
+          After AI reviews complete:
+
+          - [ ] Copilot analyzes all AI feedback
+          - [ ] Implementation fixes are generated
+          - [ ] Follow-up PRs are created
+          - [ ] Human approves final changes
+
+          ---
+          *Git-Core Protocol - Continuous Improvement System*"
+
+          PR_URL=$(gh pr create \
+            --title "${TITLE_PREFIX} Validation: ${TRIGGER_NAME}" \
+            --body "$PR_BODY" \
+            --head "${{ needs.generate-report.outputs.branch_name }}" \
+            --base main \
+            --label "validation,ai-review-requested,continuous-improvement")
+
+          PR_NUMBER=$(echo "$PR_URL" | grep -oP '\d+$')
+
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "url=$PR_URL" >> $GITHUB_OUTPUT
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 5: Request AI Reviews (Parallel)
+  # ═══════════════════════════════════════════════════════════════════
+  request-ai-reviews:
+    name: "🤖 Request AI Reviews"
+    runs-on: ubuntu-latest
+    needs: create-pr
+    if: needs.create-pr.outputs.pr_number != ''
+
+    steps:
+      - name: Request Gemini Review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment "${{ needs.create-pr.outputs.pr_number }}" \
+            --repo "${{ github.repository }}" \
+            --body "/gemini review
+
+          Please analyze this workflow validation report:
+
+          ## Focus Areas
+
+          1. **Performance Analysis**
+             - Are there optimization opportunities in the workflows?
+             - Can parallelism be improved?
+             - Are there unnecessary sequential operations?
+
+          2. **Security Review**
+             - Are secrets handled properly?
+             - Are there any permission escalation risks?
+             - Are action versions pinned correctly?
+
+          3. **Reliability Assessment**
+             - Are there flaky test patterns?
+             - Is error handling adequate?
+             - Are retries configured appropriately?
+
+          4. **Cost Optimization**
+             - Can runner usage be reduced?
+             - Are caches being used effectively?
+             - Can jobs be consolidated?
+
+          Please provide specific, actionable recommendations."
+
+      - name: Request CodeRabbit Review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment "${{ needs.create-pr.outputs.pr_number }}" \
+            --repo "${{ github.repository }}" \
+            --body "@coderabbitai review
+
+          Focus on:
+          - Workflow best practices
+          - YAML structure and syntax
+          - Job dependencies optimization
+          - Action version recommendations"
+
+      - name: Add Copilot Queue Notice
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment "${{ needs.create-pr.outputs.pr_number }}" \
+            --repo "${{ github.repository }}" \
+            --body "## 🤖 Copilot Meta-Analysis Queue
+
+          **Status:** ⏳ Waiting for CodeRabbit and Gemini reviews
+
+          Once AI reviews are complete, Copilot will:
+
+          1. **Analyze the analyzers** - Review CodeRabbit and Gemini feedback
+          2. **Cross-validate** - Check for conflicting recommendations
+          3. **Prioritize** - Rank improvements by impact
+          4. **Generate** - Create implementation PRs
+
+          ### Auto-Assignment Trigger
+
+          Copilot will be auto-assigned when:
+          - Both CodeRabbit and Gemini have commented
+          - OR 30 minutes have passed
+
+          To manually trigger: \`@copilot analyze --model sonnet-4.5\`
+
+          ---
+          *Git-Core Protocol - Multi-Agent Validation*"
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 6: Schedule Copilot Meta-Analysis
+  # ═══════════════════════════════════════════════════════════════════
+  schedule-copilot:
+    name: "⏰ Schedule Copilot"
+    runs-on: ubuntu-latest
+    needs: [create-pr, request-ai-reviews]
+    if: needs.create-pr.outputs.pr_number != ''
+
+    steps:
+      - name: Create Copilot Assignment Issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create tracking issue for Copilot assignment
+          ISSUE_BODY="## 🤖 Copilot Meta-Analysis Task
+
+          **Validation PR:** #${{ needs.create-pr.outputs.pr_number }}
+          **Created:** $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          **Auto-assign after:** 30 minutes
+
+          ---
+
+          ### Task Description
+
+          After AI bots (CodeRabbit, Gemini) complete their reviews:
+
+          1. **Read all AI review comments** on PR #${{ needs.create-pr.outputs.pr_number }}
+          2. **Analyze the workflow** that triggered this validation
+          3. **Cross-reference** AI recommendations
+          4. **Generate action plan** with prioritized fixes
+          5. **Create implementation PRs** for approved changes
+
+          ### Expected Output
+
+          A comment on the PR with:
+          - Summary of AI feedback
+          - Validated recommendations
+          - Implementation roadmap
+          - Estimated impact
+
+          ---
+
+          ### Commands
+
+          \`\`\`
+          @copilot analyze PR #${{ needs.create-pr.outputs.pr_number }}
+          @copilot implement high-priority fixes
+          @copilot create follow-up issues
+          \`\`\`
+
+          ---
+          *Auto-generated by Workflow Validator*"
+
+          gh issue create \
+            --title "🤖 Copilot: Meta-analyze PR #${{ needs.create-pr.outputs.pr_number }}" \
+            --body "$ISSUE_BODY" \
+            --label "copilot,meta-analysis,scheduled"
+
+  # ═══════════════════════════════════════════════════════════════════
+  # JOB 7: Summary
+  # ═══════════════════════════════════════════════════════════════════
+  summary:
+    name: "📊 Summary"
+    runs-on: ubuntu-latest
+    needs: [analyze, create-pr, request-ai-reviews]
+    if: always()
+
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "## 🔬 Workflow Validator Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Trigger" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow:** ${{ github.event.workflow_run.name || 'Manual' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Conclusion:** ${{ github.event.workflow_run.conclusion || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Analysis Results" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Errors | ${{ needs.analyze.outputs.has_errors == 'true' && '❌' || '✅' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Warnings | ${{ needs.analyze.outputs.has_warnings == 'true' && '⚠️' || '✅' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance | ${{ needs.analyze.outputs.performance_score }}% |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Validation PR" >> $GITHUB_STEP_SUMMARY
+          echo "- **PR:** #${{ needs.create-pr.outputs.pr_number || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL:** ${{ needs.create-pr.outputs.pr_url || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### AI Reviews" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Gemini Code Assist requested" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ CodeRabbit requested" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏳ Copilot meta-analysis scheduled" >> $GITHUB_STEP_SUMMARY
